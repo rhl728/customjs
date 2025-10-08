@@ -154,7 +154,7 @@ consentCheckBoxes.forEach(consentCheckBox=>{
  
 }
 
-const checkingElements = function () {
+const checkingElements = function () {   ///sections-MiniCartContent,  
 
   setTimeout(() => {
     const accCreatingBtn = document.getElementById(
@@ -176,8 +176,8 @@ const checkingElements = function () {
         let isChecked = checkbox.checked;
 
         // if (isChecked) {
-        // //   e.stopPropagation();
-        // // document.querySelector
+        //    e.stopPropagation();
+        //  document.querySelector
         // document.querySelector('.savebtn').classList.add('enable'); 
         // }
         // else{
@@ -217,8 +217,58 @@ const checkingElements = function () {
     });
   }, 300);
 
-
+ 
 };
+
+const consentPopupFn = () => {
+  
+  setTimeout(()=>{
+    console.log('ffff');
+
+    const consentCheckBoxes = document.querySelectorAll('.consentCheckBox'); // layouts-Checkout, sections-ProfileUserInfo
+
+consentCheckBoxes.forEach(consentCheckBox=>{
+  
+  consentCheckBox.addEventListener('click',(e)=>{
+    console.log('test22222222',e.target.checked);
+
+    if(e.target.checked){
+            consentPopup.style.display = "flex";
+            // document.querySelector('.contbtn')?.classList.remove('pointer-events-none','opacity-50');
+            // document.classList.remove('pointer-events-none'); 
+    }else{
+            document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50');  // sections-MiniCartContent, sections-ProfileUserInfo
+            // checkoutContbtn.classList.add('pointer-events-none');
+    }
+
+     consentPopupYesBtn.addEventListener("click", function (e) {
+        consentCheckBox.checked = true;
+        consentPopup.style.display = "none";
+         document.querySelector('.contbtn')?.classList.remove('pointer-events-none','opacity-50');
+      });
+
+      consentPopupNoBtn.addEventListener("click", function (e) {
+        consentCheckBox.checked = false;
+        consentPopup.style.display = "none";
+        document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50'); 
+      });
+
+      consentPopupCloseBtn.addEventListener("click", function (e) {
+        consentCheckBox.checked = false;
+        consentPopup.style.display = "none";
+        document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50');
+      });
+
+  })
+})
+
+
+
+
+
+  },300)
+
+}
 
 // checking user status
 
