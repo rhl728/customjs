@@ -9,6 +9,7 @@ let consentPopupNoBtn = null;
 let consentPopupCloseBtn = null;
 let checkoutContbtn = null;
 let checkoutConsentCBox = null;
+let profileConsentCBox =null;
 
 function primaryFn() {
   // welcome popup close section
