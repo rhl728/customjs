@@ -19,18 +19,19 @@ const consentPopupFnCore = () => {
 consentCheckBoxes.forEach(consentCheckBox=>{
   
   consentCheckBox.addEventListener('click',(e)=>{
-    console.log('zzzzzzzzzzzz',e.target.checked);
+    
 
     if(e.target.checked){
             consentPopup.style.display = "flex";
-            // document.querySelector('.contbtn')?.classList.remove('pointer-events-none','opacity-50');
-            // document.classList.remove('pointer-events-none'); 
+             
     }else{
             document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50');  // sections-MiniCartContent, sections-ProfileUserInfo
-            // checkoutContbtn.classList.add('pointer-events-none');
+            
     }
 
-     consentPopupYesBtn.addEventListener("click", function (e) {
+  })
+
+  consentPopupYesBtn.addEventListener("click", function (e) {
         consentCheckBox.checked = true;
         consentPopup.style.display = "none";
          document.querySelector('.contbtn')?.classList.remove('pointer-events-none','opacity-50');
@@ -47,8 +48,6 @@ consentCheckBoxes.forEach(consentCheckBox=>{
         consentPopup.style.display = "none";
         document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50');
       });
-
-  })
 })
 }
 
@@ -60,13 +59,10 @@ function primaryFn() {
   closeButton = document.getElementById(
     "layout-main-aad-welcome-popup-close-btn"
   );
-//  document.querySelectorAll('.layout-main-aad-welcome-popup-close-btn')
- 
- 
 
  
- 
- 
+
+
 popupContainer = document.getElementById("layout-main-aad-welcome-popup");
   
   
@@ -120,46 +116,7 @@ consentPopupFnCore();
     popupContainer.style.display = "none";
   });
   
-  // if(checkoutConsentCBox && checkoutContbtn){
-  //   //   console.log(">>>",checkoutConsentCBox,checkoutContbtn)
-  //       checkoutConsentCBox.addEventListener("click",function(e){
-
-
-   
-  //       if(e.target.checked){
-  //           consentPopup.style.display = "flex";
-  //           // document.querySelector('.contbtn')?.classList.remove('pointer-events-none','opacity-50');
-  //           // document.classList.remove('pointer-events-none'); 
-  //       }else{
-  //           document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50');
-  //           // checkoutContbtn.classList.add('pointer-events-none');
-  //       }
-        
-        
-        
-  //         consentPopupYesBtn.addEventListener("click", function (e) {
-  //       checkoutConsentCBox.checked = true;
-  //       consentPopup.style.display = "none";
-  //        document.querySelector('.contbtn')?.classList.remove('pointer-events-none','opacity-50');
-  //     });
-
-  //     consentPopupNoBtn.addEventListener("click", function (e) {
-  //       checkoutConsentCBox.checked = false;
-  //       consentPopup.style.display = "none";
-  //       document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50'); 
-  //     });
-
-  //     consentPopupCloseBtn.addEventListener("click", function (e) {
-  //       checkoutConsentCBox.checked = false;
-  //       consentPopup.style.display = "none";
-  //       document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50');
-  //     });
-  //   });
-      
-      
-
-      
-  // }
+  
 
  
 }
@@ -175,65 +132,18 @@ const checkingElements = function () {   ///sections-MiniCartContent,
 
     accCreatingBtn?.addEventListener("click", function () {
 
-      const innerButton = document.getElementById("inner-btn");
-      const checkboxListner = document.getElementById("profile-checkbox");
-     
 
-      innerButton?.addEventListener("click", function (e) {
-        const checkbox = document.getElementById("profile-checkbox");
-        // console.log("2>>", checkbox.checked);
-
-        let isChecked = checkbox.checked;
-
-        // if (isChecked) {
-        //    e.stopPropagation();
-        //  document.querySelector
-        // document.querySelector('.savebtn').classList.add('enable'); 
-        // }
-        // else{
-        //             document.querySelector('.savebtn').classList.remove('enable'); 
-
-        // }
-
-        // const checkbox = document.getElementById("profile-checkbox");
-      });
-
-      checkboxListner.addEventListener("click", function (e) {
-        // console.log("e>>>", e.target.checked);
-        if (e.target.checked) {
-          consentPopup.style.display = "flex";
-        }else{
-            document.querySelector('.savebtn').classList.add('pointer-events-none','opacity-50'); 
-        }
-      });
-
-      consentPopupYesBtn.addEventListener("click", function (e) {
-        checkboxListner.checked = true;
-        consentPopup.style.display = "none";
-         document.querySelector('.savebtn').classList.remove('pointer-events-none','opacity-50'); 
-      });
-
-      consentPopupNoBtn.addEventListener("click", function (e) {
-        checkboxListner.checked = false;
-        consentPopup.style.display = "none";
-        document.querySelector('.savebtn').classList.add('pointer-events-none','opacity-50'); 
-      });
-
-      consentPopupCloseBtn.addEventListener("click", function (e) {
-        checkboxListner.checked = false;
-        consentPopup.style.display = "none";
-        document.querySelector('.savebtn').classList.add('pointer-events-none','opacity-50');  
-      });
+      consentPopupFnCore()
     });
   }, 300);
 
  
 };
 
-const consentPopupFn = () => {
+const consentPopupFn = () => {   //sections->AddressBookPopup
   
   setTimeout(()=>{
-    console.log('ffff');
+ 
 
 
 consentPopupFnCore();
