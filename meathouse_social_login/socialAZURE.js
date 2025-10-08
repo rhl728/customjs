@@ -9,7 +9,7 @@ let consentPopupNoBtn = null;
 let consentPopupCloseBtn = null;
 let checkoutContbtn = null;
 let checkoutConsentCBox = null;
-let profileConsentCBox =null;
+let consentCheckBoxes = null; //common checkboxes 
 
 function primaryFn() {
   // welcome popup close section
@@ -24,7 +24,7 @@ function primaryFn() {
  
  
  
-  popupContainer = document.getElementById("layout-main-aad-welcome-popup");
+popupContainer = document.getElementById("layout-main-aad-welcome-popup");
   
   
   
@@ -50,6 +50,25 @@ closeButtons.forEach(closeButton => {
     "sections-HeaderBlock-consent-popup-close-btn"
   );
 
+  checkoutConsentCBox =  document.getElementById(
+    "layouts-checkout-consent-checkbox"
+  );
+  checkoutContbtn = document.getElementById(
+    "section-minicartContent-cont-btn"
+  );
+
+const consentCheckBoxes = document.querySelectorAll('.consentCheckBox');
+
+consentCheckBoxes.forEach(consentCheckBox=>{
+  
+  consentCheckBox.addEventListener('click',(e)=>{
+    console.log('test22222222',e.target.checked);
+
+  })
+})
+
+
+
   // showing welcome popup if a guest user
   if (isGuestUser && popupContainer) {
       
@@ -57,12 +76,7 @@ closeButtons.forEach(closeButton => {
       
   }
   
-  checkoutConsentCBox =  document.getElementById(
-    "layouts-checkout-consent-checkbox"
-  );
-  checkoutContbtn = document.getElementById(
-    "section-minicartContent-cont-btn"
-  );
+
 
   //welcome popup close button
   closeButton?.addEventListener("click", function () {
