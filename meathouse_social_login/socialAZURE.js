@@ -57,12 +57,39 @@ closeButtons.forEach(closeButton => {
     "section-minicartContent-cont-btn"
   );
 
-const consentCheckBoxes = document.querySelectorAll('.consentCheckBox');
+const consentCheckBoxes = document.querySelectorAll('.consentCheckBox'); // layouts-Checkout, sections-ProfileUserInfo
 
 consentCheckBoxes.forEach(consentCheckBox=>{
   
   consentCheckBox.addEventListener('click',(e)=>{
     console.log('test22222222',e.target.checked);
+
+    if(e.target.checked){
+            consentPopup.style.display = "flex";
+            // document.querySelector('.contbtn')?.classList.remove('pointer-events-none','opacity-50');
+            // document.classList.remove('pointer-events-none'); 
+    }else{
+            document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50');  // sections-MiniCartContent, sections-ProfileUserInfo
+            // checkoutContbtn.classList.add('pointer-events-none');
+    }
+
+     consentPopupYesBtn.addEventListener("click", function (e) {
+        consentCheckBox.checked = true;
+        consentPopup.style.display = "none";
+         document.querySelector('.contbtn')?.classList.remove('pointer-events-none','opacity-50');
+      });
+
+      consentPopupNoBtn.addEventListener("click", function (e) {
+        consentCheckBox.checked = false;
+        consentPopup.style.display = "none";
+        document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50'); 
+      });
+
+      consentPopupCloseBtn.addEventListener("click", function (e) {
+        consentCheckBox.checked = false;
+        consentPopup.style.display = "none";
+        document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50');
+      });
 
   })
 })
@@ -83,46 +110,46 @@ consentCheckBoxes.forEach(consentCheckBox=>{
     popupContainer.style.display = "none";
   });
   
-  if(checkoutConsentCBox && checkoutContbtn){
-    //   console.log(">>>",checkoutConsentCBox,checkoutContbtn)
-        checkoutConsentCBox.addEventListener("click",function(e){
+  // if(checkoutConsentCBox && checkoutContbtn){
+  //   //   console.log(">>>",checkoutConsentCBox,checkoutContbtn)
+  //       checkoutConsentCBox.addEventListener("click",function(e){
 
 
    
-        if(e.target.checked){
-            consentPopup.style.display = "flex";
-            // document.querySelector('.contbtn')?.classList.remove('pointer-events-none','opacity-50');
-            // document.classList.remove('pointer-events-none'); 
-        }else{
-            document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50');
-            // checkoutContbtn.classList.add('pointer-events-none');
-        }
+  //       if(e.target.checked){
+  //           consentPopup.style.display = "flex";
+  //           // document.querySelector('.contbtn')?.classList.remove('pointer-events-none','opacity-50');
+  //           // document.classList.remove('pointer-events-none'); 
+  //       }else{
+  //           document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50');
+  //           // checkoutContbtn.classList.add('pointer-events-none');
+  //       }
         
         
         
-          consentPopupYesBtn.addEventListener("click", function (e) {
-        checkoutConsentCBox.checked = true;
-        consentPopup.style.display = "none";
-         document.querySelector('.contbtn')?.classList.remove('pointer-events-none','opacity-50');
-      });
+  //         consentPopupYesBtn.addEventListener("click", function (e) {
+  //       checkoutConsentCBox.checked = true;
+  //       consentPopup.style.display = "none";
+  //        document.querySelector('.contbtn')?.classList.remove('pointer-events-none','opacity-50');
+  //     });
 
-      consentPopupNoBtn.addEventListener("click", function (e) {
-        checkoutConsentCBox.checked = false;
-        consentPopup.style.display = "none";
-        document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50'); 
-      });
+  //     consentPopupNoBtn.addEventListener("click", function (e) {
+  //       checkoutConsentCBox.checked = false;
+  //       consentPopup.style.display = "none";
+  //       document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50'); 
+  //     });
 
-      consentPopupCloseBtn.addEventListener("click", function (e) {
-        checkoutConsentCBox.checked = false;
-        consentPopup.style.display = "none";
-        document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50');
-      });
-    });
+  //     consentPopupCloseBtn.addEventListener("click", function (e) {
+  //       checkoutConsentCBox.checked = false;
+  //       consentPopup.style.display = "none";
+  //       document.querySelector('.contbtn')?.classList.add('pointer-events-none','opacity-50');
+  //     });
+  //   });
       
       
 
       
-  }
+  // }
 
  
 }
