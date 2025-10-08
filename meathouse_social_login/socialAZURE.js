@@ -12,7 +12,8 @@ let checkoutConsentCBox = null;
 let consentCheckBoxes = null; //common checkboxes
 
 const consentPopupFnCore = () => {
-  const consentCheckBoxes = document.querySelectorAll(".consentCheckBox"); // layouts-Checkout, sections-ProfileUserInfo
+
+  const consentCheckBoxes = document.querySelectorAll(".consentCheckBox"); // layouts-Checkout, sections-ProfileUserInfo, sections->AddressBookPopup, sections-ProfileCreationPopup
 
   consentCheckBoxes.forEach((consentCheckBox) => {
     consentCheckBox.addEventListener("click", (e) => {
@@ -21,7 +22,7 @@ const consentPopupFnCore = () => {
       } else {
         document
           .querySelector(".contbtn")
-          ?.classList.add("pointer-events-none", "opacity-50"); // sections-MiniCartContent, sections-ProfileUserInfo
+          ?.classList.add("pointer-events-none", "opacity-50"); // sections-MiniCartContent, sections-ProfileUserInfo, sections->AddressBookPopup, section-ProfileCreationPopup
       }
     });
 
