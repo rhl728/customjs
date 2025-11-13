@@ -255,9 +255,9 @@
                         </div>
                     </template>
                     <template v-else>
-                        <span class="empty-order-info">
+                        <span class="empty-order-info flex flex-col items-center">
                             <b-icon class="shopping-basket" icon="basket3-fill"></b-icon>
-                            {{slotData.language.cart.emptyText}}
+                            Add items to proceed
                         </span>
                     </template>
                 </template>
@@ -499,7 +499,7 @@
                         </div>
                     </div>
                     <div v-else>
-                        <a class="bg-primary text-white p-4 w-full proceed-to-checkout inline-flex mt-2 mx-auto items-center justify-center" href="/"> Constinue shopping</a>
+                        <a class="border border-primary text-primary p-4 w-full proceed-to-checkout inline-flex mt-10 mx-auto items-center justify-center" href="/"> Continue shopping</a>
                     </div>
                 </div>
                 <div v-else>
