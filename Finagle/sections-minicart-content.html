@@ -273,127 +273,206 @@
                     <order-info-popup-buttons-section />
                 </template>
 
-                <div v-if="!hidePrices" class="order-charges">
-                    <!--<template v-if="showDiscountCode && !drawerMode">-->
-                    <!--    <div  class="mb-4" :class="{'hidden' : slotData.discountCode}">-->
-                    <!--        <discount-code-snippet />-->
-                    <!--    </div>-->
-                    <!--</template>-->
-                    <div class="section-title">
-                        <h3 class="h5">{{ slotData.language.orderConfirmation.title }}</h3>
-                    </div>
+                <div v-if="isCheckoutPage">
+
+                    <div v-if="Object.keys(slotData.selectedProducts).length">
+                        <div v-if="!hidePrices" class="order-charges">
+                            <!--<template v-if="showDiscountCode && !drawerMode">-->
+                            <!--    <div  class="mb-4" :class="{'hidden' : slotData.discountCode}">-->
+                            <!--        <discount-code-snippet />-->
+                            <!--    </div>-->
+                            <!--</template>-->
+                            <div class="section-title">
+                                <h3 class="h5">{{ slotData.language.orderConfirmation.title }}</h3>
+                            </div>
 
 
-                    <div class="summary-item sub-total txt-subtotal">
-                        <div class="name">{{slotData.languageInfo.subTotal}} <span class="inline-block mx-1"></span>
-                        </div>
-                        <div class="value">{{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.subTotal)
-                            }}</div>
-                    </div>
+                            <div class="summary-item sub-total txt-subtotal">
+                                <div class="name">{{slotData.languageInfo.subTotal}} <span
+                                        class="inline-block mx-1"></span>
+                                </div>
+                                <div class="value">{{slotData.orderCurrency}} {{
+                                    slotData.helpers.PriceFormat(slotData.subTotal)
+                                    }}</div>
+                            </div>
 
-                    <!-- additional charges -->
-                    <template v-if="slotData.additionalCharges">
-                        <div class="summary-item additional-charge" v-for="charge in slotData.additionalCharges"
-                            v-if="charge.display_value > 0">
-                            <div class="name"> {{ charge.name }} <span class="inline-block mx-1"></span> </div>
-                            <div class="value">{{slotData.orderCurrency}} {{
-                                slotData.helpers.PriceFormat(charge.display_value) }} </div>
-                        </div>
-                    </template>
+                            <!-- additional charges -->
+                            <template v-if="slotData.additionalCharges">
+                                <div class="summary-item additional-charge" v-for="charge in slotData.additionalCharges"
+                                    v-if="charge.display_value > 0">
+                                    <div class="name"> {{ charge.name }} <span class="inline-block mx-1"></span> </div>
+                                    <div class="value">{{slotData.orderCurrency}} {{
+                                        slotData.helpers.PriceFormat(charge.display_value) }} </div>
+                                </div>
+                            </template>
 
-                    <!-- delivery charges -->
-                    <div class="summary-item delivery-charge"
-                        v-if="slotData.deliveryInfoData && slotData.deliveryInfoData.shippingPrice">
-                        <div class="name"> {{slotData.languageInfo.deliveryCharges}}: </div>
-                        <div class="value">{{slotData.orderCurrency}} {{
-                            slotData.helpers.PriceFormat(slotData.deliveryInfoData.shippingPrice) }} </div>
-                    </div>
+                            <!-- delivery charges -->
+                            <div class="summary-item delivery-charge"
+                                v-if="slotData.deliveryInfoData && slotData.deliveryInfoData.shippingPrice">
+                                <div class="name"> {{slotData.languageInfo.deliveryCharges}}: </div>
+                                <div class="value">{{slotData.orderCurrency}} {{
+                                    slotData.helpers.PriceFormat(slotData.deliveryInfoData.shippingPrice) }} </div>
+                            </div>
 
-                    <div class="summary-item order-discount"
-                        :class="{'pb-0': slotData.discountCode && !showDiscountBox}"
-                        v-if="slotData.cartOfferDiscount > 0  && !slotData.submitLoading">
-                        <div class="name"> {{slotData.language.cart.discountCode.discount}}</div>
-                        <div class="value">-{{slotData.orderCurrency}} {{
-                            slotData.helpers.PriceFormat(slotData.cartOfferDiscount) }} </div>
-                    </div>
+                            <div class="summary-item order-discount"
+                                :class="{'pb-0': slotData.discountCode && !showDiscountBox}"
+                                v-if="slotData.cartOfferDiscount > 0  && !slotData.submitLoading">
+                                <div class="name"> {{slotData.language.cart.discountCode.discount}}</div>
+                                <div class="value">-{{slotData.orderCurrency}} {{
+                                    slotData.helpers.PriceFormat(slotData.cartOfferDiscount) }} </div>
+                            </div>
 
-                    <!-- cart offer shipping discount -->
-                    <div class="summary-item order-discount 1"
-                        v-if="slotData.cartOfferShippingDiscount > 0  && !slotData.submitLoading && slotData.deliveryInfoData.shippingPrice>0 ">
-                        <div class="name"> {{slotData.languageInfo.shippingDiscount}} </div>
-                        <div class="value">-{{slotData.orderCurrency}} {{
-                            slotData.helpers.PriceFormat(slotData.cartOfferShippingDiscount) }} </div>
-                    </div>
+                            <!-- cart offer shipping discount -->
+                            <div class="summary-item order-discount 1"
+                                v-if="slotData.cartOfferShippingDiscount > 0  && !slotData.submitLoading && slotData.deliveryInfoData.shippingPrice>0 ">
+                                <div class="name"> {{slotData.languageInfo.shippingDiscount}} </div>
+                                <div class="value">-{{slotData.orderCurrency}} {{
+                                    slotData.helpers.PriceFormat(slotData.cartOfferShippingDiscount) }} </div>
+                            </div>
 
-                    <!-- applied coupon code -->
-                    <!--<div v-if="slotData.discountCode && !showDiscountBox" class="flex items-center mt-1 mb-2  applied-discount-code-wrapper text-body ">-->
-                    <!--    {{slotData.language.cart.discountCode.couponText}}:  -->
-                    <!--    <span class="discount-code text-success underline truncate max-w-[200px]" :title="slotData.discountCode"> {{slotData.discountCode}} </span>-->
-                    <!--    <span class="ml-auto cursor-pointer" @click.prevent="clearDiscount">-->
-                    <!--        <b-icon class="w-4 h-4 hover:text-heading" icon="trash" title="Clear coupon" ></b-icon>-->
-                    <!--    </span>-->
+                            <!-- applied coupon code -->
+                            <!--<div v-if="slotData.discountCode && !showDiscountBox" class="flex items-center mt-1 mb-2  applied-discount-code-wrapper text-body ">-->
+                            <!--    {{slotData.language.cart.discountCode.couponText}}:  -->
+                            <!--    <span class="discount-code text-success underline truncate max-w-[200px]" :title="slotData.discountCode"> {{slotData.discountCode}} </span>-->
+                            <!--    <span class="ml-auto cursor-pointer" @click.prevent="clearDiscount">-->
+                            <!--        <b-icon class="w-4 h-4 hover:text-heading" icon="trash" title="Clear coupon" ></b-icon>-->
+                            <!--    </span>-->
 
-                    <!--</div>-->
+                            <!--</div>-->
 
-                    <!--<div v-if="slotData.discountCode && !showDiscountBox && !slotData.cartOffersData && !slotData.submitLoading"  class="flex items-center mt-1 mb-2  text-red-500 discount-code-order-text text-body ">-->
-                    <!--    {{slotData.language.cart.discountCode.orderNotApplyText}}-->
-                    <!--</div>-->
+                            <!--<div v-if="slotData.discountCode && !showDiscountBox && !slotData.cartOffersData && !slotData.submitLoading"  class="flex items-center mt-1 mb-2  text-red-500 discount-code-order-text text-body ">-->
+                            <!--    {{slotData.language.cart.discountCode.orderNotApplyText}}-->
+                            <!--</div>-->
 
-                    <!-- loyalty points discount -->
-                    <!--<div class="flex items-center w-full py-2  font-semibold border-b-0 border-gray-300 loyalty-points text-body last:border-b-0 md:text-base last:pb-0" v-if="slotData.paymentInfo && slotData.paymentInfo.loyaltyPoints && slotData.paymentInfo.loyaltyPoints > 0">-->
-                    <!--    <div class="name"> {{slotData.language.orderConfirmation.fields.redeem_points}}: </div>-->
-                    <!--    <div class="flex-shrink-0 ml-auto value">-{{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.paymentInfo.loyaltyPoints) }} </div>-->
-                    <!--</div>-->
+                            <!-- loyalty points discount -->
+                            <!--<div class="flex items-center w-full py-2  font-semibold border-b-0 border-gray-300 loyalty-points text-body last:border-b-0 md:text-base last:pb-0" v-if="slotData.paymentInfo && slotData.paymentInfo.loyaltyPoints && slotData.paymentInfo.loyaltyPoints > 0">-->
+                            <!--    <div class="name"> {{slotData.language.orderConfirmation.fields.redeem_points}}: </div>-->
+                            <!--    <div class="flex-shrink-0 ml-auto value">-{{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.paymentInfo.loyaltyPoints) }} </div>-->
+                            <!--</div>-->
 
-                    <!--  <div v-if="slotData.totalSavePrice" class="flex items-center w-full  font-semibold border-b-0 border-gray-300 total-discount-price text-body last:border-b-0 md:text-base last:pb-0 text-success"   :class="[ drawerMode ? 'py-0': 'py-2']">
-                    <span class="title"> {{slotData.language.cart.totalDiscountText}}: </span>
-                    <span class="flex-shrink-0 ml-auto value">-{{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.totalSavePrice) }} </span>
-                </div> -->
+                            <!--  <div v-if="slotData.totalSavePrice" class="flex items-center w-full  font-semibold border-b-0 border-gray-300 total-discount-price text-body last:border-b-0 md:text-base last:pb-0 text-success"   :class="[ drawerMode ? 'py-0': 'py-2']">
+                        <span class="title"> {{slotData.language.cart.totalDiscountText}}: </span>
+                        <span class="flex-shrink-0 ml-auto value">-{{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.totalSavePrice) }} </span>
+                    </div> -->
 
-                    <div class="summary-item additional-charge" v-if="slotData.serviceCharge">
-                        <!--<div class="name"> {{slotData.languageInfo.serviceCharges}} {{slotData.settings.order_service_charge_rate}}%: </div>-->
-                        <div class="name"> {{slotData.languageInfo.serviceCharges}}</div>
-                        <div class="value">{{slotData.orderCurrency}} {{
-                            slotData.helpers.PriceFormat(slotData.serviceCharge) }} </div>
-                    </div>
+                            <div class="summary-item additional-charge" v-if="slotData.serviceCharge">
+                                <!--<div class="name"> {{slotData.languageInfo.serviceCharges}} {{slotData.settings.order_service_charge_rate}}%: </div>-->
+                                <div class="name"> {{slotData.languageInfo.serviceCharges}}</div>
+                                <div class="value">{{slotData.orderCurrency}} {{
+                                    slotData.helpers.PriceFormat(slotData.serviceCharge) }} </div>
+                            </div>
 
-                    <div class="summary-item additional-charge" v-if="slotData.taxCharge">
-                        <!--<div class="name"> {{slotData.languageInfo.tax}} {{slotData.settings.order_tax_rate}}%: </div>-->
-                        <div class="name"> {{slotData.languageInfo.tax}}</div>
-                        <div class="value">{{slotData.orderCurrency}} {{
-                            slotData.helpers.PriceFormat(slotData.taxCharge) }} </div>
-                    </div>
-
-
-                    <div v-if="slotData.totalPrice>=0" class="summary-item total-price">
-                        <span class="title"> {{slotData.languageInfo.total}} </span>
-                        <span class="value"> {{slotData.orderCurrency}} {{
-                            slotData.helpers.PriceFormat(slotData.totalPrice) }} </span>
-                    </div>
-
-                    <!--<div v-if="slotData.earnPoints > 0" class="flex items-center w-full py-2  font-semibold border-b-0 border-gray-300 earn-points text-heading last:border-b-0 md:text-base last:pb-0">-->
-                    <!--    <span class="title"> -->
-                    <!--        {{slotData.language.orderConfirmation.loyalty.startText}} {{ slotData.earnPoints }} {{slotData.language.orderConfirmation.loyalty.endText}} -->
-                    <!--    </span>-->
-                    <!--</div>-->
+                            <div class="summary-item additional-charge" v-if="slotData.taxCharge">
+                                <!--<div class="name"> {{slotData.languageInfo.tax}} {{slotData.settings.order_tax_rate}}%: </div>-->
+                                <div class="name"> {{slotData.languageInfo.tax}}</div>
+                                <div class="value">{{slotData.orderCurrency}} {{
+                                    slotData.helpers.PriceFormat(slotData.taxCharge) }} </div>
+                            </div>
 
 
+                            <div v-if="slotData.totalPrice>=0" class="summary-item total-price">
+                                <span class="title"> {{slotData.languageInfo.total}} </span>
+                                <span class="value"> {{slotData.orderCurrency}} {{
+                                    slotData.helpers.PriceFormat(slotData.totalPrice) }} </span>
+                            </div>
 
-                    </template>
+                            <!--<div v-if="slotData.earnPoints > 0" class="flex items-center w-full py-2  font-semibold border-b-0 border-gray-300 earn-points text-heading last:border-b-0 md:text-base last:pb-0">-->
+                            <!--    <span class="title"> -->
+                            <!--        {{slotData.language.orderConfirmation.loyalty.startText}} {{ slotData.earnPoints }} {{slotData.language.orderConfirmation.loyalty.endText}} -->
+                            <!--    </span>-->
+                            <!--</div>-->
 
-                    <template v-if="showButton">
 
-                        <template v-if="submitOrder">
-                            <div class="order-submit-btn">
-                                <!--<div v-if="onClickSumbitOrder()"></div>-->
 
-                                <!--  <div style="display:none">{{ onClickSumbitOrder() }}</div>-->
+                            </template>
 
-                                <span v-if="slotData.orderSubmitError"
-                                    class="block text-xs text-red-500 order-error md: md:mt-2">
-                                    {{ slotData.orderSubmitError }}
-                                </span>
-                                <button id="btnSubmitOrder" @click="onClickSumbitOrderFn()"
+                            <template v-if="showButton">
+
+                                <template v-if="submitOrder">
+                                    <div class="order-submit-btn">
+                                        <!--<div v-if="onClickSumbitOrder()"></div>-->
+
+                                        <!--  <div style="display:none">{{ onClickSumbitOrder() }}</div>-->
+
+                                        <span v-if="slotData.orderSubmitError"
+                                            class="block text-xs text-red-500 order-error md: md:mt-2">
+                                            {{ slotData.orderSubmitError }}
+                                        </span>
+                                        <button id="btnSubmitOrder" @click="onClickSumbitOrderFn()"
+                                            class="proceed-to-checkout inline-flex items-center justify-center w-full"
+                                            :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}"
+                                            :disabled="!slotData.validateMinValue">
+                                            <span class="flex items-center button-label" v-if="slotData.submitLoading">
+                                                <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                        stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor"
+                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                    </path>
+                                                </svg>
+                                                {{slotData.language.processing}}
+                                            </span>
+                                            <span class="button-label" v-else>
+                                                <template v-if="buttonText">
+                                                    <span class="title"> PAY </span>
+                                                    <span class="flex-shrink-0 ml-auto value">
+                                                        {{slotData.orderCurrency}} {{
+                                                        slotData.helpers.PriceFormat(slotData.totalPrice) }} </span>
+                                                </template>
+                                                <template v-else>
+                                                    <template v-if="slotData.settings.enable_online_ordering == '1'">
+                                                        {{slotData.language.orderConfirmation.goToPayment}}
+                                                    </template>
+                                                    <template v-else>
+                                                        {{slotData.language.cart.inquireText}}
+                                                    </template>
+                                                </template>
+                                            </span>
+                                        </button>
+
+                                    </div>
+
+                                </template>
+
+                                <template v-if="!buttonText && !submitOrder">
+                                    <button @click="onClickButtonFn()"
+                                        class="proceed-to-checkout inline-flex items-center justify-center w-full"
+                                        :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}"
+                                        :disabled="!slotData.validateMinValue">
+                                        <span class="flex items-center button-label" v-if="slotData.submitLoading">
+                                            <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                    stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                </path>
+                                            </svg>
+                                            {{slotData.language.processing}}
+                                        </span>
+                                        <span class="button-label" v-else>Proceed to Checkout</span>
+                                    </button>
+                                </template>
+                            </template>
+                            <template v-if="buttonText && showButton && !submitOrder">
+                                <!--<button id="btnSubmitOrder"-->
+                                <!--           class="proceed-to-checkout inline-flex items-center justify-center w-full" :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}" -->
+                                <!--           :disabled="!slotData.validateMinValue">-->
+                                <!--           <span class="flex items-center button-label" v-if="slotData.submitLoading">-->
+                                <!--               <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">-->
+                                <!--                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>-->
+                                <!--                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>-->
+                                <!--               </svg>-->
+                                <!--               {{slotData.language.processing}}-->
+                                <!--           </span>-->
+                                <!--           <span class="button-label" v-else>-->
+                                <!--               <template>-->
+                                <!--                   {{buttonText}} <span>{{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.totalPrice) }}</span>-->
+                                <!--               </template>-->
+                                <!--           </span>-->
+                                <!--       </button>-->
+                                <button @click="onClickButtonFn()"
                                     class="proceed-to-checkout inline-flex items-center justify-center w-full"
                                     :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}"
                                     :disabled="!slotData.validateMinValue">
@@ -409,27 +488,215 @@
                                         {{slotData.language.processing}}
                                     </span>
                                     <span class="button-label" v-else>
-                                        <template v-if="buttonText">
-                                            <span class="title"> PAY </span>
-                                            <span class="flex-shrink-0 ml-auto value"> {{slotData.orderCurrency}} {{
+                                        <template>
+                                            {{buttonText}} <span>{{slotData.orderCurrency}} {{
                                                 slotData.helpers.PriceFormat(slotData.totalPrice) }} </span>
-                                        </template>
-                                        <template v-else>
-                                            <template v-if="slotData.settings.enable_online_ordering == '1'">
-                                                {{slotData.language.orderConfirmation.goToPayment}}
-                                            </template>
-                                            <template v-else>
-                                                {{slotData.language.cart.inquireText}}
-                                            </template>
                                         </template>
                                     </span>
                                 </button>
+                            </template>
 
+                        </div>
+                    </div>
+                    <div v-else>
+                        <a class="bg-primary text-white p-4 w-full proceed-to-checkout inline-flex mt-2 mx-auto items-center justify-center" href="/"> Constinue shopping</a>
+                    </div>
+                </div>
+                <div v-else>
+                    <div v-if="!hidePrices" class="order-charges">
+                        <!--<template v-if="showDiscountCode && !drawerMode">-->
+                        <!--    <div  class="mb-4" :class="{'hidden' : slotData.discountCode}">-->
+                        <!--        <discount-code-snippet />-->
+                        <!--    </div>-->
+                        <!--</template>-->
+                        <div class="section-title">
+                            <h3 class="h5">{{ slotData.language.orderConfirmation.title }}</h3>
+                        </div>
+
+
+                        <div class="summary-item sub-total txt-subtotal">
+                            <div class="name">{{slotData.languageInfo.subTotal}} <span class="inline-block mx-1"></span>
                             </div>
+                            <div class="value">{{slotData.orderCurrency}} {{
+                                slotData.helpers.PriceFormat(slotData.subTotal)
+                                }}</div>
+                        </div>
+
+                        <!-- additional charges -->
+                        <template v-if="slotData.additionalCharges">
+                            <div class="summary-item additional-charge" v-for="charge in slotData.additionalCharges"
+                                v-if="charge.display_value > 0">
+                                <div class="name"> {{ charge.name }} <span class="inline-block mx-1"></span> </div>
+                                <div class="value">{{slotData.orderCurrency}} {{
+                                    slotData.helpers.PriceFormat(charge.display_value) }} </div>
+                            </div>
+                        </template>
+
+                        <!-- delivery charges -->
+                        <div class="summary-item delivery-charge"
+                            v-if="slotData.deliveryInfoData && slotData.deliveryInfoData.shippingPrice">
+                            <div class="name"> {{slotData.languageInfo.deliveryCharges}}: </div>
+                            <div class="value">{{slotData.orderCurrency}} {{
+                                slotData.helpers.PriceFormat(slotData.deliveryInfoData.shippingPrice) }} </div>
+                        </div>
+
+                        <div class="summary-item order-discount"
+                            :class="{'pb-0': slotData.discountCode && !showDiscountBox}"
+                            v-if="slotData.cartOfferDiscount > 0  && !slotData.submitLoading">
+                            <div class="name"> {{slotData.language.cart.discountCode.discount}}</div>
+                            <div class="value">-{{slotData.orderCurrency}} {{
+                                slotData.helpers.PriceFormat(slotData.cartOfferDiscount) }} </div>
+                        </div>
+
+                        <!-- cart offer shipping discount -->
+                        <div class="summary-item order-discount 1"
+                            v-if="slotData.cartOfferShippingDiscount > 0  && !slotData.submitLoading && slotData.deliveryInfoData.shippingPrice>0 ">
+                            <div class="name"> {{slotData.languageInfo.shippingDiscount}} </div>
+                            <div class="value">-{{slotData.orderCurrency}} {{
+                                slotData.helpers.PriceFormat(slotData.cartOfferShippingDiscount) }} </div>
+                        </div>
+
+                        <!-- applied coupon code -->
+                        <!--<div v-if="slotData.discountCode && !showDiscountBox" class="flex items-center mt-1 mb-2  applied-discount-code-wrapper text-body ">-->
+                        <!--    {{slotData.language.cart.discountCode.couponText}}:  -->
+                        <!--    <span class="discount-code text-success underline truncate max-w-[200px]" :title="slotData.discountCode"> {{slotData.discountCode}} </span>-->
+                        <!--    <span class="ml-auto cursor-pointer" @click.prevent="clearDiscount">-->
+                        <!--        <b-icon class="w-4 h-4 hover:text-heading" icon="trash" title="Clear coupon" ></b-icon>-->
+                        <!--    </span>-->
+
+                        <!--</div>-->
+
+                        <!--<div v-if="slotData.discountCode && !showDiscountBox && !slotData.cartOffersData && !slotData.submitLoading"  class="flex items-center mt-1 mb-2  text-red-500 discount-code-order-text text-body ">-->
+                        <!--    {{slotData.language.cart.discountCode.orderNotApplyText}}-->
+                        <!--</div>-->
+
+                        <!-- loyalty points discount -->
+                        <!--<div class="flex items-center w-full py-2  font-semibold border-b-0 border-gray-300 loyalty-points text-body last:border-b-0 md:text-base last:pb-0" v-if="slotData.paymentInfo && slotData.paymentInfo.loyaltyPoints && slotData.paymentInfo.loyaltyPoints > 0">-->
+                        <!--    <div class="name"> {{slotData.language.orderConfirmation.fields.redeem_points}}: </div>-->
+                        <!--    <div class="flex-shrink-0 ml-auto value">-{{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.paymentInfo.loyaltyPoints) }} </div>-->
+                        <!--</div>-->
+
+                        <!--  <div v-if="slotData.totalSavePrice" class="flex items-center w-full  font-semibold border-b-0 border-gray-300 total-discount-price text-body last:border-b-0 md:text-base last:pb-0 text-success"   :class="[ drawerMode ? 'py-0': 'py-2']">
+                        <span class="title"> {{slotData.language.cart.totalDiscountText}}: </span>
+                        <span class="flex-shrink-0 ml-auto value">-{{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.totalSavePrice) }} </span>
+                    </div> -->
+
+                        <div class="summary-item additional-charge" v-if="slotData.serviceCharge">
+                            <!--<div class="name"> {{slotData.languageInfo.serviceCharges}} {{slotData.settings.order_service_charge_rate}}%: </div>-->
+                            <div class="name"> {{slotData.languageInfo.serviceCharges}}</div>
+                            <div class="value">{{slotData.orderCurrency}} {{
+                                slotData.helpers.PriceFormat(slotData.serviceCharge) }} </div>
+                        </div>
+
+                        <div class="summary-item additional-charge" v-if="slotData.taxCharge">
+                            <!--<div class="name"> {{slotData.languageInfo.tax}} {{slotData.settings.order_tax_rate}}%: </div>-->
+                            <div class="name"> {{slotData.languageInfo.tax}}</div>
+                            <div class="value">{{slotData.orderCurrency}} {{
+                                slotData.helpers.PriceFormat(slotData.taxCharge) }} </div>
+                        </div>
+
+
+                        <div v-if="slotData.totalPrice>=0" class="summary-item total-price">
+                            <span class="title"> {{slotData.languageInfo.total}} </span>
+                            <span class="value"> {{slotData.orderCurrency}} {{
+                                slotData.helpers.PriceFormat(slotData.totalPrice) }} </span>
+                        </div>
+
+                        <!--<div v-if="slotData.earnPoints > 0" class="flex items-center w-full py-2  font-semibold border-b-0 border-gray-300 earn-points text-heading last:border-b-0 md:text-base last:pb-0">-->
+                        <!--    <span class="title"> -->
+                        <!--        {{slotData.language.orderConfirmation.loyalty.startText}} {{ slotData.earnPoints }} {{slotData.language.orderConfirmation.loyalty.endText}} -->
+                        <!--    </span>-->
+                        <!--</div>-->
+
+
 
                         </template>
 
-                        <template v-if="!buttonText && !submitOrder">
+                        <template v-if="showButton">
+
+                            <template v-if="submitOrder">
+                                <div class="order-submit-btn">
+                                    <!--<div v-if="onClickSumbitOrder()"></div>-->
+
+                                    <!--  <div style="display:none">{{ onClickSumbitOrder() }}</div>-->
+
+                                    <span v-if="slotData.orderSubmitError"
+                                        class="block text-xs text-red-500 order-error md: md:mt-2">
+                                        {{ slotData.orderSubmitError }}
+                                    </span>
+                                    <button id="btnSubmitOrder" @click="onClickSumbitOrderFn()"
+                                        class="proceed-to-checkout inline-flex items-center justify-center w-full"
+                                        :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}"
+                                        :disabled="!slotData.validateMinValue">
+                                        <span class="flex items-center button-label" v-if="slotData.submitLoading">
+                                            <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                    stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                </path>
+                                            </svg>
+                                            {{slotData.language.processing}}
+                                        </span>
+                                        <span class="button-label" v-else>
+                                            <template v-if="buttonText">
+                                                <span class="title"> PAY </span>
+                                                <span class="flex-shrink-0 ml-auto value"> {{slotData.orderCurrency}} {{
+                                                    slotData.helpers.PriceFormat(slotData.totalPrice) }} </span>
+                                            </template>
+                                            <template v-else>
+                                                <template v-if="slotData.settings.enable_online_ordering == '1'">
+                                                    {{slotData.language.orderConfirmation.goToPayment}}
+                                                </template>
+                                                <template v-else>
+                                                    {{slotData.language.cart.inquireText}}
+                                                </template>
+                                            </template>
+                                        </span>
+                                    </button>
+
+                                </div>
+
+                            </template>
+
+                            <template v-if="!buttonText && !submitOrder">
+                                <button @click="onClickButtonFn()"
+                                    class="proceed-to-checkout inline-flex items-center justify-center w-full"
+                                    :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}"
+                                    :disabled="!slotData.validateMinValue">
+                                    <span class="flex items-center button-label" v-if="slotData.submitLoading">
+                                        <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor"
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                            </path>
+                                        </svg>
+                                        {{slotData.language.processing}}
+                                    </span>
+                                    <span class="button-label" v-else>Proceed to Checkout</span>
+                                </button>
+                            </template>
+                        </template>
+                        <template v-if="buttonText && showButton && !submitOrder">
+                            <!--<button id="btnSubmitOrder"-->
+                            <!--           class="proceed-to-checkout inline-flex items-center justify-center w-full" :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}" -->
+                            <!--           :disabled="!slotData.validateMinValue">-->
+                            <!--           <span class="flex items-center button-label" v-if="slotData.submitLoading">-->
+                            <!--               <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">-->
+                            <!--                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>-->
+                            <!--                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>-->
+                            <!--               </svg>-->
+                            <!--               {{slotData.language.processing}}-->
+                            <!--           </span>-->
+                            <!--           <span class="button-label" v-else>-->
+                            <!--               <template>-->
+                            <!--                   {{buttonText}} <span>{{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.totalPrice) }}</span>-->
+                            <!--               </template>-->
+                            <!--           </span>-->
+                            <!--       </button>-->
                             <button @click="onClickButtonFn()"
                                 class="proceed-to-checkout inline-flex items-center justify-center w-full"
                                 :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}"
@@ -445,52 +712,19 @@
                                     </svg>
                                     {{slotData.language.processing}}
                                 </span>
-                                <span class="button-label" v-else>Proceed to Checkout</span>
+                                <span class="button-label" v-else>
+                                    <template>
+                                        {{buttonText}} <span>{{slotData.orderCurrency}} {{
+                                            slotData.helpers.PriceFormat(slotData.totalPrice) }} </span>
+                                    </template>
+                                </span>
                             </button>
                         </template>
-                    </template>
-                    <template v-if="buttonText && showButton && !submitOrder">
-                        <!--<button id="btnSubmitOrder"-->
-                        <!--           class="proceed-to-checkout inline-flex items-center justify-center w-full" :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}" -->
-                        <!--           :disabled="!slotData.validateMinValue">-->
-                        <!--           <span class="flex items-center button-label" v-if="slotData.submitLoading">-->
-                        <!--               <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">-->
-                        <!--                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>-->
-                        <!--                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>-->
-                        <!--               </svg>-->
-                        <!--               {{slotData.language.processing}}-->
-                        <!--           </span>-->
-                        <!--           <span class="button-label" v-else>-->
-                        <!--               <template>-->
-                        <!--                   {{buttonText}} <span>{{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.totalPrice) }}</span>-->
-                        <!--               </template>-->
-                        <!--           </span>-->
-                        <!--       </button>-->
-                        <button @click="onClickButtonFn()"
-                            class="proceed-to-checkout inline-flex items-center justify-center w-full"
-                            :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}"
-                            :disabled="!slotData.validateMinValue">
-                            <span class="flex items-center button-label" v-if="slotData.submitLoading">
-                                <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                        stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                    </path>
-                                </svg>
-                                {{slotData.language.processing}}
-                            </span>
-                            <span class="button-label" v-else>
-                                <template>
-                                    {{buttonText}} <span>{{slotData.orderCurrency}} {{
-                                        slotData.helpers.PriceFormat(slotData.totalPrice) }} </span>
-                                </template>
-                            </span>
-                        </button>
-                    </template>
 
+                    </div>
                 </div>
+
+
 
 
 
@@ -675,7 +909,6 @@
 
                     </div>
                 </template>
-
 
 
 
