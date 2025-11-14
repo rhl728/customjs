@@ -1,0 +1,527 @@
+<div>
+  <template v-if="slotData.settingLoaded">
+    <div class="main-loader" v-if="mainLoader">
+      <progress-bar-snippet />
+    </div>
+    
+    <header-block-section :all_location_data="true" />
+    
+    
+    <div class="main-container">
+    
+        <div class="location-dropdown p-4 md:p-8 2xl:px-16 lg:hidden">
+            
+            <div class="location-dropdown-inner-wrapper">
+                
+                <div class="icon">
+                    
+                    <svg width="16" height="22" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.00004 16.485L12.243 12.243C13.0821 11.4039 13.6534 10.3348 13.8848 9.1709C14.1163 8.00704 13.9974 6.80069 13.5432 5.7044C13.0891 4.6081 12.32 3.67109 11.3334 3.01184C10.3467 2.3526 9.18669 2.00073 8.00004 2.00073C6.8134 2.00073 5.6534 2.3526 4.66673 3.01184C3.68005 3.67109 2.91102 4.6081 2.45686 5.7044C2.00271 6.80069 1.88383 8.00704 2.11526 9.1709C2.34668 10.3348 2.91803 11.4039 3.75704 12.243L8.00004 16.485ZM13.657 13.657L8.00004 19.314L2.34304 13.657C1.22426 12.5382 0.462378 11.1127 0.153729 9.56088C-0.154919 8.00904 0.00353175 6.40053 0.609045 4.93874C1.21456 3.47696 2.23994 2.22755 3.55552 1.34852C4.87111 0.469486 6.41781 0.000305176 8.00004 0.000305176C9.58228 0.000305176 11.129 0.469486 12.4446 1.34852C13.7601 2.22755 14.7855 3.47696 15.391 4.93874C15.9966 6.40053 16.155 8.00904 15.8464 9.56088C15.5377 11.1127 14.7758 12.5382 13.657 13.657ZM1.00004 20H15V22H1.00004V20Z" fill="#1E1E1E"/>
+                    </svg>
+
+                </div>
+                <div class="location-dropdown-dropdown-wrapper location-dropdown-wrapper">
+                    
+                    <div class="dropdown-title">
+                        
+                        <span>Select Outlet</span>
+                    
+                        <span class="icon-wrapper">
+                            <svg width="6" height="4" viewBox="0 0 6 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 3.5L0 0.5H6L3 3.5Z" fill="#6B7280"/>
+                            </svg>
+                        </span>
+                        
+                    </div>
+                    
+                    <div class="dropdown-wrapper">
+                        
+                          <select >
+                             <option disabled selected></option>
+                              <option 
+                                v-for="location in slotData.settings.locations" 
+                                :key="location.id || location.name"
+                                :value="location.url"
+                                :data-id="location.id"
+                              >
+                                {{ location.name }}
+                              </option>
+                            </select>
+                        
+
+                        
+                    </div>
+                    
+                </div>
+                
+                
+            </div>
+            
+        </div>
+
+        <banner-block-custom-block
+              :slides="[
+                {'url':'$$__client_media_url__$$/$$__client_media_path__$$/1.webp'}
+                ]"
+              slide_show="false"
+              :rounded_corners="false"
+              columns="1"
+              title=""
+              description=""
+              :show_button="false"
+              :slide_link="true"
+              :use_cart_banners="true"
+              :slide_show_dots="false"
+              banner_height="h-[0px] pt-[40%]"
+              slide_show_speed="3000"
+            />
+            
+
+        <template
+          v-if="slotData.settings.locations.length
+        >= 2"
+        >
+
+        </template>
+        
+        
+        <div class="container">
+        
+        <horizontal-category-menu  :items_to_show="50" :show_onload="false"
+                    :all_location_data="slotData.allLocationData" />
+                    
+        
+        </div>            
+        
+        <!--<trail-popup-snippet :is_active="slotData.isActive"></trail-popup-snippet>-->
+        
+        
+       <!-- <category-block-custom-block
+          :start="0"
+          :limit="12"
+          title="Top Categories"
+          columns="6"
+          show_main_block="false"
+          main_block_title="Top Categories"
+          slide_show="true"
+          main_block_width="25%"
+          slide_show_dots="flase"
+          slide_show_arrows="true"
+          slide_show_autoplay="true"
+          slide_show_speed="300"
+          auto_play_speed="5000"
+          show_main_block_button="true"
+          main_block_button_text="All Categories"
+          main_block_height="230px"
+          :all_location_data="true"
+          :slider_responsive='[ 
+                {
+                    "breakpoint": 1024,
+                    "settings": {
+                       "slidesToShow": 5,
+                    }
+                },
+                {
+                    "breakpoint": 480,
+                    "settings": {
+                      "slidesToShow": 3,
+                    }
+                }
+            ]'
+        />-->
+        
+        
+<div class="container row best-selling-block">
+    
+     <best-selling-product-custom-block
+      :limit="3"
+      :start="0"
+      columns="3"
+      title="Popular Items"
+      show_title="true"
+      slide_show="false"
+      show_product_name="true"
+      show_product_description="true"
+      show_product_price="true"
+      show_product_attribute="false"
+      show_upcomming_offer="false"
+      show_product_tags="false"
+      show_add_to_cart="true"
+      slide_show_speed="300"
+      auto_play_speed="5000"
+      slides_to_scroll="1"
+      slide_show_arrows="true"
+      :all_location_data="true"
+    />
+
+</div>
+
+<!--<div class="container row">-->
+
+<!--    <specific-product-custom-block-->
+<!--      :limit="9"-->
+<!--      :start="0"-->
+<!--      attributes='[{"code":"NEW_ARRIVALS","value":"1", "condition":"eq"}, {"code":"NEW_ARRIVALS_END_DATE","value":"$$__current_datetime__$$", "condition":"gteq"}]'-->
+<!--      columns="3"-->
+<!--      title="New Arrivals"-->
+<!--      show_title="true"-->
+<!--      :categories="['8236bcf3051127d75afcae45202d1354']"-->
+<!--      slide_show="false"-->
+<!--      show_product_name="true"-->
+<!--      show_product_description="true"-->
+<!--      show_product_price="true"-->
+<!--      show_product_attribute="false"-->
+<!--      show_product_tags="false"-->
+<!--      show_upcomming_offer="false"-->
+<!--      show_add_to_cart="true"-->
+<!--      slide_show_speed="300"-->
+<!--      auto_play_speed="5000"-->
+<!--      slides_to_scroll="1"-->
+<!--      slide_show_arrows="true"-->
+<!--      :all_location_data="true"-->
+<!--    />-->
+
+<!--</div>-->
+
+<div class="container row">
+    
+<div class="categroy-block-custom">  
+        <products-block-custom-block
+                  :limit="20"
+                  :start="0"
+                  :all_location_data="false"
+                  title="Fresh Bread"
+                  show_title="true"
+                  slide_show="false"
+                  slide_show_dots="true"
+                  rounded_corners="true"
+                  columns="3"
+                  :categories="['b2a745b29eabcc1bfe8db11a28f9d9a3','2396ae9f511993def87048fbf28c7482']"
+                  description="false"
+                  :show_add_to_cart="true"
+                  :show_product_attribute="false"
+                  :show_product_tags="false"
+                  :slide_link="true"
+         />
+         <products-block-custom-block
+                  :limit="20"
+                  :start="0"
+                  :all_location_data="false"
+                  title="Fresh - Buns"
+                  show_title="true"
+                  slide_show="false"
+                  slide_show_dots="true"
+                  rounded_corners="true"
+                  columns="3"
+                :categories="['9bdfdf6ed113171756389978cb01c938','c93eebbdd6d9d14e1c7a3c174f50e5fe']"
+                  description="false"
+                  :show_add_to_cart="true"
+                  :show_product_attribute="false"
+                  :show_product_tags="false"
+                  :slide_link="true"
+         />
+
+         <products-block-custom-block
+                  :limit="20"
+                  :start="0"
+                  :all_location_data="false"
+                  title="Fresh - Cake"
+                  show_title="true"
+                  slide_show="false"
+                  slide_show_dots="true"
+                  rounded_corners="true"
+                  columns="3"
+                  :categories="['b76cd84f8258a4f41ac2fa25e71c90e4','6f15a646daf1c5c3165ca7359e15d0e9']"
+                  description="false"
+                  :show_add_to_cart="true"
+                  :show_product_attribute="false"
+                  :show_product_tags="false"
+                  :slide_link="true"
+         />
+         
+         
+          <products-block-custom-block
+                  :limit="20"
+                  :start="0"
+                  :all_location_data="false"
+                  title="Fresh - Biscuit"
+                  show_title="true"
+                  slide_show="false"
+                  slide_show_dots="true"
+                  rounded_corners="true"
+                  columns="3"
+                  :categories="['7d5406e19f16f5c6e2766285757a666e','802e2a530e18e4f1e7d9813e944ef417']"
+                  description="false"
+                  :show_add_to_cart="true"
+                  :show_product_attribute="false"
+                  :show_product_tags="false"
+                  :slide_link="true"
+         />
+         
+         
+       <products-block-custom-block
+                  :limit="20"
+                  :start="0"
+                  :all_location_data="false"
+                  title="Frozen - Pizza"
+                  show_title="true"
+                  slide_show="false"
+                  slide_show_dots="true"
+                  rounded_corners="true"
+                  columns="3"
+                  :categories="['85d29b488f0f3ec4a57d8a95a83ab2a1','19ac9f70cd15bc4b2c3a07d66eb0a5da']"
+                  description="false"
+                  :show_add_to_cart="true"
+                  :show_product_attribute="false"
+                  :show_product_tags="false"
+                  :slide_link="true"
+         />
+         
+        <products-block-custom-block
+                  :limit="20"
+                  :start="0"
+                  :all_location_data="false"
+                  title="Frozen Meals"
+                  show_title="true"
+                  slide_show="false"
+                  slide_show_dots="true"
+                  rounded_corners="true"
+                  columns="3"
+                  :categories="['fdcb558996f858128fb2dccc2dab870f','8a9ff781c4d387a19dea9bd800ebacf6']"
+                  description="false"
+                  :show_add_to_cart="true"
+                  :show_product_attribute="false"
+                  :show_product_tags="false"
+                  :slide_link="true"
+         />
+         
+         <products-block-custom-block
+                  :limit="20"
+                  :start="0"
+                  :all_location_data="false"
+                  title="Flat Breads"
+                  show_title="true"
+                  slide_show="false"
+                  slide_show_dots="true"
+                  rounded_corners="true"
+                  columns="3"
+                  :categories="['a4ca6d218dcfce202cf8ed86953b4a09','78f6be47871fab16895fcb73b87e1ef1']"
+                  description="false"
+                  :show_add_to_cart="true"
+                  :show_product_attribute="false"
+                  :show_product_tags="false"
+                  :slide_link="true"
+         />
+         
+        <products-block-custom-block
+                  :limit="20"
+                  :start="0"
+                  :all_location_data="false"
+                  title="RTE Snacks"
+                  show_title="true"
+                  slide_show="false"
+                  slide_show_dots="true"
+                  rounded_corners="true"
+                  columns="3"
+                  :categories="['2b85a7568ac6a472681402fb071fbd26','25ba98940486c633df3fffe1289f4de8']"
+                  description="false"
+                  :show_add_to_cart="true"
+                  :show_product_attribute="false"
+                  :show_product_tags="false"
+                  :slide_link="true"
+         />
+         
+         <products-block-custom-block
+                  :limit="20"
+                  :start="0"
+                  :all_location_data="false"
+                  title="Frozen - Bread/Bun"
+                  show_title="true"
+                  slide_show="false"
+                  slide_show_dots="true"
+                  rounded_corners="true"
+                  columns="3"
+                  :categories="['eb0564759320cdf801e034c8807eb3bb','5e2cde79efe53431259eb1e2c63e4be4']"
+                  description="false"
+                  :show_add_to_cart="true"
+                  :show_product_attribute="false"
+                  :show_product_tags="false"
+                  :slide_link="true"
+         />
+         
+         
+         
+         
+</div> 
+
+
+</div>    
+   
+        
+
+<!--<div class="container row">-->
+
+<!--        <products-block-custom-block-->
+<!--          :limit="6"-->
+<!--          :start="0"-->
+<!--          :featured="true"-->
+<!--          :all_location_data="true"-->
+<!--          title="Featured Items"-->
+<!--          show_title="true"-->
+<!--          slide_show="false"-->
+<!--          slide_show_dots="true"-->
+<!--          rounded_corners="true"-->
+<!--          columns="3"-->
+<!--          description="false"-->
+<!--          :show_add_to_cart="true"-->
+<!--          :show_product_attribute="false"-->
+<!--          :show_product_tags="false"-->
+<!--          :slide_link="true"-->
+<!--          slide_show_speed="100"-->
+<!--          :slider_responsive='[ -->
+<!--                  {-->
+<!--                      "breakpoint": 1024,-->
+<!--                      "settings": {-->
+<!--                          "centerPadding":"60px"-->
+<!--                      }-->
+<!--                  },-->
+<!--                  {-->
+<!--                      "breakpoint": 480,-->
+<!--                      "settings": {-->
+<!--                          "centerPadding":"30px"-->
+<!--                      }-->
+<!--                  }-->
+<!--              ]'-->
+<!--        />-->
+    
+    
+<!--</div>-->
+    
+<!--<div class="container row">-->
+<!--        <offer-product-custom-block-->
+<!--          :limit="9"-->
+<!--          :start="0"-->
+<!--          columns="3"-->
+<!--          title="Deals"-->
+<!--          show_title="true"-->
+<!--          slide_show="false"-->
+<!--          show_product_name="true"-->
+<!--          show_product_description="true"-->
+<!--          show_product_price="true"-->
+<!--          show_product_attribute="false"-->
+<!--          show_product_tags="false"-->
+<!--          show_add_to_cart="true"-->
+<!--          show_upcomming_offer="false"-->
+<!--          slide_show_speed="300"-->
+<!--          auto_play_speed="5000"-->
+<!--          slides_to_scroll="1"-->
+<!--          slide_show_arrows="true"-->
+<!--          :all_location_data="true"-->
+<!--        />-->
+    
+<!--</div>-->
+    
+<!--<div class="container row">-->
+    
+<!--        <div-->
+<!--          class="w-full px-4 mx-auto mb-8 md:px-8 2xl:px-16 custom-banner-block custom-banner-block-1"-->
+<!--        >-->
+<!--          <banner-block-custom-block-->
+<!--            :slides="[-->
+<!--                {'url':'$$__client_media_url__$$/$$__client_media_path__$$/2.webp', 'button_url':'#'},-->
+<!--                {'url':'$$__client_media_url__$$/$$__client_media_path__$$/3.webp', 'button_url':'#'},-->
+<!--                {'url':'$$__client_media_url__$$/$$__client_media_path__$$/4.webp' , 'button_url':'#'},-->
+<!--                {'url':'$$__client_media_url__$$/$$__client_media_path__$$/5.webp' , 'button_url':'#'},-->
+<!--                {'url':'$$__client_media_url__$$/$$__client_media_path__$$/6.webp'},-->
+<!--                {'url':'$$__client_media_url__$$/$$__client_media_path__$$/7.webp'},-->
+<!--                ]"-->
+<!--            slide_show="true"-->
+<!--            slide_show_dots="true"-->
+<!--            rounded_corners="true"-->
+<!--            columns="3"-->
+<!--            title=""-->
+<!--            description=""-->
+<!--            :show_button="false"-->
+<!--            :slide_link="true"-->
+<!--            button_text="Vist Shop"-->
+<!--            button_url="#"-->
+<!--            banner_height="h-0 pb-[29%]"-->
+<!--            slide_show_speed="100"-->
+<!--            :slider_responsive='[ -->
+<!--                    {-->
+<!--                        "breakpoint": 1024,-->
+<!--                        "settings": {-->
+<!--                            "centerPadding":"60px"-->
+<!--                        }-->
+<!--                    },-->
+<!--                    {-->
+<!--                        "breakpoint": 480,-->
+<!--                        "settings": {-->
+<!--                            "centerPadding":"30px"-->
+<!--                        }-->
+<!--                    }-->
+<!--                ]'-->
+<!--          />-->
+<!--        </div>-->
+        
+<!--    </div>    -->
+    
+<!--<div class="container row">-->
+    
+<!--        <div-->
+<!--          class="w-full p-4 md:px-8 md:py-4 2xl:px-16 custom-banner-block custom-banner-block-2"-->
+<!--        >-->
+<!--          <banner-block-custom-block-->
+<!--            :slides="[-->
+<!--                {'url':'$$__client_media_url__$$/$$__client_media_path__$$/2.webp'}-->
+<!--                ]"-->
+<!--            slide_show="false"-->
+<!--            rounded_corners="true"-->
+<!--            columns="1"-->
+<!--            title=""-->
+<!--            description=""-->
+<!--            :show_button="false"-->
+<!--            button_text="Vist Shop"-->
+<!--            button_url="#"-->
+<!--            banner_height="h-0 pb-[29%]"-->
+<!--            slide_show_speed="3000"-->
+<!--          />-->
+<!--        </div>-->
+    
+<!--    </div>-->
+    
+    
+    <!--<div class="container row">-->
+    
+    <!--    <best-selling-product-custom-block-->
+    <!--      :limit="6"-->
+    <!--      :start="0"-->
+    <!--      columns="3"-->
+    <!--      title="Best Selling"-->
+    <!--      show_title="true"-->
+    <!--      slide_show="false"-->
+    <!--      show_product_name="true"-->
+    <!--      show_product_description="true"-->
+    <!--      show_product_price="true"-->
+    <!--      show_product_attribute="false"-->
+    <!--      show_upcomming_offer="false"-->
+    <!--      show_product_tags="false"-->
+    <!--      show_add_to_cart="true"-->
+    <!--      slide_show_speed="300"-->
+    <!--      auto_play_speed="5000"-->
+    <!--      slides_to_scroll="1"-->
+    <!--      slide_show_arrows="true"-->
+    <!--      :all_location_data="true"-->
+    <!--    />-->
+        
+    <!--</div>    -->
+        
+    
+    </div>
+
+    <!--<footer-block-section />-->
+  </template>
+  <div v-else>
+    <page-loader-snippet  />
+</div>
+</div>
