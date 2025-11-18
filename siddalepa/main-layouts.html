@@ -1,0 +1,271 @@
+<div id="home-page">
+  <template v-if="slotData.settingLoaded">
+    <div class="main-loader" v-if="mainLoader">
+      <progress-bar-snippet />
+    </div>
+    <header-block-section :all_location_data="true" />
+    <div class="flex flex-wrap mt-20 mb-4 xl:mb-6">
+      <div class="w-full bg-white">
+        <banner-block-custom-block
+          :slides="[
+            {'url':'$$__client_media_url__$$/$$__client_media_path__$$/1.webp'}
+            ]"
+          slide_show="false"
+          :rounded_corners="false"
+          columns="1"
+          title=""
+          description=""
+          :show_button="false"
+          :slide_link="true"
+          :use_cart_banners="true"
+          :slide_show_dots="false"
+          banner_height="h-[0px] pt-[40%]"
+          slide_show_speed="5000"
+        />
+      </div>
+    </div>
+    <template
+      v-if="slotData.settings.locations.length
+    >= 2"
+    >
+      <location-banner-starter-custom-block
+        :settingLoaded="slotData.settingLoaded"
+      />
+    </template>
+    <trail-popup-snippet :is_active="slotData.isActive"></trail-popup-snippet>
+    
+    <section class="main main-margin-top main-margin-bottom">
+        <h1>Welcome to Siddhalepa</h1>
+        <p>Live Healthy with Ayurveda</p>
+    </section>
+    
+    
+    <category-block-custom-block
+      categories="['09c1c7d98d178688ca95ff1fe7389ab9','ea9e81c3e89b211b6a0096583f302f78','68fb17d30f229b71b81e07d9e43d2a4f','d22acb9839731963f520403080830902','5637dd2b87d3f6b85e67a85af2eed529','a95f04bdca21c0b52c49f56ec23f4b3f']"
+      :start="0"
+      :limit="40"
+      title=""
+      columns="6"
+      sort_property="sort_order"
+      show_main_block="false"
+      main_block_title="Top Categories"
+      slide_show="true"
+      main_block_width="25%"
+      slide_show_dots="false"
+      slide_show_arrows="true"
+      slide_show_autoplay="true"
+      slide_show_speed="300"
+      auto_play_speed="5000"
+      show_main_block_button="true"
+      main_block_button_text="All Categories"
+      main_block_height="500px"
+      :all_location_data="true"
+      :slider_responsive='[ 
+            {
+                "breakpoint": 1024,
+                "settings": {
+                   "slidesToShow": 4,
+                }
+            },
+                        {
+                "breakpoint": 768,
+                "settings": {
+                   "slidesToShow": 4,
+                }
+            },
+            {
+                "breakpoint": 480,
+                "settings": {
+                  "slidesToShow": 3,
+                }
+            }
+        ]'
+    />
+
+<div class ="banner-wrapper">
+    
+    <section class="main feature-section main-margin-top main-margin-bottom">
+      <div class="feature-container">
+        <!-- Left Column -->
+        <div class="feature-left">
+          <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/home/0af52d9fb065a17588329793b11d84c6_1763368692.jpg" alt="Feature Image" />
+          <div class="feature-text">
+            <h2>Check our Ayur Pharmaceuticals Products</h2>
+            <p>Guggulu, Churna, Kalka, Rasayana</p>
+          </div>
+        </div>
+    
+        <!-- Right Column -->
+        <div class="feature-right">
+          <div class="feature-content">
+            <h4>Is your liver silently drowning in fat?</h4>
+            <p>Siddhalepa LivPro, powered by the time-tested goodness of Heen Bovitiya and Aloe Vera</p>
+            <a href="/ayur-pharmaceuticals" class="btn btn-color-primary btn-style-round">Shop Now</a>
+            <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/home/d9f4dbd25353426b7d02ba4a2a57dfb4_1763369244.png" alt="Vertical Image" class="feature-vertical-img" />
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    
+    <section class="feature-alt-container main-margin-top main-margin-bottom">
+      <!-- Left Column -->
+      <div class="feature-alt-left">
+        <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/b61f71db4277b7b4b8c1f82534fe0585_1762505472.png" alt="Feature Left Image" class="feature-alt-left-img" />
+        <div class="feature-alt-content">
+          <h2><span>Supirivicky </span>Supirivicky is a non-fluoride and 100% vegetarian toothpaste which gives you total dental care.</h2>
+          <a href="/all" class="btn btn-color-primary btn-style-round btn-top-margin">Shop Now</a>
+        </div>
+      </div>
+    
+      <!-- Right Column -->
+      <div class="feature-alt-right">
+        <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/home/617fcb152da32fcd89c24732dc6fe041_1763370002.png" alt="Feature Right Image" class="feature-alt-right-img" />
+      </div>
+    </section>
+
+</div>
+
+<section class="main main-margin-top">
+        <h2>Featured Products</h2>
+        <p>Love Healthy with Ayurveda</p>
+    </section>
+
+
+
+    <products-block-custom-block
+      :limit="6"
+      :start="0"
+      :featured="true"
+      :all_location_data="true"
+      title="Featured Items"
+      show_title="false"
+      slide_show="true"
+      slide_show_dots="false"
+      rounded_corners="true"
+      columns="4"
+      description="false"
+      :show_add_to_cart="false"
+      :show_product_attribute="false"
+      :show_product_tags="false"
+      :slide_link="true"
+      slide_show_speed="1500"
+      main_block_height="300px"
+      slide_show_arrows="true"
+      :slider_responsive='[ 
+            {
+                "breakpoint": 1024,
+                "settings": {
+                   "slidesToShow": 4,
+                }
+            },
+                        {
+                "breakpoint": 768,
+                "settings": {
+                   "slidesToShow": 4,
+                }
+            },
+            {
+                "breakpoint": 480,
+                "settings": {
+                  "slidesToShow": 3,
+                }
+            }
+        ]'
+    />
+
+
+    
+    
+        <section class="main feature-section main-margin-top ">
+      <div class="feature-container sustainable-container">
+        <!-- Left Column -->
+        <div class="feature-left sustainable">
+          <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/464e6573ebde260a8b1ac317611cf506_1762764254.png" alt="Feature Image" />
+        </div>
+    
+        <!-- Right Column -->
+      <div class="feature-alt-left sustainable-right">
+        <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/9c9e37c9271ccdecc1c8d24c23b7ddad_1762764253.png" alt="Feature Left Image" class="feature-alt-left-img" />
+        <div class="feature-alt-content sustainable-para">
+          <h2>Our Sustainable Sourcing</h2>
+          <p>Anyway, you still use Lorem Ipsum and rightly so, as it will the always have a place in web workers toolbox, as happen checkpoints always things, not the way.</p>
+        </div>
+      </div>
+    </section>
+    
+    <section class="main main-margin-top">
+        <h2>New Arrivals</h2>
+        <p>Love Healthy with Ayurveda</p>
+    </section>
+    
+    <specific-product-custom-block
+      :limit="12"
+      :start="0"
+      attributes='[{"code":"NEW_ARRIVALS","value":"1", "condition":"eq"}, {"code":"NEW_ARRIVALS_END_DATE","value":"$$__current_datetime__$$", "condition":"gteq"}]'
+      columns="4"
+      title="New Arrivals"
+      show_title="false"
+      c
+      :categories="['8236bcf3051127d75afcae45202d1354']"
+      slide_show="true"
+      show_product_name="true"
+      show_product_description="true"
+      show_product_price="true"
+      show_product_attribute="false"
+      show_product_tags="false"
+      show_upcomming_offer="false"
+      show_add_to_cart="false"
+      slide_show_speed="1500"
+      auto_play_speed="5000"
+      main_block_height="500px"
+      slides_to_scroll="1"
+      slide_show_arrows="true"
+      :all_location_data="true"
+      :slider_responsive='[ 
+            {
+                "breakpoint": 1024,
+                "settings": {
+                   "slidesToShow": 4,
+                }
+            },
+                        {
+                "breakpoint": 768,
+                "settings": {
+                   "slidesToShow": 3,
+                }
+            },
+            {
+                "breakpoint": 480,
+                "settings": {
+                  "slidesToShow": 2,
+                }
+            }
+        ]'
+    />
+    
+    <section class="main main-margin-top media-hub">
+        <h2>Media Hub</h2>
+        <p>It's content strategy gone awry right from the start.</p>
+    </section>
+    
+    <section class = "card-row main">
+          <div class="card card1">
+              <a href = "https://siddhalepanew.preview.smart360-002.ebeyondsonline.com/media-room/">
+                  <img src ="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/39ae429138ac8ece73c41a17d2e5727c_1762838429.jpg" alt ="card1">
+              </a>
+          </div>
+          <div class="card">
+              <a href = "https://siddhalepanew.preview.smart360-002.ebeyondsonline.com/news-and-events/">
+                  <img src ="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/26f87891f47a6c274f918e85abe91f43_1762838502.jpg" alt ="card1">
+              </a>
+          </div>
+          <div class="card">
+              <a href = "https://siddhalepanew.preview.smart360-002.ebeyondsonline.com/blog/">
+                  <img src ="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/a8a2e7f9e11b464e3ec1cbed5a66e588_1762838502.jpg" alt ="card1">
+              </a>
+          </div>
+    </section>
+    <footer-block-section />
+  </template>
+</div>
