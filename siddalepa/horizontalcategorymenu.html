@@ -1,12 +1,28 @@
-<div class="horizontal-menu-wrapper relative" >
+<div class="horizontal-menu-wrapper  hidden lg:block" >
     <span class="block px-6 md:px-8 py-3 font-semibold lg:hidden flex border-b border-gray-100 curser-pointer items-center"   
     v-on:click="toggleMenu">
-        Categories
+        Menu
         <b-icon v-if="isActive" class=" ml-auto text-black w-5 h-5 " icon="caret-up-fill"    />
         <b-icon v-else class="ml-auto text-black w-5 h-5 " icon="caret-down-fill"    />
     </span>
+    
     <div class="list-group lg:block" :class="[ isActive ? 'block bg-white absolute top-full left-0': 'hidden']">
-        <ul class="lg:flex list-none">
+        
+        <ul class="lg:flex list-none gap-4">
+            <li class="category mx-2 relative group" > 
+                 <a href="/" class="block  font-semibold hover:opacity-80 whitespace-nowrap">Home</a>
+            </li>
+
+            <li class="category mx-2  group" > 
+            <div class="flex items-center gap-2 justify-center">
+                 <a href="#" class="block  font-semibold hover:opacity-80 whitespace-nowrap">Shop</a>
+                  <b-icon icon="chevron-down"  class="child-arrow cursor-pointer lg:ml-auto w-4 h-4 transition-all  group-hover:rotate-180">
+                        </b-icon>
+            </div>
+                
+                 <div class="full-mega-menu shadow-md h-0 group-hover:h-auto overflow-hidden absolute left-1/2 transform -translate-x-1/2 bg-white">
+                         <div class=" p-8 list-group lg:block" :class="[ isActive ? 'block bg-white absolute top-full left-0': 'hidden']">
+        <ul class="lg:flex list-none gap-4">
             <template v-if="slotData.showFeatured">
                 <li class="category mx-2 relative group"  data-category="featured" :data-name="slotData.language.category.featured">
 
@@ -24,8 +40,9 @@
 
                 </li>
             </template>
+          
 
-            <li v-if="!slotData.allLocationData || slotData.settings.locations.length == 1" class="category mx-2 relative group"  data-category="all" :data-name="slotData.language.category.allCategories">
+           <!-- <li v-if="!slotData.allLocationData || slotData.settings.locations.length == 1" class="category mx-2 relative group"  data-category="all" :data-name="slotData.language.category.allCategories">
 
                 <template v-if="'$$__location_url__$$'">
                     <a v-bind:href="'$$__location_url__$$/all'" class="block  font-semibold hover:opacity-80 whitespace-nowrap" :class="{ 'active text-primary': slotData.activeTab === 'all' }">
@@ -38,7 +55,7 @@
                     </a>
                 </template>
             </li>
-
+-->
             <template v-if="slotData.allLocationData && slotData.settings.locations.length > 1">
                 <template v-for="location in slotData.locations.slice(0, slotData.itemsToShow)">
                     <template v-if="location.url_rewrite">
@@ -61,16 +78,11 @@
                                     <a v-bind:href="'/' + category?.url_rewrite?.request_path" :class="{ 'active text-primary': slotData.activeTab === category.id, 'pr-1' : category.child_categories && category.child_categories.length > 0 }" class="block font-semibold hover:opacity-80 whitespace-nowrap">
                                     {{category.name}}
                                     </a>
-                                    <template v-if="category.child_categories && category.child_categories.length > 0">
-                                        <b-icon icon="chevron-down" 
-                                                class="child-arrow cursor-pointer lg:ml-auto w-4 h-4 transition-all	 group-hover:rotate-180"
-                                                >
-                                        </b-icon>
-                                    </template>
+                                   
                                 </template>
                             </div>
                             <template v-if="(!slotData.allLocationData  || slotData.settings.locations.length == 1) && category.child_categories && category.child_categories.length > 0">
-                                <div class="lg:absolute min-w-[200px] lg:top-full lg:-left-6 bg-white h-0 group-hover:h-auto px-2 overflow-hidden " >
+                                <div class="" >
                                     <horizontal-sub-category-snippet :activeChildren="category.child_categories"  />
                                 </div>
                             </template>
@@ -83,11 +95,10 @@
                 <li class="category mx-2 relative group" >
                     <div class="flex items-center">
                         <a class="block font-semibold hover:opacity-80 pr-1" >More</a>
-                        <b-icon icon="chevron-down"  class="child-arrow cursor-pointer lg:ml-auto w-4 h-4 transition-all  group-hover:rotate-180">
-                        </b-icon>
+                       
                     </div>
-                    <div class="lg:absolute min-w-[200px] lg:top-full lg:-left-6 bg-white h-0 group-hover:h-auto px-2 overflow-hidden" >
-                        <ul class="sub-category-wrapper lg:p-4 lg:pb-2 list-none my-0" >
+                    <div class="" >
+                        <ul class="sub-category-wrapper lg:py-2 list-none my-0" >
                             <template v-for="category in slotData.categories.slice(slotData.itemsToShow, slotData.categories.length)">
         
                             <li v-if="category.url_rewrite" class="category subcategory my-0" :data-category="category.id" :data-name="category.name">
@@ -104,4 +115,21 @@
 
         </ul>
     </div>
+
+                 </div>
+            </li>
+         
+            <li class="category mx-2 relative group" > 
+                 <a href="/offers" class="block  font-semibold hover:opacity-80 whitespace-nowrap">Offers</a>
+            </li>          
+            <li class="category mx-2 relative group" > 
+                 <a href="https://siddhalepanew.preview.smart360-002.ebeyondsonline.com/about-us/" class="block  font-semibold hover:opacity-80 whitespace-nowrap">About us</a>
+            </li>            
+            <li class="category mx-2 relative group" > 
+                 <a href="/contact-us" class="block  font-semibold hover:opacity-80 whitespace-nowrap">Contact us</a>
+            </li>
+        </ul>
+        
+    </div>
+    
 </div>
