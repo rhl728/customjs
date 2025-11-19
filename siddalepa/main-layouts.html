@@ -41,12 +41,11 @@
     
     
     <category-block-custom-block
-      categories="['09c1c7d98d178688ca95ff1fe7389ab9','ea9e81c3e89b211b6a0096583f302f78','68fb17d30f229b71b81e07d9e43d2a4f','d22acb9839731963f520403080830902','5637dd2b87d3f6b85e67a85af2eed529','a95f04bdca21c0b52c49f56ec23f4b3f']"
+    :categories="['09c1c7d98d178688ca95ff1fe7389ab9','ea9e81c3e89b211b6a0096583f302f78']"
       :start="0"
       :limit="40"
       title=""
       columns="6"
-      sort_property="sort_order"
       show_main_block="false"
       main_block_title="Top Categories"
       slide_show="true"
@@ -88,20 +87,20 @@
       <div class="feature-container">
         <!-- Left Column -->
         <div class="feature-left">
-          <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/home/0af52d9fb065a17588329793b11d84c6_1763368692.jpg" alt="Feature Image" />
+          <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/2624b5b78532b062230f2c37a010ce14_1762499217.jpg" alt="Feature Image" />
           <div class="feature-text">
-            <h2>Check our Ayur Pharmaceuticals Products</h2>
-            <p>Guggulu, Churna, Kalka, Rasayana</p>
+            <h2>Check our spa products</h2>
+            <p>Design is no afterthought, far from.</p>
           </div>
         </div>
     
         <!-- Right Column -->
         <div class="feature-right">
           <div class="feature-content">
-            <h4>Is your liver silently drowning in fat?</h4>
-            <p>Siddhalepa LivPro, powered by the time-tested goodness of Heen Bovitiya and Aloe Vera</p>
-            <a href="/ayur-pharmaceuticals" class="btn btn-color-primary btn-style-round">Shop Now</a>
-            <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/home/d9f4dbd25353426b7d02ba4a2a57dfb4_1763369244.png" alt="Vertical Image" class="feature-vertical-img" />
+            <h4>Try new ayurveda products</h4>
+            <p>You come to the point, make things.</p>
+            <a href="" class="btn btn-color-primary btn-style-round">Shop Now</a>
+            <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/a957a5d6a473b4e1687528be50e11918_1762499647.png" alt="Vertical Image" class="feature-vertical-img" />
           </div>
         </div>
       </div>
@@ -113,14 +112,15 @@
       <div class="feature-alt-left">
         <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/b61f71db4277b7b4b8c1f82534fe0585_1762505472.png" alt="Feature Left Image" class="feature-alt-left-img" />
         <div class="feature-alt-content">
-          <h2><span>Supirivicky </span>Supirivicky is a non-fluoride and 100% vegetarian toothpaste which gives you total dental care.</h2>
-          <a href="/all" class="btn btn-color-primary btn-style-round btn-top-margin">Shop Now</a>
+          <h2><span>Shine & Be Healthy </span>This Summer with Ayurveda</h2>
+          <p>Buy Siddhalepa Threepla Get Free Ayur Immune Tea Pack</p>
+          <a href="" class="btn btn-color-primary btn-style-round">Shop Now</a>
         </div>
       </div>
     
       <!-- Right Column -->
       <div class="feature-alt-right">
-        <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/home/617fcb152da32fcd89c24732dc6fe041_1763370002.png" alt="Feature Right Image" class="feature-alt-right-img" />
+        <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/a5ff2b0a5d60b9c3bca38f121ac18312_1762505472.png" alt="Feature Right Image" class="feature-alt-right-img" />
       </div>
     </section>
 
@@ -134,6 +134,7 @@
 
 
     <products-block-custom-block
+     
       :limit="6"
       :start="0"
       :featured="true"
@@ -173,7 +174,17 @@
             }
         ]'
     />
-
+    <div class="relative p-4 rounded-md md:p-8 2xl:px-16">
+         <custom-offer-category-list-template
+          category_ids="['']"
+          :limit="6"
+          :hideHeader="true" 
+          :hideLoadMore="true" 
+          :hideNoResult="true" 
+          :columns=6
+        /> 
+        
+    </div>
 
     
     
@@ -244,24 +255,24 @@
         ]'
     />
     
-    <section class="main main-margin-top media-hub">
-        <h2>Media Hub</h2>
+    <section class="main main-margin-top main-margin-bottom">
+        <h2>Media Room</h2>
         <p>It's content strategy gone awry right from the start.</p>
     </section>
     
-    <section class = "card-row main">
+    <section class = "card-row main main-margin-top">
           <div class="card card1">
-              <a href = "https://siddhalepanew.preview.smart360-002.ebeyondsonline.com/media-room/">
+              <a href = "#">
                   <img src ="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/39ae429138ac8ece73c41a17d2e5727c_1762838429.jpg" alt ="card1">
               </a>
           </div>
           <div class="card">
-              <a href = "https://siddhalepanew.preview.smart360-002.ebeyondsonline.com/news-and-events/">
+              <a href = "#">
                   <img src ="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/26f87891f47a6c274f918e85abe91f43_1762838502.jpg" alt ="card1">
               </a>
           </div>
           <div class="card">
-              <a href = "https://siddhalepanew.preview.smart360-002.ebeyondsonline.com/blog/">
+              <a href = "#">
                   <img src ="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/a8a2e7f9e11b464e3ec1cbed5a66e588_1762838502.jpg" alt ="card1">
               </a>
           </div>
