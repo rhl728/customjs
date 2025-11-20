@@ -16,14 +16,17 @@ const mainFn = () => {
   const url = new URL(currentUrl);
   const currentPage = url.pathname;
 
-  const elements = document.querySelectorAll(".headerElements");
 
-  elements.forEach((el) => {
-    console.log("el :>> ", el.dataset.key, currentPage);
-    if (el.dataset.key == currentPage) {
-      el.classList.add("activeClass");
-    }
-  });
+  function activateElements(selector, activeClass) {
+    document.querySelectorAll(selector).forEach((el) => {
+      if (el.dataset.key === currentPage) {
+        el.classList.add(activeClass);
+      }
+    });
+  }
+
+  activateElements(".headerElements", "activeClass");
+  activateElements(".footerElements", "font-medium");
 };
 
 document.addEventListener("oms_getTemplateListSuccess", function (e) {
