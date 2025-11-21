@@ -1,79 +1,77 @@
 <header id="header" class=" fixed top-0 left-0 w-full z-[12]  bg-white  shadow-md min-h-[90px]">
     <div class="header-wrapper px-4 md:px-6 py-10"
         :class="{'inquire-header-wrapper': slotData.settings && slotData.settings.enable_online_ordering != '1'}">
-        <div class="relative flex items-center justify-between h-16 text-slate-900 sections-HeaderBlockheader-sub-wrapper">
-            <hamburger-menu-snippet  />
+        <div
+            class="relative flex items-center justify-between h-16 text-slate-900 sections-HeaderBlockheader-sub-wrapper">
+            <hamburger-menu-snippet />
             <div class="mr-auto ml-4 md:ml-8">
-                <logo-snippet  />
+                <logo-snippet />
             </div>
-          <!--  <template v-if="slotData.showHorizontalMenu">-->
-          <div class="main-nav mr-auto uppercase flex gap-4 items-center">
-<!--              <ul class="items-center justify-center lg:flex list-none">
-                <li>
-                    <a href="/">Home</a>
-                </li>       
-                <li>
-                    <a href="/">Home</a>
-                </li>
-               
-                  
-              </ul>
-                
-               
-                <a href="#">Offers</a>
-                <a href="#">About us</a>
-                <a href="#">Contact us</a>-->
-               <horizontal-category-menu  :items_to_show="10" :show_onload="false"
+
+            <div class="main-nav mr-auto uppercase flex gap-4 items-center">
+
+                <horizontal-category-menu :items_to_show="10" :show_onload="false"
                     :all_location_data="slotData.allLocationData" />
-          </div>
-               
-           <!-- </template>-->
+            </div>
 
-                <div class="action-header flex">
-                    <location-block-section  />
 
-                    <div class="right-header flex items-center">
-                        <search-block-section  />
-                        <template v-if="slotData.settings && slotData.settings.enable_online_ordering == '1'">
-                            <template v-if="slotData.isUserLogin">
-                                <user-icon-snippet  />
-                            </template>
-                            <template v-else>
-                                <login-snippet  />
-                            </template>
+            <div class="action-header flex">
+                <location-block-section />
+
+                <div class="right-header flex items-center">
+                    
+                    <template v-if="slotData.settings && slotData.settings.enable_online_ordering == '1'">
+                        <template v-if="slotData.isUserLogin">
+                            <user-icon-snippet />
                         </template>
-                        <template v-if="slotData?.settings?.currency_list">
-                            <li class="relative group" style="list-style-type: none ; margin: 4%;">
-                                <div class="flex items-center">
-                                    <a class="block font-semibold hover:opacity-80 pr-1">{{slotData.orderCurrency}}</a>
-                                    <b-icon icon="chevron-down"
-                                        class="child-arrow cursor-pointer lg:ml-auto w-4 h-4 transition-all  group-hover:rotate-180">
-                                    </b-icon>
-                                </div>
-                                <div
-                                    class="lg:absolute min-w-[200px] lg:top-full lg:-left-6 bg-white h-0 group-hover:h-auto px-2 overflow-hidden">
-                                    <ul class="sub-category-wrapper lg:p-4 lg:pb-2 list-none my-0">
-                                        <template v-for="currency in slotData?.settings?.currency_list">
-
-                                            <li class="category subcategory my-0" :data-category="currency.id"
-                                                :data-name="currency.currency_code">
-                                                <a class="block  hover:opacity-80 whitespace-nowrap"
-                                                    v-on:click="setCurrency(currency.currency_code)">
-                                                    {{currency.currency_code}}
-                                                </a>
-                                            </li>
-
-                                        </template>
-                                    </ul>
-                                </div>
-                            </li>
+                        <template v-else>
+                            <login-snippet />
                         </template>
-                        <template v-if="slotData.disableCheckout != true">
+                    </template>
+                    <a href="/my-favourites">
+
+                        <div class="mr-auto ml-4 md:ml-8">
+    
+                            <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                                <path
+                                class="w-full"
+                                    d="M442.9 144C415.6 144 389.9 157.1 373.9 179.2L339.5 226.8C335 233 327.8 236.7 320.1 236.7C312.4 236.7 305.2 233 300.7 226.8L266.3 179.2C250.3 157.1 224.6 144 197.3 144C150.3 144 112.2 182.1 112.2 229.1C112.2 279 144.2 327.5 180.3 371.4C221.4 421.4 271.7 465.4 306.2 491.7C309.4 494.1 314.1 495.9 320.2 495.9C326.3 495.9 331 494.1 334.2 491.7C368.7 465.4 419 421.3 460.1 371.4C496.3 327.5 528.2 279 528.2 229.1C528.2 182.1 490.1 144 443.1 144zM335 151.1C360 116.5 400.2 96 442.9 96C516.4 96 576 155.6 576 229.1C576 297.7 533.1 358 496.9 401.9C452.8 455.5 399.6 502 363.1 529.8C350.8 539.2 335.6 543.9 320 543.9C304.4 543.9 289.2 539.2 276.9 529.8C240.4 502 187.2 455.5 143.1 402C106.9 358.1 64 297.7 64 229.1C64 155.6 123.6 96 197.1 96C239.8 96 280 116.5 305 151.1L320 171.8L335 151.1z" />
+                            </svg>
+                        </div>
+                    </a>
+                    <template v-if="slotData?.settings?.currency_list">
+                        <li class="relative group" style="list-style-type: none ; margin: 4%;">
+                            <div class="flex items-center">
+                                <a class="block font-semibold hover:opacity-80 pr-1">{{slotData.orderCurrency}}</a>
+                                <b-icon icon="chevron-down"
+                                    class="child-arrow cursor-pointer lg:ml-auto w-4 h-4 transition-all  group-hover:rotate-180">
+                                </b-icon>
+                            </div>
+                            <div
+                                class="lg:absolute min-w-[200px] lg:top-full lg:-left-6 bg-white h-0 group-hover:h-auto px-2 overflow-hidden">
+                                <ul class="sub-category-wrapper lg:p-4 lg:pb-2 list-none my-0">
+                                    <template v-for="currency in slotData?.settings?.currency_list">
+
+                                        <li class="category subcategory my-0" :data-category="currency.id"
+                                            :data-name="currency.currency_code">
+                                            <a class="block  hover:opacity-80 whitespace-nowrap"
+                                                v-on:click="setCurrency(currency.currency_code)">
+                                                {{currency.currency_code}}
+                                            </a>
+                                        </li>
+
+                                    </template>
+                                </ul>
+                            </div>
+                        </li>
+                    </template>
+                    <template v-if="slotData.disableCheckout != true">
                         <cart-drawer-snippet />
                     </template>
-                    </div>
+                    <search-block-section />
                 </div>
+            </div>
         </div>
     </div>
-    <cart-item-snippet  />
+    <cart-item-snippet />
 </header>
