@@ -2071,20 +2071,50 @@ document.addEventListener("oms_getTemplateListSuccess", function () {
 });
 
 
+//set default order type ->> Store pickup
+
 function updateOrderType(orderTypeValue) {
     
   const key = "oms_order_details_f19f00fa2ca8585db05b39ba151d8a91";
 
 
   let data = localStorage.getItem(key);
-console.log(">>>>",data)
+// console.log(">>>>",JSON.parse(data))
 
   if (!data) {
-      console.log(">dddd")
+    //   console.log(">dddd")
     const newData = {
-      delivery_info: {
-        orderType: orderTypeValue
-      }
+          "delivery_info": {
+        "date": null,
+        "time": null,
+        "orderType": orderTypeValue,
+        "shippingPrice": null,
+        "deliveryDateInvalid": null,
+        "shipping_calling_code": "+94",
+        "shipping_country_code": "LK",
+        "shipping_country": "Sri Lanka"
+    },
+    "user_info": {
+        "name": "",
+        "last_name": "",
+        "contact_number": "",
+        "email": "",
+        "address": "",
+        "address_line2": "",
+        "state": "",
+        "country": "Sri Lanka",
+        "city": "",
+        "zip": "",
+        "calling_code": "+94",
+        "country_code": "LK"
+    },
+    "payment_info": {
+        "paymentMethod": null,
+        "paymentMethodInvalid": true,
+        "loyaltyPoints": null
+    },
+    "instruction": null,
+    "more_info": {}
     };
 
     localStorage.setItem(key, JSON.stringify(newData));
