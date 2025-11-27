@@ -1,25 +1,50 @@
-<header id="header" class=" fixed top-0 left-0 w-full z-[12]  bg-white  shadow-md min-h-[90px]">
+<header id="header" class="fixed top-0 left-0 w-full z-[12]  bg-white  shadow-md min-h-[90px]">
     <div class="header-wrapper px-4 md:px-6 py-10"
         :class="{'inquire-header-wrapper': slotData.settings && slotData.settings.enable_online_ordering != '1'}">
-        <div
-            class="relative flex items-center justify-between h-16 text-slate-900 sections-HeaderBlockheader-sub-wrapper">
+        <div class="relative flex items-center justify-between h-16 text-slate-900 sections-HeaderBlockheader-sub-wrapper">
             <hamburger-menu-snippet />
             <div class="mr-auto ml-4 md:ml-8">
                 <logo-snippet />
             </div>
-
-            <div class="main-nav mr-auto uppercase flex gap-4 items-center">
+        
+        <div class="main-nav mr-auto uppercase flex gap-4 items-center">
 
                 <horizontal-category-menu :items_to_show="10" :show_onload="false"
                     :all_location_data="slotData.allLocationData" />
             </div>
 
-
-            <div class="action-header flex">
+            <div class="action-header flex items-center">
                 <location-block-section />
 
                 <div class="right-header flex items-center">
-                    
+                   
+                    <template v-if="slotData?.selected_currencies  && slotData.selected_currencies .length > 1">
+                        <div class="relative group max-w-[60px] md:border md:border-black ml-3 md:ml-8 p-1 rounded-md !my-0"
+                            style="list-style-type: none ;">
+                            <div class="flex items-center cursor-pointer select-none">
+                                <a
+                                    class="block font-semibold hover:opacity-80 pr-1 text-xs">{{slotData.orderCurrency}}</a>
+                                <b-icon icon="chevron-down"
+                                    class="child-arrow cursor-pointer ml-auto w-4 h-4 text-gray-600 transition-all duration-300 group-hover:rotate-180">
+                                </b-icon>
+                            </div>
+                            <div
+                                class="absolute min-w-[120px] top-[102%] -left-6 bg-white h-0 group-hover:h-auto px-2 overflow-hidden">
+                                <ul class="sub-category-wrapper py-2 list-none my-0">
+                                    <template v-for="(currency, index) in slotData.selected_currencies">
+                                        <li :key="index"
+                                            class="px-4 py-2 hover:bg-primary hover:text-white cursor-pointer transition-colors duration-200 rounded-md text-sm"
+                                            @click="setCurrency(currency)" :class="{
+                                           'bg-primary text-white': slotData.orderCurrency === currency,
+                                           'text-gray-800': slotData.orderCurrency !== currency
+                                         }">
+                                            {{ currency }}
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </div>
+                    </template>
                     <template v-if="slotData.settings && slotData.settings.enable_online_ordering == '1'">
                         <template v-if="slotData.isUserLogin">
                             <user-icon-snippet />
@@ -68,7 +93,7 @@
                     <template v-if="slotData.disableCheckout != true">
                         <cart-drawer-snippet />
                     </template>
-                    <search-block-section />
+                     <search-block-section />
                 </div>
             </div>
         </div>
