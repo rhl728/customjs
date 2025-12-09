@@ -1,0 +1,203 @@
+<div v-if="slotData.settingLoaded">
+  <header-block-section  />
+
+  <div class="thank-you-wrapper confirmed">
+    <div class="info-wrapper">
+        <div
+      class="section-title"
+    >
+      <p class="order-number">
+          <template v-if="slotData.orderForm == 'inquire'">
+                {{slotData.language.paymentSuccess.inquiry.inquiryNumber}}
+            </template>
+            <template v-else>
+                {{slotData.language.paymentSuccess.orderNumber}}
+            </template>
+            <span id="order-id" class="number" :data-order-id="slotData.orderInfo.id">#{{slotData.orderInfo.reference}}</span>
+      </p>
+      <p class="h1 title">
+        <template v-if="slotData.orderForm == 'inquire'">
+            {{slotData.language.paymentSuccess.inquiry.subTitle}}
+        </template>
+        <template v-else>
+            <span class="status-text text-pending ">
+                Your Order is Placed
+            </span>
+            <span class="status-text text-confirmed active">
+                Your Order is Confirmed
+            </span>
+            <span class="status-text text-rejected">
+                Your Order is Rejected
+            </span>
+            <span class="status-text text-error">
+                Something went wrong
+            </span>
+        </template>
+      </p>
+      
+      <p class="status-description">
+        <span class="description-default">
+            Please hold on while outlet confirms your order
+        </span>
+        <span class="description-confirmed">
+            Thank you for your ordering with us. We'll inform you when your order is ready.
+        </span>
+        <span class="description-rejected">
+            Your order cannot be fulfilled at the moment please go <a href="/" title="Home Page">back</a> and try a new order or select another outlet.
+        </span>
+        <span class="description-return">
+            Outlet is taking longer than usual to process your order. You can go back to <a href="/" title="Home Page">Home Page</a> and check your order status via "Main Menu" > "Check My Order" later.
+        </span>
+        <span class="description-error">
+            An unexpected error occured with your order, please contact outlet for more information.
+        </span>
+      </p>
+      
+      <div class="image-wrapper">
+          <img src="https://dna3n15iwxmh8.cloudfront.net/f19f00fa2ca8585db05b39ba151d8a91/media/images/order-place-image/51d7b346419cb7c2a528f334c4289aea_1762420869.jpg" alt="delivery-image">
+      </div>
+      
+      <div class="buttons-wrapper">
+          <button>
+              <span>Check My Order</span>
+          </button>
+          <button onclick="window.location.href='https://finagle-mini-marts-trial.shoponcloud.com/'">
+              <span>Continue Shopping</span>
+          </button>
+      </div>
+      
+      <!-- display loading screen until order confirmation -->
+      <div class="loader-wrapper">
+            <span class="loader"></span>
+      </div>
+    </div>
+    
+    <!--<code>{{slotData.orderInfo}}</code>-->
+    
+        <!-- Order Information Section -->
+        <!--<div v-if="slotData.orderInfo" class="order-info-wrapper collapse-section">-->
+            
+            <!--Order Confirmation Heading-->
+        <!--    <p class="h5 collapse-button">{{slotData.language.cart.title}}-->
+        <!--        <span>-->
+        <!--            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+        <!--                <path d="M17.293 15.7073L18.7072 14.293L12.0001 7.58594L5.29297 14.293L6.70718 15.7073L12.0001 10.4144L17.293 15.7073Z" fill="black"/>-->
+        <!--            </svg>-->
+        <!--        </span>-->
+        <!--    </p>-->
+            
+            <!--Order Products List-->
+        <!--    <div class="collapse-item">-->
+        <!--        <div class="order-product-list">-->
+        <!--            <div class="order-product-list-item">-->
+        <!--                <div class="product-image">-->
+        <!--                    <img src="$$__client_media_url__$$/$$__client_media_path__$$/no-image.png" alt="" title="" width="100" height="100" loading="lazy" >-->
+        <!--                </div>-->
+        <!--                <div class="product-info">-->
+        <!--                    <p class="product-name truncate">Sandwich Bread (500 g)</p>-->
+        <!--                    <p class="product-price">LKR 490.00</p>-->
+        <!--                    <span class="order-qty">1</span>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--    </div>-->
+        <!--</div>-->
+        
+        
+        <!--Order Summary Section [mobile] -->
+        <!--<div class="summary-wrapper">-->
+        <!--    <div v-if="slotData.orderInfo.sub_total" class="summary-item sub-total txt-subtotal">-->
+        <!--            <div class="name">$$__order_confirmations_text_subtotal__$$</div>-->
+        <!--            <div class="value">{{slotData.paymentInfo.currency}} {{ slotData.helpers.PriceFormat(slotData.orderInfo.sub_total) }}</div>-->
+        <!--        </div>-->
+                
+        <!--        <div class="summary-item additional-charge" v-if="slotData.orderInfo.cart_total_discount">-->
+        <!--                <div class="name"> {{slotData.languageInfo.tax}} {{slotData.settings.order_tax_rate}}%: </div>-->
+        <!--                <div class="name">$$__order_confirmations_text_discounts__$$</div>-->
+        <!--                <div class="value">{{slotData.paymentInfo.currency}} {{ slotData.helpers.PriceFormat(slotData.orderInfo.cart_total_discount) }} </div>-->
+        <!--            </div>-->
+                    
+        <!--        <div class="summary-item additional-charge" v-if="slotData.serviceCharge">-->
+        <!--                <div class="name"> {{slotData.languageInfo.serviceCharges}} {{slotData.settings.order_service_charge_rate}}%: </div>-->
+        <!--                <div class="name">$$__order_confirmations_text_service_fee__$$</div>-->
+        <!--                <div class="value">{{slotData.paymentInfo.currency}} {{ slotData.helpers.PriceFormat(slotData.serviceCharge) }} </div>-->
+        <!--            </div>-->
+                    
+        <!--            <div class="summary-item additional-charge" v-if="slotData.taxCharge">-->
+        <!--                <div class="name"> {{slotData.languageInfo.tax}} {{slotData.settings.order_tax_rate}}%: </div>-->
+        <!--                <div class="name">$$__order_confirmations_text_taxes__$$</div>-->
+        <!--                <div class="value">{{slotData.paymentInfo.currency}} {{ slotData.helpers.PriceFormat(slotData.taxCharge) }} </div>-->
+        <!--            </div>-->
+    
+        <!--            <div v-if="slotData.orderInfo.gross_total>=0" class="summary-item total-price">-->
+        <!--                <span class="title">$$__order_confirmations_text_total__$$</span>-->
+        <!--                <span class="value"> {{slotData.paymentInfo.currency}} {{ slotData.helpers.PriceFormat(slotData.orderInfo.gross_total) }} </span>-->
+        <!--            </div>-->
+        <!--</div>-->
+        
+        <!-- Customer Details Section -->
+        <!--<div class="customer-info-wrapper">-->
+        <!--    <div class="customer-info">-->
+        <!--        <p class="h6 customer-info-title">Personal Details</p>-->
+        <!--        <p class="customer">-->
+        <!--            <span class="name">John Doe</span>-->
+        <!--            <span class="address">No. 123, High Level Road, Kottawa, Colombo</span>-->
+        <!--            <span class="phone">077 123 4567</span>-->
+        <!--            <span class="email">johndoe@example.com</span>-->
+        <!--        </p>-->
+        <!--    </div>-->
+        <!--    <div class="billing-info">-->
+        <!--        <p class="h6 customer-info-title">Pickup Details</p>-->
+        <!--        <p class="outlet-name">Finagle Mini Mart - Kottawa</p>-->
+        <!--        <p class="message">You can Collect your order from this outlet.</p>-->
+        <!--        <p><a class="link-as-button-option-3" href="#" target="_blank" title="Get Directions">Get Directions</a></p>-->
+        <!--    </div>-->
+        <!--</div>-->
+    </div>
+    
+    <!--Order Summary Section [desktop] -->
+    <!--<div class="summary-wrapper">-->
+    <!--    <div class="order-charges">-->
+    <!--        <div class="section-title">-->
+    <!--            <h3 class="h5">$$__order_confirmations_title_order_summary__$$</h3>-->
+    <!--        </div>-->
+    <!--        <div v-if="slotData.orderInfo.sub_total" class="summary-item sub-total txt-subtotal">-->
+    <!--            <div class="name">$$__order_confirmations_text_subtotal__$$</div>-->
+    <!--            <div class="value">{{slotData.paymentInfo.currency}} {{ slotData.helpers.PriceFormat(slotData.orderInfo.sub_total) }}</div>-->
+    <!--        </div>-->
+            
+    <!--        <div class="summary-item additional-charge" v-if="slotData.orderInfo.cart_total_discount">-->
+    <!--                <div class="name"> {{slotData.languageInfo.tax}} {{slotData.settings.order_tax_rate}}%: </div>-->
+    <!--                <div class="name">$$__order_confirmations_text_discounts__$$</div>-->
+    <!--                <div class="value">{{slotData.paymentInfo.currency}} {{ slotData.helpers.PriceFormat(slotData.orderInfo.cart_total_discount) }} </div>-->
+    <!--            </div>-->
+                
+    <!--        <div class="summary-item additional-charge" v-if="slotData.serviceCharge">-->
+    <!--                <div class="name"> {{slotData.languageInfo.serviceCharges}} {{slotData.settings.order_service_charge_rate}}%: </div>-->
+    <!--                <div class="name">$$__order_confirmations_text_service_fee__$$</div>-->
+    <!--                <div class="value">{{slotData.paymentInfo.currency}} {{ slotData.helpers.PriceFormat(slotData.serviceCharge) }} </div>-->
+    <!--            </div>-->
+                
+    <!--            <div class="summary-item additional-charge" v-if="slotData.taxCharge">-->
+    <!--                <div class="name"> {{slotData.languageInfo.tax}} {{slotData.settings.order_tax_rate}}%: </div>-->
+    <!--                <div class="name">$$__order_confirmations_text_taxes__$$</div>-->
+    <!--                <div class="value">{{slotData.paymentInfo.currency}} {{ slotData.helpers.PriceFormat(slotData.taxCharge) }} </div>-->
+    <!--            </div>-->
+
+    <!--            <div v-if="slotData.orderInfo.gross_total>=0" class="summary-item total-price">-->
+    <!--                <span class="title">$$__order_confirmations_text_total__$$</span>-->
+    <!--                <span class="value"> {{slotData.paymentInfo.currency}} {{ slotData.helpers.PriceFormat(slotData.orderInfo.gross_total) }} </span>-->
+    <!--            </div>-->
+    <!--    </div>-->
+    <!--    <div class="order-submit-btn">-->
+    <!--        <button class="proceed-to-checkout inline-flex items-center justify-center w-full">$$__order_confirmations_btn_text_download_reciept__$$</button>-->
+    <!--    </div>-->
+    <!--</div>-->
+  </div>
+  
+  <!--{{slotData}}-->
+  <footer-block-section  />
+</div>
+ <div v-else>
+  <page-loader-snippet  />
+</div>

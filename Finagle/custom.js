@@ -214,7 +214,7 @@ const intLocationPicker = () => {
             // Create the central draggable marker
               draggableMarker = new AdvancedMarkerElement({
                 map,
-                position: map.getCenter(),
+                position: outlet.position, //position: map.getCenter(),
                 gmpDraggable: true,
                 title: "Drag me to find an address",
                 content: (() => {
@@ -593,8 +593,22 @@ const intLocationPicker = () => {
             shipping_addr.setAttribute('data-latitude', currentPosition.lat);
             shipping_addr.setAttribute('data-longitude', currentPosition.lng);
             
-            
             shipping_addr.dispatchEvent(new Event('input'));
+            
+            //Set Map Latitude Field on Checkout Form
+            const shipping_lat = document.getElementById('c36b05784ce9b8eedde5c141e30e0d2c');
+            shipping_lat.value = currentPosition.lat;
+            shipping_lat.setAttribute('value', currentPosition.lat);
+            
+            shipping_lat.dispatchEvent(new Event('input'));
+            
+            //Set Map Longitude Field on Checkout Form
+            const shipping_lng = document.getElementById('57623f36e37df5b216c15f2e1c9abcc7');
+            shipping_lng.value = currentPosition.lng;
+            shipping_lng.setAttribute('value', currentPosition.lng);
+            
+            shipping_lng.dispatchEvent(new Event('input'));
+            
             
             //Append to checkout Form
             
@@ -2035,6 +2049,7 @@ hidecheckoutBtn()
 document.addEventListener("oms_getTemplateListSuccess", function () {
 
     const cards = document.querySelectorAll(".location-card");
+    console.log("cards" , cards);
 
     cards.forEach(card => {
         card.addEventListener("click", function(){
@@ -2042,6 +2057,9 @@ document.addEventListener("oms_getTemplateListSuccess", function () {
             localStorage.setItem("user_current_location", selectedLocation);
         });
     });
+    
+    // console.log("hi");
+    // console.log(".......", selectedLocation);
 
     const select = document.querySelector("#locationSelect");
     if (select) {
@@ -2125,3 +2143,144 @@ function updateOrderType(orderTypeValue) {
 }
 
 updateOrderType("Store Pickup");
+
+
+
+// search page modification
+
+document.addEventListener("oms_getTemplateListSuccess", function (e) {
+    const gridBtn = document.getElementById("gridBtn");
+    const listBtn = document.getElementById("listBtn");
+
+    function activateGrid() {
+        gridBtn.classList.add("active-btn");
+        listBtn.classList.remove("active-btn");
+    }
+
+    function activateList() {
+        gridBtn.classList.remove("active-btn");
+        listBtn.classList.add("active-btn");
+    }
+
+    gridBtn.addEventListener("click", activateGrid);
+    listBtn.addEventListener("click", activateList);
+
+    activateGrid();
+    
+    getCheckMyOrderUrl();
+});
+
+
+// display none the mini cart section while add items in mobile view
+
+// document.addEventListener("DOMContentLoaded", function(){
+//     const cartBar = document.querySelector(".mini-cart-box");
+//     console.log("cartBar", cartBar);
+//     const totalValue = document.querySelector(".mini-cart-wrapper .order-charges .value");
+//     console.log("totalValue", totalValue);
+    
+//     function updateCartBar(){
+//         let amount = totalValue.innerText.replace("LKR", "").trim();
+//         amount = parseFloat(amount);
+//         console.log("amount", amount);
+        
+//         if(amount === 0){
+//             cartBar.classList.remove("show");
+//         }else{
+//             cartBar.classList.add("show");
+//         }
+//     }
+    
+//     updateCartBar();
+    
+//     const observer = new MutationObserver(updateCartBar);
+    
+//     observer.observe(totalValue, {
+//         characterData: true,
+//         subtree: true,
+//         clildList: true
+//     });
+// });
+
+// document.addEventListener("DOMContentLoaded", function () {
+//     const cartBar = document.querySelector(".mini-cart-box");
+//     const totalValue = document.querySelector(".mini-cart-wrapper .order-charges .value");
+//     console.log("...", cartBar);
+//     console.log("===", totalValue);
+
+//     if (!cartBar || !totalValue) {
+//         console.log("Elements not found!");
+//         return;
+//     }
+
+//     function updateCartBar() {
+//         let amountText = totalValue.innerText.replace("LKR", "").trim();
+//         let amount = parseFloat(amountText);
+//         console.log("--",amount);
+
+//         if (amount === 0) {
+//             cartBar.classList.add("hide");
+//         } else {
+//             cartBar.classList.remove("hide");
+//         }
+//     }
+
+//     updateCartBar();
+
+//     const observer = new MutationObserver(updateCartBar);
+
+//     observer.observe(totalValue, {
+//         characterData: true,
+//         childList: true,
+//         subtree: true
+//     });
+// });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const cartBar = document.querySelector(".mini-cart-box");
+    const totalValue = document.querySelector(".mini-cart-wrapper .order-charges .value");
+    
+    console.log("Cart Bar:", cartBar);
+    console.log("Total Value:", totalValue);
+    
+    if (!cartBar || !totalValue) {
+        return;
+    }
+    
+    function updateCartBar() {
+        let amountText = (totalValue.textContent || totalValue.innerText)
+            .replace("LKR", "")
+            .replace(/,/g, "")
+            .trim();
+        
+        let amount = parseFloat(amountText);
+        
+        if (isNaN(amount) || amount === 0) {
+            cartBar.classList.add("hide");
+        } else {
+            cartBar.classList.remove("hide");
+        }
+    }
+    
+    updateCartBar();
+    
+    const observer = new MutationObserver(function(mutations) {
+        console.log("Mutations detected:", mutations.length);
+        mutations.forEach(m => console.log("Type:", m.type, "Target:", m.target));
+        updateCartBar();
+    });
+    
+    observer.observe(totalValue, {
+        characterData: true,     
+        childList: true,          
+        subtree: true,            
+        attributes: false,        
+        characterDataOldValue: true  
+    });
+
+});
+
+
+const getCheckMyOrderUrl = ()=>{
+    console.log('ssssssssssssssssssssss')
+}
