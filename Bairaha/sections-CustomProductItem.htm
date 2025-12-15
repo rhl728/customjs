@@ -1,4 +1,4 @@
-<div class="card relative" v-bind:class="[slideShow ? 'slideshow-mode flex xl:block items-center' : 'grid-mode rounded-md box-border overflow-hidden flex flex-nowrap rounded-md items-center bg-transparent border border-gray-100 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-md ' ]">
+<div class="relative card" v-bind:class="[slideShow ? 'slideshow-mode flex xl:block items-center' : 'grid-mode rounded-md box-border flex flex-nowrap rounded-md items-center bg-transparent border border-gray-100 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-md flex flex-col ' ]">
   <!-- offer percentage -->
   <template v-if="showOfferTags"><legend></legend>
   
@@ -8,56 +8,57 @@
 
   <!-- image -->
   <template v-if="showProductImage">
-    <template v-if="data.images.length">
+  
+    <template v-if="data.images?.length>0 && data.images.find(img=>img.type==='image')">
       <template v-for="image in data.images">
-        <template v-if="image.primary_image && image.primary_image == 1">
+        <template v-if="image.type==='image' && image.primary_image && image.primary_image == 1 ">
           
-            <a v-bind:href="'/'+data.seo_url " v-bind:class="[slideShow ? 'flex flex-shrink-0 w-32 h-36 mr-2 xl:block xl:mr-0 xl:h-auto xl:w-auto' : 'complete-product-a-tag flex flex-shrink-0 w-32 sm:w-44 md:w-36 xl:w-44 h-full' ]" >
-              <div
-                class="thumb  bg-center bg-no-repeat h-full w-full bg-gray-100  " v-bind:class="[slideShow ? 'xl:h-56 h-36 bg-contain' : 'h-full bg-cover' ]"
-                v-bind:style="{'background-image': 'url(' + image.small + ')'}"
-                v-bind:title="data.name"
-              ></div>
+            <a v-bind:href="'/'+data.seo_url " v-bind:class="[slideShow ? 'relative flex flex-shrink-0 w-32 h-36 mr-2 xl:block xl:mr-0 xl:h-auto xl:w-auto' : 'relative flex flex-shrink-0 w-32 sm:w-44 md:w-36 xl:w-44 h-[200px] ','complete-product-a-tag' ]" >
+
+              <img 
+              :src="image.small" 
+              :alt="data.name"
+              class="w-full h-full thumb object-contain object-center bg-white"
+              :class="[slideShow ? 'xl:h-56 h-36 ' : 'h-full ' ]"
+              :title="data.name"
+              loading="lazy" decoding="async"
+              >
+              <Favorite-icon-snippet 
+                :favorite="data.favorite"
+                :productId="data.id"
+                :isInTheFavoritePage="isInTheFavoritePage"
+                :key="data.id"
+                @removeSingleProduct="removeSingleProduct"
+              />
             </a>
-          
+
         </template>
       </template>
     </template>
     <template v-else>
-      <a v-bind:href="'/'+data.seo_url " v-bind:class="[slideShow ? '' : 'complete-product-a-tag flex flex-shrink-0 w-32 sm:w-44 md:w-36 xl:w-44 h-full' ]">
-        <div
-          class="thumb bg-contain bg-center bg-no-repeat h-full w-full bg-gray-100  " v-bind:class="[slideShow ? 'h-56' : '' ]"
-          v-bind:style="{'background-image': 'url($$__client_media_url__$$/$$__client_media_path__$$/no-image.png)'}"
-          v-bind:title="data.name"
-        ></div>
+      <a v-bind:href="'/'+data.seo_url " v-bind:class="[slideShow ? 'relative' : 'relative flex flex-shrink-0 w-32 sm:w-44 md:w-36 xl:w-44 h-[200px]','complete-product-a-tag' ]">
+
+        <img 
+        src="$$__client_media_url__$$/$$__client_media_path__$$/no-image.png" 
+        :alt="data.name"
+        class="w-full h-full thumb object-contain object-center bg-white"
+        :class="[slideShow ? 'h-56' : '' ]"
+        :title="data.name"
+        loading="lazy" decoding="async"
+        >
+          
+        <Favorite-icon-snippet
+          :favorite="data.favorite"
+          :productId="data.id"
+          :isInTheFavoritePage="isInTheFavoritePage"
+          :key="data.id"
+          @removeSingleProduct="removeSingleProduct"
+        />
       </a>
     </template>
   </template>
-  
-    <!--    <div class="w-full" v-for="category in data.categories">-->
-    <!--    <div v-if="['8df6f6d11ebca2277c61acc41c5496d4', '061e87bd1afa82eb5258dc23e21bb236','295da9bb8205734849040fa25d013256'].includes(category.id)">-->
-    <!--        <div class="offer-percentage-wrapper absolute top-1 right-1 lg:right-3 lg:top-3 bg-slate-900 text-white rounded-md text-xs px-2 py-1">-->
-    <!--            <span class="offer-percentage flash-percentage">-->
-    <!--                    25% OFF -->
-    <!--            </span>-->
-    <!--            <span><svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-    <!--                <path d="M20.5122 3.01482C20.5787 3.00242 20.6429 2.99336 20.7104 3.00631C23.8557 4.71129 27.1107 6.30085 30.2147 8.08845C30.5147 8.26126 30.9827 8.42416 30.9999 8.81509C31.0091 9.02468 30.4913 9.84702 30.351 10.0966C27.3042 15.5148 24.0884 20.8535 20.9823 26.2372C20.808 26.3454 20.6265 26.3925 20.4262 26.3146L16.5712 24.2351C16.3082 24.576 16.0077 24.9321 15.6735 25.2103C14.0042 26.5999 10.908 26.6746 8.84423 27.3731C7.80358 27.7253 6.68069 28.5952 5.65521 28.9391C4.99745 29.1598 4.90649 28.7441 4.66589 28.2792C3.35583 25.7482 2.23686 23.1022 1.00006 20.5393C0.99421 20.1092 1.40708 19.9872 1.73257 19.8164C2.65795 19.3308 3.65534 18.9561 4.54923 18.4184C6.68297 16.3585 8.60404 13.9605 10.7371 11.9172C12.3314 10.3901 14.5074 10.3301 16.4944 9.56023L20.1524 3.2504C20.2182 3.14705 20.3916 3.03731 20.5122 3.01482ZM19.8173 6.08076C20.8095 6.33801 22.0368 6.10969 22.653 5.26L20.7995 4.27728L19.8173 6.08076ZM28.0981 11.7141C26.7535 10.7713 26.3364 9.01188 26.8811 7.51131L23.8362 5.85652C23.5742 5.74992 23.272 6.22692 23.0601 6.39812C22.0242 7.23527 20.5924 7.49605 19.3298 7.0057L19.2428 7.03055C17.2174 10.3418 15.5565 13.8438 13.7644 17.2765C14.203 17.3978 14.6521 17.2673 15.0367 17.056L17.0107 15.2087C15.7661 12.1881 18.4819 10.652 21.2633 11.5987C22.0607 11.87 22.9328 12.4226 23.4988 13.0315C25.7766 15.4824 24.2345 18.479 20.8636 17.9771L17.1998 23.3783L17.6009 23.5299C18.6697 22.2954 20.3557 21.7421 21.9405 22.3486L22.0275 22.3237L28.0981 11.7141ZM29.6872 9.00037L27.8348 8.09864C27.5441 9.06682 27.8504 10.1391 28.6274 10.8015C28.6993 10.8203 28.7187 10.762 28.7525 10.7166C28.853 10.5812 29.7469 9.07816 29.6872 9.00037ZM21.617 16.9584C24.6236 16.729 23.5407 14.0189 21.6669 12.9569C20.1505 12.0976 17.4122 11.9678 17.8547 14.3587C19.4631 12.4455 22.6093 13.8864 21.9176 16.323C21.8498 16.5622 21.7018 16.7351 21.617 16.9584ZM21.4531 23.2734C20.4608 23.0164 19.2336 23.2444 18.6173 24.0943L20.4666 25.0739L21.4531 23.2734Z" fill="black"/>-->
-    <!--                </svg>-->
-    <!--            </span>-->
-    <!--        </div>-->
-    <!--        <div class="bottom-offer offer-percentage-wrapper top-2 right-1 lg:right-3 lg:top-3 bg-slate-900 text-white rounded-md text-xs px-2 py-1">-->
-    <!--            <span class="offer-percentage flash-percentage">-->
-    <!--                    25% OFF -->
-    <!--            </span>-->
-    <!--            <span><svg width="25" height="25" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-    <!--                <path d="M16.2085 11.6943C16.8607 11.4518 17.611 11.2028 18.106 11.8623C18.9011 12.9218 17.8591 13.9537 17.0278 14.5967C16.2386 15.2071 13.6072 16.6743 13.229 17.3213C12.8955 17.8921 13.062 18.4782 13.7915 18.5732C14.5889 18.6771 16.681 18.648 17.5142 18.5771C18.4541 18.4972 19.0256 18.0789 19.6519 17.4658C19.6967 17.4219 19.6974 17.3379 19.7046 17.3379H24.7847C23.012 20.1097 21.8027 23.2099 18.0483 23.8428C15.877 24.2088 13.5974 24.3432 11.4165 24.6846C10.3075 24.8582 9.30018 25.1188 8.51904 25.9453L6.38916 28.9873C6.0242 29.5086 5.26965 29.5623 4.82275 29.1094C4.18497 28.4625 3.53439 27.8248 2.92236 27.1592C1.34302 25.4416 0.31912 23.8361 1.53564 21.54C3.05003 18.682 5.06962 16.4547 8.11963 15.0703C10.6421 13.9254 13.6129 12.6597 16.2085 11.6943ZM29.7319 4C30.3873 4.05622 30.9093 4.61138 30.9995 5.2168V15.0371C31.012 15.4781 30.2566 16.2519 29.8374 16.252H16.9478L18.7583 14.8047H29.4858V10.1016H14.4077V11.083L12.9487 11.6514V5.06152C12.9488 4.69568 13.7378 3.9822 14.1646 4.00195L29.7319 4ZM14.4888 5.39746L14.4077 5.47461V7.12891L14.4888 7.20703H29.4858V5.39746H14.4888Z" fill="black"/>-->
-    <!--                </svg>-->
-    <!--            </span>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--</div>-->
 
-  <div class="info "  v-bind:class="[slideShow ? 'xl:pt-6' : 'px-4' ]">
+  <div class="flex flex-col w-full h-full info" v-bind:class="[slideShow ? 'xl:pt-6' : 'px-4' ]">
     <!-- name -->
     <template v-if="showProductName">
       <a
@@ -67,7 +68,7 @@
         v-if="data.name"
       >
         <div class="head">
-          <h3 class="title-name text-heading font-semibold mb-1 md:mb-1.5 text-sm sm:text-base md:text-sm xl:text-base" v-bind:class="[slideShow ? ' xl:text-lg' : '' ]">
+          <h3 class="title-name text-heading font-semibold mb-1 md:mb-1.5 text-sm sm:text-base md:text-sm xl:text-base text-center line-clamp-3 " v-bind:class="[slideShow ? ' xl:text-lg' : '' ]">
             <span itemprop="name"> {{data.name}} </span>
             <template v-if="data.featured">
               <span class="featured-item-icon absolute top-2 left-2 bg-primary p-1.5 rounded-md text-white text-sm flex">
@@ -83,6 +84,22 @@
       </a>
     </template>
 
+    <template v-if="data?.rate_summaries?.length > 0 && slotData.settings.enable_reviews === '1' && Number(data.rate_summaries[0].average) > 0" class="flex justify-center items-center">
+      <div class="flex justify-center items-center space-x-1">
+        <star-rating
+          :star-size="18"
+          :rating="Number(data.rate_summaries[0].average)"
+          :increment="0.1"
+          :show-rating="false"
+          :padding="2"
+          active-color="#F07E19"
+          inactive-color="#D9D9D9"
+          :read-only="true"
+        />
+        <span class="text-xs text-[#5A5A5A] font-normal pt-1">({{data.review_count}})</span>
+      </div>
+    </template>
+
     <!-- description -->
     <template v-if="showProductDescription">
       <a
@@ -91,7 +108,7 @@
         :aria-label="data.name"
         v-if="data.name"
       >
-      <div v-if="data.description" class="description-details text-gray-500 description text-body text-xs xl:text-sm leading-normal mb-0.5 xl:mb-2" v-bind:class="[slideShow ? '' : '' ]">
+      <div v-if="data.description" class="description-details mt-2 mb-2 text-xs leading-normal text-center text-gray-500 description text-body text-xs xl:text-sm break-all leading-normal mb-0.5 xl:mb-2" v-bind:class="[slideShow ? '' : '' ]">
         <!--  {{data.description.slice(0, 130)}} -->
         {{slotData.helpers.HtmlToString(data.description).slice(0, 130)}}
       </div>
@@ -106,14 +123,21 @@
     <!-- item price -->
     <template v-if="showProductPrice">
       <a v-bind:href="'/'+data.seo_url " class="name-product-link" :aria-label="data.name" v-if="data.name">
+        <div class="text-center ">
         <item-quantity-availability-snippet :data="data"></item-quantity-availability-snippet>
-        <!--<custom-product-item-price-snippet :data="data" :showLabel="showProductPriceLabel" />-->
-        <custom-product-item-price-snippet :data="data" :showLabel="true" />
+      </div>
+        <custom-product-item-price-snippet :data="data" :showLabel="showProductPriceLabel" />
       </a>
       <!-- Include MintPay pricing block -->
       <template>
-        <div v-if="slotData.settings.payment_methods && slotData.helpers.IsMintPayEnabled(slotData.settings.payment_methods)">
+        <div class="text-center" v-if="slotData.settings.payment_methods && slotData.helpers.IsMintPayEnabled(slotData.settings.payment_methods)">
           <mint-pay-price-block-snippet :data="data" pageView="list"/>
+        </div>
+      </template>
+      <!-- Include KokoPay pricing block -->
+      <template>
+        <div class="text-center"  v-if="slotData.settings.payment_methods && slotData.helpers.IsKokoPayEnabled(slotData.settings.payment_methods)">
+          <koko-pay-price-block-snippet :data="data" pageView="list"/>
         </div>
       </template>
     </template>
@@ -138,15 +162,18 @@
     <!-- item tags -->
     <template v-if="data.tags">
       <template v-if="showProductTags">
-        <div class="tag-wrapper hidden md:block">
+        <div class="hidden tag-wrapper md:block">
           <template v-for="tag in data.tags">
             <div class="tag" :title="tag.name">
               <template v-if="tag.icon">
-                <span
-                  class="tag-icon"
-                  :style="{'background-image': 'url(' + tag.icon + ')'}"
-                  :title="tag.name"
-                ></span>
+       
+                <img 
+                class="tag-icon"
+                :src="tag.icon" 
+                 :title="tag.name"
+                 :alt="tag.name"
+                 loading="lazy" decoding="async"
+                 >
               </template>
               <template v-else>
                 <b-icon class="w-6 h-6" icon="tag"  :title="tag.name"></b-icon>
@@ -159,7 +186,10 @@
 
     <!-- add to cart button -->
     <template v-if="showAddToCart && slotData.disableCheckout != true">
+      <div class="m-auto mb-5">
       <item-add-to-cart-snippet :data="data" />
+    </div>
     </template>
   </div>
 </div>
+
