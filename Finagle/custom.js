@@ -2281,6 +2281,66 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-const getCheckMyOrderUrl = ()=>{
-    console.log('ssssssssssssssssssssss')
-}
+
+
+
+let urlPath = null;
+
+const getCheckMyOrderUrl = (orderID) => {
+  let requestID = window.crypto.randomUUID();
+  let checkOrderStatus = new CustomEvent("oms_checkOrderStatus", {
+    detail: {
+      client_id: "f19f00fa2ca8585db05b39ba151d8a91",
+      request_id: requestID,
+      order_id: orderID,
+    },
+  });
+  document.dispatchEvent(checkOrderStatus);
+
+  let that = this;
+  document.addEventListener(
+    "oms_checkOrderStatusSuccess" + requestID,
+    function (e) {
+      let result = e.detail.result;
+      if (result.success) {
+        console.log("Order Status:", result.data);
+        urlPath = result?.data?.check_order_url_path;
+
+        console.log(">>>>>", urlPath);
+      }
+    },
+    false,
+    that
+  );
+};
+
+const getSlotData = () => {
+  const isThankYouPage = document.getElementById("thank-you");
+  if (isThankYouPage) {
+    const slotDataEl = document.querySelector("#slotData-thankyou");
+
+    let detail = JSON.parse(slotDataEl.dataset.detail);
+
+    console.log("slotData>>>>>", detail);
+
+    let orderID = detail?.orderInfo?.id;
+
+    if (orderID) {
+      getCheckMyOrderUrl(orderID);
+    }
+  }
+};
+
+const checkOrderBtnClick = () => {
+  console.log("btn>>>>>>");
+  if (urlPath) {
+    window.location.href = `${window.location.origin}${urlPath}`;
+  }
+};
+
+document.addEventListener("oms_getTemplateListSuccess", function (e) {
+  if (e.detail.result.success) {
+    getSlotData();
+  }
+});
+
