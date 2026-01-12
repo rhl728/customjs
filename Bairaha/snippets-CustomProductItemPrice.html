@@ -1,4 +1,4 @@
-<div class="price-wrapper">
+<div class="text-center price-wrapper">
   <template v-if="data.unit_price">
     <div
       class="price-details text-heading font-semibold text-sm sm:text-base mt-0.5 space-s-2 sm:text-xl md:text-base md:mt-0 leading-none"
@@ -6,10 +6,83 @@
       itemscope
       itemtype="http://schema.org/Offer"
     >
+      
+    <template v-if="data.attributes?.MSRP && data.attributes?.MSRP.value && parseFloat(data.attributes?.MSRP.value) > parseFloat(data.unit_price) ">
+      <template v-if="parseFloat(data.attributes?.MSRP.value) > parseFloat(data.display_price)">
+        <span class="msrp-wrapper text-sm sm:text-basw font-normal text-gray-500 ml-0.5">
+
+          <span  class="msrp-wrapper text-gray-400 text-sm font-normal">{{data.attributes?.MSRP.label}}:</span>
+          <span class="msrp-wrapper text-gray-400 value md:text-base line-through break-all"
+            >{{slotData.orderCurrency}} {{slotData.helpers.PriceFormat(data.attributes?.MSRP.value)}}
+            </span
+          >
+        </span>
+        <br>
+      </template>
+    </template>
+
+
+    <!-- our price section -->
+      <span
+        class="text-sm price text-primary sm:text-base lg:text-base break-all"
+        :class="{'has-flash-offer': 
+                  data.available_now != 0 && 
+                  data.quantity > 0 && 
+                  data.available_now_price != data.display_price,
+                  'has-discount': 
+                  data.unit_price != data.display_price 
+                  }"
+      >
+      
+                  <!-- if there is retail price -->
+                <template v-if="data.attributes?.MSRP && data.attributes?.MSRP.value ">
+                  <!-- only retail price -->
+                    <template v-if="parseFloat(data.attributes?.MSRP.value) > parseFloat(data.display_price)  && parseFloat(data.unit_price) == parseFloat(data.display_price)">
+                        <span class="label">{{slotData.language.item.ourPriceText}}:</span>
+                    </template>
+                    <!-- retail price with cagtelog offer -->
+                    <template v-else>
+                        <template v-if="parseFloat(data.unit_price) != parseFloat(data.display_price)">
+                            <span class="msrp-wrapper text-gray-400 text-sm  font-normal">{{slotData.language.item.ourPriceText}}:</span>
+                        </template>
+                    </template>
+                </template>
+                <!-- if there is only catelog sale without retail price -->
+                <template v-else>
+                    <template v-if="data.unit_price != data.display_price">
+                        <span class="msrp-wrapper text-gray-400 text-sm font-normal">{{slotData.language.item.ourPriceText}}:</span>
+                    </template>
+                </template>
+                
+                <span
+                  :class="parseFloat(data.unit_price) != parseFloat(data.display_price) && 
+                  slotData.helpers.InArray('offer_price', slotData.settings.menu_display_sections)? 'msrp-wrapper text-gray-400 value line-through font-normal':''"
+                  
+                >
+                  <template v-if="data.product_type == 'configurable'">
+                    <span v-if="showLabel" class="text-sm as-low-as price text-primary sm:text-base lg:text-lg"
+                      >{{slotData.language.item.asLowAsText}}</span
+                    >
+                  </template>
+                  
+                    <span class="">{{slotData.orderCurrency}}</span>
+                    <span class="">
+                      {{slotData.helpers.PriceFormat(data.unit_price)}}
+                    </span>
+                  
+                  
+                </span>
+      </span>
+<br>
+
+
+
       <template
         v-if="slotData.helpers.InArray('offer_price', slotData.settings.menu_display_sections) || !slotData.menuDisplaySettings"
       >
-        <template v-if="Number(data.unit_price) != Number(data.display_price)">
+        <template v-if="data.unit_price != data.display_price" >
+          <div class="text-sm price text-primary sm:text-base lg:text-base">
+            <span class="label">{{slotData.language.item.nowText}}:</span>
           <span
             class="discount-price"
           >
@@ -19,87 +92,32 @@
                 >{{slotData.language.item.asLowAsText}}</span
               >
             </template>
-            <span class="currency">{{slotData.orderCurrency}}</span>
-            <span class="amount"
+            <span class="font-semibold currency">{{slotData.orderCurrency}}</span>
+            <span class="font-semibold amount"
               >{{slotData.helpers.PriceFormat(data.display_price)}}</span
             >
           </span>
+          </div>
+          
         </template>
       </template>
 
-      <span
-        class="price "
-        :class="{'has-flash-offer': 
-                  data.available_now != 0 && 
-                  data.quantity > 0 && 
-                  data.available_now_price != data.display_price,
-                  'has-discount': 
-                  data.unit_price != data.display_price 
-                  }"
-      >
-          <!--uncommented-->
-        <template v-if="data.attributes.MSRP && data.attributes.MSRP.value">
-                    <template v-if="Number(data.attributes.MSRP.value) > Number(data.display_price)">
-                        <span class="label">{{slotData.language.item.ourPriceText}}:</span>
-                    </template>
-                    <template v-else>
-                        <template v-if="Number(data.unit_price) != Number(data.display_price)">
-                            <span class="label">{{slotData.language.item.ourPriceText}}:</span>
-                        </template>
-                    </template>
-                </template>
-                <template v-else>
-                    <template v-if="Number(data.unit_price) != Number(data.display_price)">
-                        <span class="label">{{slotData.language.item.ourPriceText}}:</span>
-                    </template>
-                </template> 
 
-   <!--uncommented-->
-        <span
-          :class="{'has-offer line-through sm:text-base font-normal text-gray-500 ml-0.5': 
-                    data.unit_price != data.display_price && 
-                    slotData.helpers.InArray('offer_price', slotData.settings.menu_display_sections)
-                    }"
-        >
-          <template v-if="data.product_type == 'configurable'">
-            <span v-if="showLabel" class="as-low-as"
-              >{{slotData.language.item.asLowAsText}}</span
-            >
-          </template>
-          <span class="currency">{{slotData.orderCurrency}}</span>
-          <span class="amount">
-            {{slotData.helpers.PriceFormat(data.unit_price)}}
-          </span>
-        </span>
-      </span>
+<!-- you Save section -->
 
-
-        <template v-if="data.attributes.MSRP && data.attributes.MSRP.value">
-        <template v-if="Number(data.attributes.MSRP.value) > Number(data.display_price)">
-          <span class="msrp-wrapper line-through sm:text-base font-normal text-gray-500 ml-0.5">
-
-            <span v-if="showLabel" class="label">{{data.attributes.MSRP.label}}:</span>
-            <span class="value"
-              >{{slotData.orderCurrency}}
-              {{slotData.helpers.PriceFormat(data.attributes.MSRP.value)}}</span
-            >
-          </span>
-        </template>
-      </template>
-   <!--you save wrapper uncommented-->
-       <template v-if="data.attributes.MSRP && data.attributes.MSRP.value">
-        <template v-if="Number(data.attributes.MSRP.value) > Number(data.display_price)">
+      <template v-if="data.attributes?.MSRP && data.attributes?.MSRP.value">
+        <template v-if="parseFloat(data.attributes?.MSRP.value) > parseFloat(data.unit_price)">
           <template
             v-if="slotData.helpers.InArray('msrp', slotData.settings.menu_display_sections) || !slotData.menuDisplaySettings"
           >
-            <div class="you-save-wrapper text-sm text-red-600">
+            <div class="text-sm text-red-600 you-save-wrapper break-all">
               <span>{{slotData.language.item.discountText}}:</span>
               <span class="currency"
                 >{{slotData.orderCurrency}}</span
               >
               <span
-                >{{slotData.helpers.PriceFormat(data.attributes.MSRP.value -
-                data.display_price)}}</span
+                >{{slotData.helpers.PriceFormat(parseFloat(data.attributes?.MSRP.value) -
+                  parseFloat(data.display_price))}}</span
               >
             </div>
           </template>
@@ -107,8 +125,8 @@
             <template
               v-if="slotData.helpers.InArray('offer_price', slotData.settings.menu_display_sections) || !slotData.menuDisplaySettings"
             >
-              <template v-if="Number(data.unit_price) != Number(data.display_price)">
-                <div class="you-save-wrapper text-sm text-red-600">
+              <template v-if="data.unit_price != data.display_price">
+                <div class="text-sm text-red-600 you-save-wrapper break-all">
                   <span>{{slotData.language.item.discountText}}:</span>
                   <span class="currency"
                     >{{slotData.orderCurrency}}</span
@@ -126,8 +144,8 @@
           <template
             v-if="slotData.helpers.InArray('offer_price', slotData.settings.menu_display_sections) || !slotData.menuDisplaySettings"
           >
-            <template v-if="Number(data.unit_price) != Number(data.display_price)">
-              <div class="you-save-wrapper text-sm text-red-600">
+            <template v-if="data.unit_price != data.display_price">
+              <div class="text-sm text-red-600 you-save-wrapper break-all">
                 <span>{{slotData.language.item.discountText}}:</span>
                 <span class="currency"
                   >{{slotData.orderCurrency}}</span
@@ -145,8 +163,8 @@
         <template
           v-if="slotData.helpers.InArray('offer_price', slotData.settings.menu_display_sections) || !slotData.menuDisplaySettings"
         >
-          <template v-if="Number(data.unit_price) != Number(data.display_price)">
-            <div class="you-save-wrapper text-sm text-red-600">
+          <template v-if="data.unit_price != data.display_price">
+            <div class="text-sm text-red-600 you-save-wrapper break-all">
               <span>{{slotData.language.item.discountText}}:</span>
               <span class="currency"
                 >{{slotData.orderCurrency}}</span
@@ -158,9 +176,9 @@
             </div>
           </template>
         </template>
-      </template> 
+      </template>
 
-   <!--uncommented-->
+
     </div>
   </template>
 </div>

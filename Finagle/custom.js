@@ -744,7 +744,7 @@ document.addEventListener("oms_getTemplateListSuccess", function (e) {
           let orderInfo = e.detail.result.data;
 
           if (orderInfo.order_info && orderInfo.order_info.success) {
-            console.log(">>>>",orderInfo)
+            // console.log(">>>>",orderInfo)
           }
         }
 
@@ -792,10 +792,13 @@ document.addEventListener("oms_getTemplateListSuccess", function (e) {
         document.querySelectorAll('.collapse-section').forEach(item => {
           const title = item.querySelector('.collapse-button');
           const productListWrapper = item.querySelector('.collapse-item');
+          const iconSpan = item.querySelector("span");
+        //   console.log("...", iconSpan);
         
           title.addEventListener('click', () => {
             productListWrapper.classList.toggle('collapse-active');
             title.classList.toggle('collapse-active');
+            iconSpan.classList.toggle('collapse-active');
           });
         });
         
@@ -2069,6 +2072,17 @@ document.addEventListener("oms_getTemplateListSuccess", function () {
             localStorage.setItem("user_current_location", selectedLocation);
         });
     }
+    
+    const select2 = document.querySelector("#locationSelect2");
+    if (select2) {
+        select2.addEventListener("change", function () {
+            const selectedOption = select2.options[select2.selectedIndex];
+            const selectedLocation = selectedOption.getAttribute("data-location").toLowerCase();
+            localStorage.setItem("user_current_location", selectedLocation);
+        });
+    }
+    
+    
 
     const savedLocation = localStorage.getItem("user_current_location");
     
@@ -2166,7 +2180,7 @@ document.addEventListener("oms_getTemplateListSuccess", function (e) {
     listBtn.addEventListener("click", activateList);
 
     activateGrid();
-    
+     
     getCheckMyOrderUrl();
 });
 
@@ -2236,51 +2250,49 @@ document.addEventListener("oms_getTemplateListSuccess", function (e) {
 //     });
 // });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const cartBar = document.querySelector(".mini-cart-box");
-    const totalValue = document.querySelector(".mini-cart-wrapper .order-charges .value");
+// document.addEventListener("DOMContentLoaded", function () {
+//     const cartBar = document.querySelector(".mini-cart-box");
+//     const totalValue = document.querySelector(".mini-cart-wrapper .order-charges .value");
     
-    console.log("Cart Bar:", cartBar);
-    console.log("Total Value:", totalValue);
+//     console.log("Cart Bar:", cartBar);
+//     console.log("Total Value:", totalValue);
     
-    if (!cartBar || !totalValue) {
-        return;
-    }
+//     if (!cartBar || !totalValue) {
+//         return;
+//     }
     
-    function updateCartBar() {
-        let amountText = (totalValue.textContent || totalValue.innerText)
-            .replace("LKR", "")
-            .replace(/,/g, "")
-            .trim();
+//     function updateCartBar() {
+//         let amountText = (totalValue.textContent || totalValue.innerText)
+//             .replace("LKR", "")
+//             .replace(/,/g, "")
+//             .trim();
         
-        let amount = parseFloat(amountText);
+//         let amount = parseFloat(amountText);
         
-        if (isNaN(amount) || amount === 0) {
-            cartBar.classList.add("hide");
-        } else {
-            cartBar.classList.remove("hide");
-        }
-    }
+//         if (isNaN(amount) || amount === 0) {
+//             cartBar.classList.add("hide");
+//         } else {
+//             cartBar.classList.remove("hide");
+//         }
+//     }
     
-    updateCartBar();
+//     updateCartBar();
     
-    const observer = new MutationObserver(function(mutations) {
-        console.log("Mutations detected:", mutations.length);
-        mutations.forEach(m => console.log("Type:", m.type, "Target:", m.target));
-        updateCartBar();
-    });
+//     const observer = new MutationObserver(function(mutations) {
+//         console.log("Mutations detected:", mutations.length);
+//         mutations.forEach(m => console.log("Type:", m.type, "Target:", m.target));
+//         updateCartBar();
+//     });
     
-    observer.observe(totalValue, {
-        characterData: true,     
-        childList: true,          
-        subtree: true,            
-        attributes: false,        
-        characterDataOldValue: true  
-    });
+//     observer.observe(totalValue, {
+//         characterData: true,     
+//         childList: true,          
+//         subtree: true,            
+//         attributes: false,        
+//         characterDataOldValue: true  
+//     });
 
-});
-
-
+// });
 
 
 
@@ -2303,10 +2315,8 @@ const getCheckMyOrderUrl = (orderID) => {
     function (e) {
       let result = e.detail.result;
       if (result.success) {
-        console.log("Order Status:", result.data);
         urlPath = result?.data?.check_order_url_path;
 
-        console.log(">>>>>", urlPath);
       }
     },
     false,
@@ -2321,7 +2331,6 @@ const getSlotData = () => {
 
     let detail = JSON.parse(slotDataEl.dataset.detail);
 
-    console.log("slotData>>>>>", detail);
 
     let orderID = detail?.orderInfo?.id;
 
@@ -2332,7 +2341,6 @@ const getSlotData = () => {
 };
 
 const checkOrderBtnClick = () => {
-  console.log("btn>>>>>>");
   if (urlPath) {
     window.location.href = `${window.location.origin}${urlPath}`;
   }
@@ -2343,4 +2351,59 @@ document.addEventListener("oms_getTemplateListSuccess", function (e) {
     getSlotData();
   }
 });
+
+
+// Footer Active class
+
+document.addEventListener("oms_getTemplateListSuccess", function (e) {
+    const links = document.querySelectorAll(".footer-link-wrapper a");
+    const currentPath = window.location.pathname.replace(/\/$/, "");
+    
+    links.forEach(link => {
+        const linkPath = link.getAttribute("href").replace(/\/$/, "");
+        
+        if (linkPath === currentPath){
+            link.classList.add("active-link");
+        }
+    });
+});
+
+window.addEventListener('load', function () {
+
+    function loadUserwayScriptWithTimeout() {
+
+        setTimeout(function () {
+
+            var script = document.createElement('script');
+
+            script.src = "https://cdn.userway.org/widget.js";
+
+            script.setAttribute('data-account', '98sF2B8MHN');
+
+            script.async = true;
+
+            document.head.appendChild(script);
+
+        }, 2000);
+
+    }
+ 
+    loadUserwayScriptWithTimeout();
+
+});
+
+document.addEventListener("oms_getTemplateListSuccess", function (e){
+
+    const wrapper = document.querySelector('.horizontal-menu-wrapper');
+
+    document.querySelectorAll('.category').forEach(item => {
+      item.addEventListener('click', () => {
+        item.scrollIntoView({
+          behavior: 'smooth',
+          inline: 'center'
+        });
+      });
+    });
+});
+
 
