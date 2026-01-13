@@ -2393,7 +2393,6 @@ window.addEventListener('load', function () {
 });
 
 document.addEventListener("oms_getTemplateListSuccess", function (e){
-
     const wrapper = document.querySelector('.horizontal-menu-wrapper');
 
     document.querySelectorAll('.category').forEach(item => {
@@ -2407,3 +2406,23 @@ document.addEventListener("oms_getTemplateListSuccess", function (e){
 });
 
 
+
+let isOrdersubmitSuccess=false;
+document.addEventListener("oms_getTemplateListSuccess", function (e){
+
+  console.log("isOrdersubmitSuccess",isOrdersubmitSuccess)
+  
+   
+});
+
+
+document.addEventListener("oms_getTemplateListSuccess", function (e){
+
+  document.addEventListener("oms_submitOrderSuccess", function (e) {
+
+    // console.log('e :>> ', e.result);
+    isOrdersubmitSuccess=true;
+
+  });
+   
+});
