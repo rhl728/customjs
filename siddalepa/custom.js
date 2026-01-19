@@ -92,34 +92,6 @@ const mainFn = () => {
 
 
 
-const setAltForProductImages = () => {
-  const el = document.getElementById("zoomWrapper");
-  if (el) {
-    //getting slot data from data attribute
-    let slotData = JSON.parse(el.dataset.detail);
-    let itemName = slotData.item.name;
-
-    const imgElements = el.querySelectorAll("img");
-    imgElements.forEach((img, index) => {
-      if (!img.hasAttribute("alt")) {
-        img.setAttribute("alt", itemName || "");
-      }
-    });
-    console.log("detail :>> ", itemName);
-  } else {
-    console.warn("Not found!!");
-  }
-};
-
-document.addEventListener("oms_getTemplateListSuccess", function (e) {
-  if (e.detail.result.success) {
-    mainFn();
-    setTimeout(() => {
-      setAltForProductImages();
-    }, 1000);
-  }
-});
-
 
 window.addEventListener('load', function () {
     function loadUserwayScriptWithTimeout() {
@@ -135,8 +107,46 @@ window.addEventListener('load', function () {
     loadUserwayScriptWithTimeout();
 });
 
+const observeZoomWrapper = () => {
+  const body = document.querySelector("body");
+  // const el = body.querySelector("#zoomWrapper");
+  //   console.log("el",el)
+  console.log("body", body);
 
+  const setAltForProductImages = () => {
+    const el = document.getElementById("zoomWrapper");
 
+    if (el) {
+      //getting slot data from data attribute
+      let slotData = JSON.parse(el.dataset.detail);
+      let itemName = slotData.item.name;
+
+      const imgElements = el.querySelectorAll("img");
+      imgElements.forEach((img, index) => {
+        if (!img.hasAttribute("alt")) {
+          img.setAttribute("alt", itemName || "");
+        }
+      });
+      console.log("detail :>> ", itemName);
+      observer.disconnect();
+    } else {
+      console.warn("Not found!!");
+    }
+  };
+  const observer = new MutationObserver(setAltForProductImages);
+
+  observer.observe(body, {
+    childList: true,
+    subtree: true,
+  });
+};
+
+document.addEventListener("oms_getTemplateListSuccess", function (e) {
+  if (e.detail.result.success) {
+    mainFn();
+    observeZoomWrapper();
+  }
+});
 
 
 
