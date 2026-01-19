@@ -89,9 +89,34 @@ const mainFn = () => {
   activateElements(".footerElements", "font-medium");
 };
 
+
+
+
+const setAltForProductImages = () => {
+  const el = document.getElementById("zoomWrapper");
+  if (el) {
+    //getting slot data from data attribute
+    let slotData = JSON.parse(el.dataset.detail);
+    let itemName = slotData.item.name;
+
+    const imgElements = el.querySelectorAll("img");
+    imgElements.forEach((img, index) => {
+      if (!img.hasAttribute("alt")) {
+        img.setAttribute("alt", itemName || "");
+      }
+    });
+    console.log("detail :>> ", itemName);
+  } else {
+    console.warn("Not found!!");
+  }
+};
+
 document.addEventListener("oms_getTemplateListSuccess", function (e) {
   if (e.detail.result.success) {
     mainFn();
+    setTimeout(() => {
+      setAltForProductImages();
+    }, 1000);
   }
 });
 
