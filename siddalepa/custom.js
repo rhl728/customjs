@@ -150,7 +150,7 @@ document.addEventListener("oms_getTemplateListSuccess", function (e) {
 
 
 
-// gt- tags
+// gt- tags--------------------------------------------
 
 let orderCurrency = localStorage.getItem("orderCurrency") || "LKR";
 
