@@ -1,4 +1,6 @@
-<div  class="rounded-md p-4 md:p-8 2xl:px-16 relative">
+<div>
+    
+<div v-if="slotData.products !== null"  class="rounded-md p-4 md:p-8 2xl:px-16 relative">
     <template v-if="slotData.showTitle">
         <h3 class="promo-deals title text-primary text-lg md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 font-bold mb-4 md:mb-5 lg:mb-6 2xl:mb-7 3xl:mb-8">
             {{title}}</h3>
@@ -116,5 +118,6 @@
 
         </div>
         <a id="load-more-btn" href="/offers" class="view-more-button home-page-only">View More</a>
-   
+</div>
+  <div class="category-product-data" :data-categories="categories?categories[0]:null" :data-productData="JSON.stringify(slotData.products)"></div>
 </div>
