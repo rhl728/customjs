@@ -1,0 +1,120 @@
+<div  class="rounded-md p-4 md:p-8 2xl:px-16 relative">
+    <template v-if="slotData.showTitle">
+        <h3 class="promo-deals title text-primary text-lg md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 font-bold mb-4 md:mb-5 lg:mb-6 2xl:mb-7 3xl:mb-8">
+            {{title}}</h3>
+    </template>
+
+  
+        <div class="product-row mt-3 md:mt-6 col-span-full 3xl:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-5 xl:gap-7 row-span-full"
+            :class="'xl:grid-cols-'+ slotData.column">
+
+            <template v-if="slotData.products != null">
+                    <template v-for="(product, key) in slotData.products" >
+                        <custom-product-item-section 
+                            
+                            v-bind:data="product"
+                            v-bind:showProductName="slotData.showProductName"
+                            v-bind:showProductDescription="slotData.showProductDescription"
+                            v-bind:showProductPrice="slotData.showProductPrice"
+                            v-bind:showProductImage="slotData.showProductImage"
+                            v-bind:showProductAttribute="slotData.showProductAttribute"
+                            v-bind:showProductTags="slotData.showProductTags"
+                            v-bind:showOfferTags="slotData.showOfferTags"
+                            v-bind:showFlashOffers="slotData.showFlashOffers"
+                            v-bind:showUpcommingOffer="slotData.showUpcommingOffer"
+                            v-bind:showAddToCart="slotData.showAddToCart"
+                            v-bind:slideShow="slotData.slideShow"
+                            />
+                    </template>
+                </template>
+            <template  v-if="slotData.products == null">
+                    <div class="card skeleton skeleton-product relative grid-mode rounded-md">
+                        <div class="skeleton-image"></div>
+                        <div class="card-body">
+                          <div class="skeleton-title"></div>
+                          <div class="skeleton-link"></div>
+                        </div>
+                    </div>
+                    <div class="card skeleton skeleton-product relative grid-mode rounded-md">
+                        <div class="skeleton-image"></div>
+                        <div class="card-body">
+                          <div class="skeleton-title"></div>
+                          <div class="skeleton-link"></div>
+                        </div>
+                    </div>
+                    <div class="card skeleton skeleton-product relative grid-mode rounded-md">
+                        <div class="skeleton-image"></div>
+                        <div class="card-body">
+                          <div class="skeleton-title"></div>
+                          <div class="skeleton-link"></div>
+                        </div>
+                    </div>
+                    <div class="card skeleton skeleton-product relative grid-mode rounded-md">
+                        <div class="skeleton-image"></div>
+                        <div class="card-body">
+                          <div class="skeleton-title"></div>
+                          <div class="skeleton-link"></div>
+                        </div>
+                    </div>
+                    <div class="card skeleton skeleton-product relative grid-mode rounded-md">
+                        <div class="skeleton-image"></div>
+                        <div class="card-body">
+                          <div class="skeleton-title"></div>
+                          <div class="skeleton-link"></div>
+                        </div>
+                    </div>
+                    <div class="card skeleton skeleton-product relative grid-mode rounded-md">
+                        <div class="skeleton-image"></div>
+                        <div class="card-body">
+                          <div class="skeleton-title"></div>
+                          <div class="skeleton-link"></div>
+                        </div>
+                    </div>
+                    <div class="card skeleton skeleton-product relative grid-mode rounded-md">
+                        <div class="skeleton-image"></div>
+                        <div class="card-body">
+                          <div class="skeleton-title"></div>
+                          <div class="skeleton-link"></div>
+                        </div>
+                    </div>
+                    <div class="card skeleton skeleton-product relative grid-mode rounded-md">
+                        <div class="skeleton-image"></div>
+                        <div class="card-body">
+                          <div class="skeleton-title"></div>
+                          <div class="skeleton-link"></div>
+                        </div>
+                    </div>
+                    <div class="card skeleton skeleton-product relative grid-mode rounded-md">
+                        <div class="skeleton-image"></div>
+                        <div class="card-body">
+                          <div class="skeleton-title"></div>
+                          <div class="skeleton-link"></div>
+                        </div>
+                    </div>
+                    <div class="card skeleton skeleton-product relative grid-mode rounded-md">
+                        <div class="skeleton-image"></div>
+                        <div class="card-body">
+                          <div class="skeleton-title"></div>
+                          <div class="skeleton-link"></div>
+                        </div>
+                    </div>
+                    <div class="card skeleton skeleton-product relative grid-mode rounded-md">
+                        <div class="skeleton-image"></div>
+                        <div class="card-body">
+                          <div class="skeleton-title"></div>
+                          <div class="skeleton-link"></div>
+                        </div>
+                    </div>
+                    <div class="card skeleton skeleton-product relative grid-mode rounded-md">
+                        <div class="skeleton-image"></div>
+                        <div class="card-body">
+                          <div class="skeleton-title"></div>
+                          <div class="skeleton-link"></div>
+                        </div>
+                    </div>
+                </template>
+
+        </div>
+        <a id="load-more-btn" href="/offers" class="view-more-button home-page-only">View More</a>
+   
+</div>
