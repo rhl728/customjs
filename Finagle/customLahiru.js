@@ -16,18 +16,18 @@ let navLinks;
 
 document.addEventListener('oms_getTemplateListSuccess', function () {
 
-    setTimeout(() => {
-        const offerBlock = document.querySelector('.product-offer-block .product-block > div');
-        console.warn('offerBlock>>', offerBlock);
+    const offerBlock = document.querySelector('.product-offer-block .product-block > div');
+    console.warn('offerBlock>>', offerBlock);
+    // setTimeout(() => {
 
-        if (!offerBlock) {
-            console.warn('Offer block not found after delay');
-            return;
-        }
+    //     if (!offerBlock) {
+    //         console.warn('Offer block not found after delay');
+    //         return;
+    //     }
 
-        offerBlock.setAttribute('data-category-id', 'deals-offers');
-        console.warn('data-category-id applied');
-    }, 300); 
+    //     offerBlock.setAttribute('data-category-id', 'deals-offers');
+    //     console.warn('data-category-id applied');
+    // }, 300); 
 
 });
 
@@ -2282,7 +2282,7 @@ document.addEventListener("oms_getTemplateListSuccess", function (e) {
         
         try {
     // Scroll Menu
-    sections = document.querySelectorAll(".categroy-block-custom > .product-block > div[data-category-id],.best-selling-block [data-category-id],.featured-offers-block");
+    sections = document.querySelectorAll(".categroy-block-custom > .product-block > div[data-category-id],.best-selling-block [data-category-id], .product-offer-block [data-category-id]");
     navLinks = document.querySelectorAll(".horizontal-menu-wrapper li");
     
     // window.addEventListener("scroll", () => {
@@ -2312,14 +2312,17 @@ document.addEventListener("oms_getTemplateListSuccess", function (e) {
     //     }
     //   });
     // });
-    
+
+
+
+    ///////////////////////
     window.addEventListener("scroll", () => {
         if(!scrolled){
             sections = document.querySelectorAll(".categroy-block-custom > .product-block > div[data-category-id],.best-selling-block [data-category-id],.product-offer-block [data-category-id]");
             console.warn('offer>', document.querySelector(".product-offer-block [data-category-id]"));
             navLinks = document.querySelectorAll(".horizontal-menu-wrapper li");
             console.warn('sections', sections);
-            // console.warn('navLinks', navLinks);
+            console.warn('navLinks>>>>>>>>>>>>>>>', navLinks);
         }
         
         scrolled = true;
