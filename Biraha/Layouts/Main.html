@@ -1,10 +1,11 @@
-<div class="body-bg">
+<div role="main" class="body-bg">
   <template v-if="slotData.settingLoaded">
     <div class="main-loader" v-if="mainLoader">
       <progress-bar-snippet />
     </div>
     <header-block-section :all_location_data="true" />
-    <div class="flex flex-wrap mb-4 xl:mb-6 mt-20">
+
+    <div class="flex flex-wrap mt-20 mb-4 xl:mb-6">
       <div class="w-full bg-white">
         <banner-block-custom-block
           :slides="[
@@ -33,142 +34,15 @@
       />
     </template>
     <trail-popup-snippet :is_active="slotData.isActive"></trail-popup-snippet>
-    <!--<category-block-custom-block-->
-    <!--  :start="0"-->
-    <!--  :limit="12"-->
-    <!--  title="Top Categories"-->
-    <!--  columns="6"-->
-    <!--  show_main_block="false"-->
-    <!--  main_block_title="Top Categories"-->
-    <!--  slide_show="true"-->
-    <!--  main_block_width="25%"-->
-    <!--  slide_show_dots="flase"-->
-    <!--  slide_show_arrows="true"-->
-    <!--  slide_show_autoplay="true"-->
-    <!--  slide_show_speed="300"-->
-    <!--  auto_play_speed="5000"-->
-    <!--  show_main_block_button="true"-->
-    <!--  main_block_button_text="All Categories"-->
-    <!--  main_block_height="230px"-->
-    <!--  :all_location_data="true"-->
-    <!--  :slider_responsive='[ -->
-    <!--        {-->
-    <!--            "breakpoint": 1024,-->
-    <!--            "settings": {-->
-    <!--               "slidesToShow": 5,-->
-    <!--            }-->
-    <!--        },-->
-    <!--        {-->
-    <!--            "breakpoint": 480,-->
-    <!--            "settings": {-->
-    <!--              "slidesToShow": 3,-->
-    <!--            }-->
-    <!--        }-->
-    <!--    ]'-->
-    <!--/>-->
 
-    <!--<products-block-custom-block-->
-    <!--  :limit="30"-->
-    <!--  :start="0"-->
-    <!--  :featured="true"-->
-    <!--  :all_location_data="true"-->
-    <!--  title="Featured Items"-->
-    <!--  show_title="true"-->
-    <!--  slide_show="false"-->
-    <!--  slide_show_dots="true"-->
-    <!--  rounded_corners="true"-->
-    <!--  columns="5"-->
-    <!--  description=""-->
-    <!--  :show_add_to_cart="true"-->
-    <!--  :show_product_attribute="false"-->
-    <!--  :show_product_tags="false"-->
-    <!--  :slide_link="true"-->
-    <!--  slide_show_speed="100"-->
-    <!--  :slider_responsive='[ -->
-    <!--          {-->
-    <!--              "breakpoint": 1024,-->
-    <!--              "settings": {-->
-    <!--                  "centerPadding":"60px"-->
-    <!--              }-->
-    <!--          },-->
-    <!--          {-->
-    <!--              "breakpoint": 480,-->
-    <!--              "settings": {-->
-    <!--                  "centerPadding":"30px"-->
-    <!--              }-->
-    <!--          }-->
-    <!--      ]'-->
-    <!--/>-->
+    <!-- <div  v-if="slotData.page_header || slotData.page_description"
+    class="px-4 md:px-8 2xl:px-16 text-center mb-14 md:mb-16 mt-10"
+    >
+      <h1 class="break-all text-primary capitalize title text-xl md:text-2xl lg:text-3xl 2xl:text-4xl font-bold mb-3 mt-0"> {{slotData.page_header}}</h1>
+      <div class="break-all mt-0 font-normal text-gray-600" v-html="slotData.page_description"></div>
+    </div> -->
 
-    <!--<offer-product-custom-block-->
-    <!--  :limit="10"-->
-    <!--  :start="0"-->
-    <!--  columns="5"-->
-    <!--  title="Deals"-->
-    <!--  show_title="true"-->
-    <!--  slide_show="false"-->
-    <!--  show_product_name="true"-->
-    <!--  show_product_description="true"-->
-    <!--  show_product_price="true"-->
-    <!--  show_product_attribute="false"-->
-    <!--  show_product_tags="false"-->
-    <!--  show_add_to_cart="true"-->
-    <!--  show_upcomming_offer="false"-->
-    <!--  slide_show_speed="300"-->
-    <!--  auto_play_speed="5000"-->
-    <!--  slides_to_scroll="1"-->
-    <!--  slide_show_arrows="true"-->
-    <!--  :all_location_data="true"-->
-    <!--/>-->
-
-          
-
-    <!--<specific-product-custom-block-->
-    <!--  :limit="10"-->
-    <!--  :start="0"-->
-    <!--  attributes='[{"code":"NEW_ARRIVALS","value":"1", "condition":"eq"}, {"code":"NEW_ARRIVALS_END_DATE","value":"$$__current_datetime__$$", "condition":"gteq"}]'-->
-    <!--  columns="5"-->
-    <!--  title="New Arrivals"-->
-    <!--  show_title="true"-->
-    <!--  c-->
-    <!--  :categories="['8236bcf3051127d75afcae45202d1354']"-->
-    <!--  slide_show="false"-->
-    <!--  show_product_name="true"-->
-    <!--  show_product_description="true"-->
-    <!--  show_product_price="true"-->
-    <!--  show_product_attribute="false"-->
-    <!--  show_product_tags="false"-->
-    <!--  show_upcomming_offer="false"-->
-    <!--  show_add_to_cart="true"-->
-    <!--  slide_show_speed="300"-->
-    <!--  auto_play_speed="5000"-->
-    <!--  slides_to_scroll="1"-->
-    <!--  slide_show_arrows="true"-->
-    <!--  :all_location_data="true"-->
-    <!--/>-->
-
-
-    <!--<best-selling-product-custom-block-->
-    <!--  :limit="10"-->
-    <!--  :start="0"-->
-    <!--  columns="5"-->
-    <!--  title="Best Selling"-->
-    <!--  show_title="true"-->
-    <!--  slide_show="false"-->
-    <!--  show_product_name="true"-->
-    <!--  show_product_description="true"-->
-    <!--  show_product_price="true"-->
-    <!--  show_product_attribute="false"-->
-    <!--  show_upcomming_offer="false"-->
-    <!--  show_product_tags="false"-->
-    <!--  show_add_to_cart="true"-->
-    <!--  slide_show_speed="300"-->
-    <!--  auto_play_speed="5000"-->
-    <!--  slides_to_scroll="1"-->
-    <!--  slide_show_arrows="true"-->
-    <!--  :all_location_data="true"-->
-    <!--/>-->     
-     <products-block-custom-block
+    <products-block-custom-block
                   :limit="10"
                   :start="0"
                   :all_location_data="false"
@@ -235,42 +109,8 @@
               }
           ]'
     />
-    
-    <!-- <products-block-custom-block-->
-    <!--              :limit="10"-->
-    <!--              :start="0"-->
-    <!--              :all_location_data="false"-->
-    <!--              title="Christmas Hampers"-->
-    <!--              show_title="true"-->
-    <!--              slide_show="false"-->
-    <!--              slide_show_dots="true"-->
-    <!--              rounded_corners="true"-->
-    <!--              columns="3"-->
-    <!--              sort_property = unit_price-->
-    <!--              sort_direction = ASC-->
-    <!--              :categories="['8fe8b3fde74b263aec2e47fecfc49f35']"-->
-    <!--              description="false"-->
-    <!--              :show_add_to_cart="true"-->
-    <!--              :show_product_attribute="false"-->
-    <!--              :show_product_tags="true"-->
-    <!--              :slide_link="true"-->
-    <!--  :slider_responsive='[ -->
-    <!--          {-->
-    <!--              "breakpoint": 1024,-->
-    <!--              "settings": {-->
-    <!--                  "centerPadding":"60px"-->
-    <!--              }-->
-    <!--          },-->
-    <!--          {-->
-    <!--              "breakpoint": 480,-->
-    <!--              "settings": {-->
-    <!--                  "centerPadding":"30px"-->
-    <!--              }-->
-    <!--          }-->
-    <!--      ]'-->
-    <!--/>-->
-    
-    <products-block-custom-block
+
+<products-block-custom-block
                   :limit="10"
                   :start="0"
                   :all_location_data="false"
@@ -506,11 +346,13 @@
           ]'
     />
     
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
 
     <footer-block-section />
   </template>
