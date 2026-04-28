@@ -1,29 +1,44 @@
-<div class="relative card" v-bind:class="[slideShow ? 'slideshow-mode flex xl:block items-center' : 'grid-mode rounded-md box-border flex flex-nowrap rounded-md items-center bg-transparent border border-gray-100 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-md flex flex-col ' ]">
+<div
+  class="relative card"
+  v-bind:class="[slideShow ? 'slideshow-mode flex xl:block items-center' : 'grid-mode rounded-md box-border flex flex-nowrap rounded-md items-center bg-transparent border border-gray-100 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-md flex flex-col ' ]"
+>
   <!-- offer percentage -->
-  <template v-if="showOfferTags"><legend></legend>
-  
-      <item-offer-percentage-snippet :data="data"></item-offer-percentage-snippet>
+  <template v-if="showOfferTags"
+    ><legend></legend>
 
+    <item-offer-percentage-snippet :data="data"></item-offer-percentage-snippet>
   </template>
 
   <!-- image -->
   <template v-if="showProductImage">
-  
-    <template v-if="data.images?.length>0 && data.images.find(img=>img.type==='image')">
+    <template
+      v-if="data.images?.length>0 && data.images.find(img=>img.type==='image')"
+    >
       <template v-for="image in data.images">
         <template v-if="image.type==='image' && image.primary_image && image.primary_image == 1 ">
           
-            <a v-bind:href="'/'+data.seo_url " v-bind:class="[slideShow ? 'relative flex flex-shrink-0 w-32 h-36 mr-2 xl:block xl:mr-0 xl:h-auto xl:w-auto' : 'relative flex flex-shrink-0 w-32 sm:w-44 md:w-36 xl:w-44 h-[200px] ','complete-product-a-tag' ]" >
+            <a v-bind:href="'/'+data.seo_url " role="region"
+            :aria-label="data.name" v-bind:class="[slideShow ? 'relative flex flex-shrink-0 w-32 h-36 mr-2 xl:block xl:mr-0 xl:h-auto xl:w-auto' : 'relative flex flex-shrink-0 w-32 sm:w-44 md:w-36 xl:w-44 h-[200px] ' ]" >
+                    <picture>
+                        <!-- Desktop -->
+                        <source :srcset="image.large" media="(min-width: 1024px)" />
 
-              <img 
-              :src="`https://shop.bairaha.com${image.small.substring(image.small.indexOf('/productImages'))}`"
-              :alt="data.name"
-              class="w-full h-full thumb object-contain object-center bg-white"
-              :class="[slideShow ? 'xl:h-56 h-36 ' : 'h-full ' ]"
-              :title="data.name"
-              loading="lazy" decoding="async"
-              >
+                        <!-- Tablet -->
+                        <!-- <source :srcset="image.thumb_path" media="(max-width: 1023px) and (min-width: 678px)" /> -->
+
+                        <!-- Mobile  -->
+                         <img 
+                             :src="image.small"
+                             :alt="data.name"
+                             class="w-full h-full thumb object-contain object-center bg-white"
+                            :class="[slideShow ? 'xl:h-56 h-36 ' : 'h-full ' ]"
+                             :title="data.name"
+                             loading="lazy" decoding="async"
+                             >
+                    </picture>
+             
               <Favorite-icon-snippet 
+                :data="data"
                 :favorite="data.favorite"
                 :productId="data.id"
                 :isInTheFavoritePage="isInTheFavoritePage"
@@ -36,18 +51,22 @@
       </template>
     </template>
     <template v-else>
-      <a v-bind:href="'/'+data.seo_url " v-bind:class="[slideShow ? 'relative' : 'relative flex flex-shrink-0 w-32 sm:w-44 md:w-36 xl:w-44 h-[200px]','complete-product-a-tag' ]">
+      <a
+        v-bind:href="'/'+data.seo_url "
+        v-bind:class="[slideShow ? 'relative' : 'relative flex flex-shrink-0 w-32 sm:w-44 md:w-36 xl:w-44 h-[200px]' ]"
+      >
+        <img
+          src="$$__client_media_url__$$/$$__client_media_path__$$/no-image.png"
+          :alt="data.name"
+          class="w-full h-full thumb object-contain object-center bg-white"
+          :class="[slideShow ? 'h-56' : '' ]"
+          :title="data.name"
+          loading="lazy"
+          decoding="async"
+        />
 
-        <img 
-        src="$$__client_media_url__$$/$$__client_media_path__$$/no-image.png" 
-        :alt="data.name"
-        class="w-full h-full thumb object-contain object-center bg-white"
-        :class="[slideShow ? 'h-56' : '' ]"
-        :title="data.name"
-        loading="lazy" decoding="async"
-        >
-          
         <Favorite-icon-snippet
+          :data="data"
           :favorite="data.favorite"
           :productId="data.id"
           :isInTheFavoritePage="isInTheFavoritePage"
@@ -58,33 +77,39 @@
     </template>
   </template>
 
-  <div class="flex flex-col w-full h-full info" v-bind:class="[slideShow ? 'xl:pt-6' : 'px-4' ]">
+  <div
+    class="flex flex-col w-full h-full info"
+    v-bind:class="[slideShow ? 'xl:pt-6' : 'px-4' ]"
+  >
     <!-- name -->
     <template v-if="showProductName">
       <a
         v-bind:href="'/'+data.seo_url "
-        class="name-product-link"
-        :aria-label="data.name"
+        class="name-product-link min-h-[44px] min-w-[44px]"
         v-if="data.name"
       >
         <div class="head">
-          <h3 class="title-name text-heading font-semibold mb-1 md:mb-1.5 text-sm sm:text-base md:text-sm xl:text-base text-center line-clamp-3 " v-bind:class="[slideShow ? ' xl:text-lg' : '' ]">
+          <h1
+            class="text-heading font-semibold mb-1 md:mb-1.5 text-sm sm:text-base md:text-sm xl:text-base text-center line-clamp-3"
+            v-bind:class="[slideShow ? ' xl:text-lg' : '' ]"
+          >
             <span itemprop="name"> {{data.name}} </span>
             <template v-if="data.featured">
-              <span class="featured-item-icon absolute top-2 left-2 bg-primary p-1.5 rounded-md text-white text-sm flex">
-              <b-icon
-                icon="star-fill"
-                class="featured-icon"
-                :title="slotData.language.detailView.featuredItemTitle"
-              ></b-icon>
-            </span>
+              <span
+                class="absolute top-2 left-2 bg-primary p-1.5 rounded-md text-white text-sm flex"
+              >
+                <i class="bi icon-bi bi-star-fill featured-icon icon-bi--sm" :title="slotData.language.detailView.featuredItemTitle"></i>
+              </span>
             </template>
-          </h3>
+          </h1>
         </div>
       </a>
     </template>
 
-    <template v-if="data?.rate_summaries?.length > 0 && slotData.settings.enable_reviews === '1' && Number(data.rate_summaries[0].average) > 0" class="flex justify-center items-center">
+    <template
+      v-if="data?.rate_summaries?.length > 0 && slotData.settings.enable_reviews === '1' && Number(data.rate_summaries[0].average) > 0"
+      class="flex justify-center items-center"
+    >
       <div class="flex justify-center items-center space-x-1">
         <star-rating
           :star-size="18"
@@ -96,7 +121,9 @@
           inactive-color="#D9D9D9"
           :read-only="true"
         />
-        <span class="text-xs text-[#5A5A5A] font-normal pt-1">({{data.review_count}})</span>
+        <span class="text-xs text-[#5A5A5A] font-normal pt-1"
+          >({{data.review_count}})</span
+        >
       </div>
     </template>
 
@@ -104,14 +131,18 @@
     <template v-if="showProductDescription">
       <a
         v-bind:href="'/'+data.seo_url "
-        class="name-product-link"
-        :aria-label="data.name"
-        v-if="data.name"
+        class="name-product-link min-h-[44px] min-w-[44px]"
+        :aria-label="slotData.helpers.HtmlToString(data.description).slice(0, 130)"
+        v-if="data.name && data.description"
       >
-      <div v-if="data.description" class="description-details mt-2 mb-2 text-xs leading-normal text-center text-gray-500 description text-body text-xs xl:text-sm break-all leading-normal mb-0.5 xl:mb-2" v-bind:class="[slideShow ? '' : '' ]">
-        <!--  {{data.description.slice(0, 130)}} -->
-        {{slotData.helpers.HtmlToString(data.description).slice(0, 130)}}
-      </div>
+        <div
+          v-if="data.description"
+          class="mt-2 mb-2 text-xs leading-normal text-center text-gray-500 description text-body xl:text-sm break-all"
+          v-bind:class="[slideShow ? '' : '' ]"
+        >
+          <!--  {{data.description.slice(0, 130)}} -->
+          {{slotData.helpers.HtmlToString(data.description).slice(0, 130)}}
+        </div>
       </a>
     </template>
 
@@ -122,28 +153,42 @@
 
     <!-- item price -->
     <template v-if="showProductPrice">
-      <a v-bind:href="'/'+data.seo_url " class="name-product-link" :aria-label="data.name" v-if="data.name">
-        <div class="text-center ">
-        <item-quantity-availability-snippet :data="data"></item-quantity-availability-snippet>
-      </div>
-        <custom-product-item-price-snippet :data="data" :showLabel="true" />
+      <a
+        v-bind:href="'/'+data.seo_url "
+        class="name-product-link min-h-[44px] min-w-[44px] block"
+        v-if="data.name"
+      >
+        <div class="text-center">
+          <item-quantity-availability-snippet
+            :data="data"
+          ></item-quantity-availability-snippet>
+        </div>
+        <custom-product-item-price-snippet
+          :data="data"
+          :showLabel="showProductPriceLabel"
+        />
       </a>
       <!-- Include MintPay pricing block -->
       <template>
-        <div class="text-center" v-if="slotData.settings.payment_methods && slotData.helpers.IsMintPayEnabled(slotData.settings.payment_methods)">
-          <mint-pay-price-block-snippet :data="data" pageView="list"/>
+        <div
+          class="text-center"
+          v-if="slotData.settings.payment_methods && slotData.helpers.IsMintPayEnabled(slotData.settings.payment_methods)"
+        >
+          <mint-pay-price-block-snippet :data="data" pageView="list" />
         </div>
       </template>
       <!-- Include KokoPay pricing block -->
       <template>
-        <div class="text-center"  v-if="slotData.settings.payment_methods && slotData.helpers.IsKokoPayEnabled(slotData.settings.payment_methods)">
-          <koko-pay-price-block-snippet :data="data" pageView="list"/>
+        <div
+          class="text-center"
+          v-if="slotData.settings.payment_methods && slotData.helpers.IsKokoPayEnabled(slotData.settings.payment_methods)"
+        >
+          <koko-pay-price-block-snippet :data="data" pageView="list" />
         </div>
       </template>
     </template>
 
     <!-- Installment Message -->
-    
 
     <!-- flash offer -->
     <template
@@ -160,35 +205,53 @@
     </template>
 
     <!-- item tags -->
-    <template v-if="data.tags">
-      <template v-if="showProductTags">
-        <div class="hidden tag-wrapper md:block">
-          <template v-for="tag in data.tags">
+  <template v-if="data.tags">
+      <template
+        v-if="slotData.settings.menu_display_sections && slotData.helpers.InArray('tag', slotData.settings.menu_display_sections)">
+        <div class="flex flex-wrap justify-center mt-1 mb-2 tag-wrapper max-w-full gap-1">
+          <div v-for="tag in data.tags" :key="tag.id || tag.name">
             <div class="tag" :title="tag.name">
               <template v-if="tag.icon">
-       
-                <img 
-                class="tag-icon"
-                :src="tag.icon" 
-                 :title="tag.name"
-                 :alt="tag.name"
-                 loading="lazy" decoding="async"
-                 >
+                <img
+                  class="tag-icon"
+                  :src="tag.icon"
+                  :title="tag.name"
+                  :alt="tag.name"
+                  loading="lazy"
+                  decoding="async"
+                />
               </template>
               <template v-else>
-                <b-icon class="w-6 h-6" icon="tag"  :title="tag.name"></b-icon>
+                <i class="bi icon-bi bi-tag icon-bi--lg" :title="tag.name"></i>
               </template>
             </div>
-          </template>
+          </div>
         </div>
+
       </template>
     </template>
+
 
     <!-- add to cart button -->
     <template v-if="showAddToCart && slotData.disableCheckout != true">
       <div class="m-auto mb-5">
-      <item-add-to-cart-snippet :data="data" />
+      <item-add-to-cart-snippet :data="data" @updateAttImage="updateAttImage" />
     </div>
+    </template>
+    <!-- show notify me buttorn for logged users -->
+    <template v-if="slotData.showNotifyMeButton ">
+      <template v-if="data.available_now == 1 && data.quantity == 0 && slotData.settings.order_manage_stock == 1 && data?.product_type !== 'configurable'">
+          <div class="flex justify-center xs:mx-auto mb-5">
+            <notify-me-button-snippet 
+            :data="data"
+            :productId="data.id"
+            :isSubscribe="data.is_subscribe == 1 ? true : false"
+            :userData="slotData.userData"
+            :isDetailsPage="false"
+            @onUpdateNotifymeSubscription="onUpdateNotifymeSubscription"
+            />
+          </div>
+      </template>
     </template>
   </div>
 </div>
