@@ -1,0 +1,195 @@
+<div class="relative card" v-bind:class="[slideShow ? 'slideshow-mode flex flex-col xl:block items-center p-5' : 'grid-mode rounded-md box-border flex flex-nowrap rounded-md items-center bg-transparent border border-gray-100 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-md flex flex-col  ' ]">
+  <!-- offer percentage -->
+  <template v-if="showOfferTags"><legend></legend>
+  
+      <item-offer-percentage-snippet :data="data"></item-offer-percentage-snippet>
+
+  </template>
+
+  <!-- image -->
+  <template v-if="showProductImage">
+  
+    <template v-if="data.images?.length>0 && data.images.find(img=>img.type==='image')">
+      <template v-for="image in data.images">
+        <template v-if="image.type==='image' && image.primary_image && image.primary_image == 1 ">
+          
+            <a v-bind:href="'/'+data.seo_url " v-bind:class="[slideShow ? 'relative flex flex-shrink-0 w-32 h-36 mr-2 xl:block xl:mr-0 xl:h-auto xl:w-auto' : 'relative flex flex-shrink-0 w-32 sm:w-44 md:w-36 xl:w-44 h-[200px] ' ]" >
+
+              <img 
+              :src="`https://shop.siddhalepa.lk${image.small.substring(image.small.indexOf('/productImages'))}`"
+ 
+              :alt="data.name"
+              class="w-full h-full thumb object-contain object-center bg-transparent"
+              :class="[slideShow ? 'xl:h-56 h-36 ' : 'h-full ' ]"
+              :title="data.name"
+              loading="lazy" decoding="async"
+              >
+              <Favorite-icon-snippet 
+                :favorite="data.favorite"
+                :productId="data.id"
+                :isInTheFavoritePage="isInTheFavoritePage"
+                :key="data.id"
+                @removeSingleProduct="removeSingleProduct"
+              />
+            </a>
+
+        </template>
+      </template>
+    </template>
+    <template v-else>
+      <a v-bind:href="'/'+data.seo_url " v-bind:class="[slideShow ? 'relative' : 'relative flex flex-shrink-0 w-32 sm:w-44 md:w-36 xl:w-44 h-[200px]' ]">
+
+        <img 
+        src="$$__client_media_url__$$/$$__client_media_path__$$/no-image.png" 
+        :alt="data.name"
+        class="w-full h-full thumb object-contain object-center bg-white"
+        :class="[slideShow ? 'h-56' : '' ]"
+        :title="data.name"
+        loading="lazy" decoding="async"
+        >
+          
+        <Favorite-icon-snippet
+          :favorite="data.favorite"
+          :productId="data.id"
+          :isInTheFavoritePage="isInTheFavoritePage"
+          :key="data.id"
+          @removeSingleProduct="removeSingleProduct"
+        />
+      </a>
+    </template>
+  </template>
+
+  <div class="flex flex-col w-full h-full info" v-bind:class="[slideShow ? 'xl:pt-6' : 'px-4' ]">
+    <!-- name -->
+    <template v-if="showProductName">
+      <a
+        v-bind:href="'/'+data.seo_url "
+        class="name-product-link"
+        :aria-label="data.name"
+        v-if="data.name"
+      >
+        <div class="head">
+          <h3 class="text-heading font-semibold mb-1 md:mb-1.5 text-sm sm:text-base md:text-sm xl:text-base text-center line-clamp-3 " v-bind:class="[slideShow ? ' xl:text-lg' : '' ]">
+            <span itemprop="name"> {{data.name}} </span>
+            <template v-if="data.featured">
+              <span class="absolute top-2 left-2 bg-primary p-1.5 rounded-md text-white text-sm flex">
+              <b-icon
+                icon="star-fill"
+                class="featured-icon"
+                :title="slotData.language.detailView.featuredItemTitle"
+              ></b-icon>
+            </span>
+            </template>
+          </h3>
+        </div>
+      </a>
+    </template>
+
+    <template v-if="data?.rate_summaries?.length > 0 && slotData.settings.enable_reviews === '1' && Number(data.rate_summaries[0].average) > 0" class="flex justify-center items-center">
+      <div class="flex justify-center items-center space-x-1">
+        <star-rating
+          :star-size="18"
+          :rating="Number(data.rate_summaries[0].average)"
+          :increment="0.1"
+          :show-rating="false"
+          :padding="2"
+          active-color="#F07E19"
+          inactive-color="#D9D9D9"
+          :read-only="true"
+        />
+        <span class="text-xs text-[#5A5A5A] font-normal pt-1">({{data.review_count}})</span>
+      </div>
+    </template>
+
+    <!-- description -->
+    <template v-if="showProductDescription">
+      <a
+        v-bind:href="'/'+data.seo_url "
+        class="name-product-link"
+        :aria-label="data.name"
+        v-if="data.name"
+      >
+      <div v-if="data.description" class="mt-2 mb-2 text-xs leading-normal text-center text-gray-500 description text-body xl:text-sm break-all" v-bind:class="[slideShow ? '' : '' ]">
+        <!--  {{data.description.slice(0, 130)}} -->
+        {{slotData.helpers.HtmlToString(data.description).slice(0, 130)}}
+      </div>
+      </a>
+    </template>
+
+    <!-- attributes -->
+    <template v-if="showProductAttribute">
+      <item-attributes-snippet :data="data"></item-attributes-snippet>
+    </template>
+
+    <!-- item price -->
+    <template v-if="showProductPrice">
+      <a v-bind:href="'/'+data.seo_url " class="name-product-link" :aria-label="data.name" v-if="data.name">
+        <div class="text-center ">
+        <item-quantity-availability-snippet :data="data"></item-quantity-availability-snippet>
+      </div>
+        <custom-product-item-price-snippet :data="data" :showLabel="showProductPriceLabel" />
+      </a>
+      <!-- Include MintPay pricing block -->
+      <template>
+        <div class="text-center" v-if="slotData.settings.payment_methods && slotData.helpers.IsMintPayEnabled(slotData.settings.payment_methods)">
+          <mint-pay-price-block-snippet :data="data" pageView="list"/>
+        </div>
+      </template>
+      <!-- Include KokoPay pricing block -->
+      <template>
+        <div class="text-center"  v-if="slotData.settings.payment_methods && slotData.helpers.IsKokoPayEnabled(slotData.settings.payment_methods)">
+          <koko-pay-price-block-snippet :data="data" pageView="list"/>
+        </div>
+      </template>
+    </template>
+
+    <!-- Installment Message -->
+    
+
+    <!-- flash offer -->
+    <template
+      v-if="slotData.settings.default_menu_type != 'without_available_now'"
+    >
+      <template v-if="showFlashOffers">
+        <item-flash-offer-snippet :data="data"></item-flash-offer-snippet>
+      </template>
+    </template>
+
+    <!-- upcoming offer -->
+    <template v-if="showUpcommingOffer">
+      <item-upcoming-offer-snippet :data="data"></item-upcoming-offer-snippet>
+    </template>
+
+    <!-- item tags -->
+    <template v-if="data.tags">
+      <template v-if="showProductTags">
+        <div class="hidden tag-wrapper md:block">
+          <template v-for="tag in data.tags">
+            <div class="tag" :title="tag.name">
+              <template v-if="tag.icon">
+       
+                <img 
+                class="tag-icon"
+                :src="tag.icon" 
+                 :title="tag.name"
+                 :alt="tag.name"
+                 loading="lazy" decoding="async"
+                 >
+              </template>
+              <template v-else>
+                <b-icon class="w-6 h-6" icon="tag"  :title="tag.name"></b-icon>
+              </template>
+            </div>
+          </template>
+        </div>
+      </template>
+    </template>
+
+    <!-- add to cart button -->
+    <template v-if="showAddToCart && slotData.disableCheckout != true">
+      <div class="m-auto mb-5">
+      <item-add-to-cart-snippet :data="data" />
+    </div>
+    </template>
+  </div>
+</div>
