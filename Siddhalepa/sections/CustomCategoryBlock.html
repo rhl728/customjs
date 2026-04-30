@@ -1,0 +1,35 @@
+<div class="text-center">
+    <!-- category image -->
+    <template v-if="slotData.showCategoryImage">
+        
+        <div class="category-image bg-center bg-no-repeat mb-4 pt-full rounded-full relative group"
+            :class="[category.category_image && category.category_image.image_path ? 'bg-cover ' : 'bg-gray-100 bg-auto']"
+>
+            <img
+                class="absolute top-0 left-0 w-full h-full object-cover rounded-full object-center"
+               
+                :src="(category.category_image && category.category_image.image_path) ? 
+                `https://shop.siddhalepa.lk${category.category_image.image_path.substring(category.category_image.image_path.indexOf('/categoryImages'))}`
+                : '$$__client_media_url__$$/$$__client_media_path__$$/no-image.png'"
+                :alt="category.name"
+                loading="lazy" decoding="async"
+            />
+            <span class="absolute top-0 left-0 bg-primary w-full h-full opacity-0 transition-opacity duration-300 group-hover:opacity-30 rounded-full"></span>
+            <span class="absolute top-0 left-0 h-full w-full flex items-center justify-center">
+                <b-icon class="w-9 h-9 text-white text-base sm:text-xl lg:text-2xl xl:text-3xl opacity-0 scale-0 transition-all duration-300 ease-in-out group-hover:opacity-100 group-hover:scale-100" icon="link-45deg"></b-icon>
+            </span>
+        </div>
+
+    </template>
+
+    <!-- category name -->
+    <template v-if="slotData.showCategoryName">
+        <div class="title text-heading text-sm md:text-base xl:text-lg font-semibold line-clamp-1 truncate"> {{category.name}} </div>
+    </template>
+
+    <!-- category description -->
+    <template v-if="slotData.showCategoryDescription && category.description">
+        <div class="description"> {{category.description}} </div>
+    </template>
+
+</div>

@@ -1,0 +1,49 @@
+<div class="discount-code-wrapper" :class="{'with-content': slotData.showContent}">
+
+
+    <div class="discount-code-content" >
+        <div class="flex flex-row items-start justify-end">
+
+            <input type="text" aria-label="discount-code"class="discount-code-input py-3 px-4 md:px-5 w-full appearance-none border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-black h-11 md:h-12 px-4 lg:h-12 sm:text-start placeholder-slate-400" 
+                         :class="{'border-black': slotData.invalid, 'opacity-60 pointer-events-none bg-green-100 border-black': slotData.hasDiscountCode }"
+                         @focus="slotData.invalid = false"
+                          v-model="slotData.discountCode" 
+                          maxlength="200"
+                          :readonly="slotData.hasDiscountCode"
+                          :placeholder="slotData.language.cart.discountCode.inputPlaceholder" />
+           
+    
+            <template v-if="slotData.hasDiscountCode">
+              <button class="discount-code-button text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-primary text-white px-5 py-4 md:py-3.5  hover:text-white hover:bg-gray-600 hover:shadow-md mt-0 w-auto ml-2 h-11 md:h-full flex-shrink-0" v-on:click="clearDiscountCode">
+                    {{slotData.language.cart.discountCode.resetText}}
+                </button>
+            </template> 
+            <template v-else>
+                <button class="discount-code-button text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-primary text-white px-5  py-4 md:py-3.5  hover:text-white hover:bg-gray-600 hover:shadow-md mt-0 w-auto ml-2  h-11 md:h-full flex-shrink-0" v-on:click="applyDiscountCode" :class="{'loading': slotData.submitLoading, 'opacity-60 pointer-events-none': slotData.hasDiscountCode }">
+                        <span class="text-label" v-if="!slotData.submitLoading">
+                        {{slotData.language.cart.discountCode.applyText}}
+                    </span>
+                    <span class="cart-loader flex items-center" v-if="slotData.submitLoading">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Processing...
+                    </span>
+                </button>
+            </template>
+
+        </div>
+
+       <!--  <span v-if="slotData.hasDiscountCode && !drawerMode" class="discount-code border bg-primary text-white px-2 py-1 uppercase inline-flex items-center text-xs rounded-md mt-2"> 
+            <b-icon class="w-5 h-5 mr-1" icon="tags-fill" ></b-icon> {{slotData.discountCode}} 
+            <b-icon v-on:click="clearDiscountCode" icon="x" class="w-5 h-5 cursor-pointer hover:opacity-80" title="Clear Discount Code"></b-icon>
+        </span> -->
+
+        <!-- <span class="discount-code-msg success-msg text-success text-sm mt-0.5" v-if="slotData.successMessage"> {{slotData.successMessage}} </span> -->
+        <span class="discount-code-msg error-msg text-error text-sm mt-0.5" v-if="slotData.errorMessage"> {{slotData.errorMessage}} </span>
+
+
+       
+    </div>
+</div>

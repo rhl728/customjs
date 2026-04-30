@@ -1,0 +1,18 @@
+<div>
+    <div class="refine-wrapper flex items-center" v-if="slotData.tags.length > 0">
+        <span class="refine-by mr-4 hidden" >{{slotData.language.refineTags.title}}:</span>
+    
+        <div class="ml-auto flex flex-wrap">
+            <template v-for="tag in slotData.tags">
+                <div class="refine-tag active  mr-2 my-1 flex items-center border border-gray-300 rounded-md py-1 px-1.5 text-gray-500 min-h-[32px] bg-white hover:shadow">
+                    <span class="tag-icon w-4 h-4 inline-block rounded-sm overflow-hidden bg-center bg-no-repeat bg-contain" v-if="tag.icon" v-bind:style="{ backgroundImage: 'url(' + tag.icon + ')' }" ></span>
+                    <span class="tag-icon" v-else >
+                        <b-icon class="w-5 h-5 text-gray-700" icon="tag-fill" ></b-icon>
+                    </span>
+                    <span class="tag-text text-sm ml-1 max-w-[200px] truncate line-clamp-2 whitespace-pre-wrap">{{ tag.name }}</span>
+                    <b-icon icon="x" class="ml-1 cursor-pointer hover:text-black" v-on:click="removeTag(tag)"></b-icon>
+                </div> 
+            </template>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="attributes hidden md:block" v-if="data.attributes">
+  <template v-for="attribute in data.attributes">
+    <template
+      v-if="attribute.is_visible != 0 &&
+                  attribute.value &&
+                  attribute.code != 'MSRP' && 
+                  attribute.code != 'BACKORDER' && 
+                  attribute.code != 'PREPARATION_TIME'
+                  ">
+            <div class="attribute pb-2 block" :class="{'text-xs' : !detailMode, 'hidden': attribute.is_super_attribute == '1' && !slotData.showSuperAttributes}" :data-code="attribute.code">
+                <span class="label capitalize font-semibold text-heading inline-block pr-2 text-slate-900 md:min-w-[40px] break-all align-middle">{{attribute.label}}:</span> 
+                <template v-if="slotData.showAttributeImages && attribute.image"> 
+                    <img :src="attribute.image" class="w-[18px] h-[18px] rounded-3xl inline-block mt-1 border border-gray-200" :title="attribute.value" alt="img" loading="lazy" decoding="async"/>
+                </template>
+                <template v-else>
+                    <div class="break-all inline-block" v-html="attribute.value"></div>
+                </template>
+            </div>
+        </template>
+    </template>
+  </template>
+</div>

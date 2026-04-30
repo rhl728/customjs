@@ -1,0 +1,111 @@
+<div v-if="slotData.settingLoaded">
+  
+    <div
+      class="content-wrapper mx-auto max-w-[1920px] px-4 md:px-8 2xl:px-16 xl:px-32 2xl:px-44 3xl:px-56 pt-16 lg:pt-20"
+    >
+      <div class="w-full max-w-[1052px] mx-auto px-4 md:px-16 py-4 md:py-14 rounded-lg" :class="slotData.pageType ? 'shadow-md' : ''">
+        <template v-if="slotData.cancellationStatus">
+          <div class="w-full h-10 text-center flex items-center justify-center">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 0C31.046 0 40 8.954 40 20C40 31.046 31.046 40 20 40C8.954 40 0 31.046 0 20C0 8.954 8.954 0 20 0ZM19.98 16H18C17.4902 16.0006 16.9999 16.1958 16.6293 16.5457C16.2586 16.8956 16.0355 17.3739 16.0057 17.8828C15.9758 18.3917 16.1413 18.8928 16.4685 19.2837C16.7957 19.6746 17.2598 19.9258 17.766 19.986L18 20V29.98C18 31.02 18.788 31.88 19.8 31.988L20.02 32H21C21.4206 32 21.8305 31.8674 22.1715 31.621C22.5124 31.3747 22.767 31.0271 22.899 30.6277C23.031 30.2283 23.0337 29.7975 22.9068 29.3965C22.7799 28.9955 22.5298 28.6447 22.192 28.394L22 28.268V18.02C22 16.98 21.212 16.12 20.2 16.012L19.98 16ZM20 10C19.4696 10 18.9609 10.2107 18.5858 10.5858C18.2107 10.9609 18 11.4696 18 12C18 12.5304 18.2107 13.0391 18.5858 13.4142C18.9609 13.7893 19.4696 14 20 14C20.5304 14 21.0391 13.7893 21.4142 13.4142C21.7893 13.0391 22 12.5304 22 12C22 11.4696 21.7893 10.9609 21.4142 10.5858C21.0391 10.2107 20.5304 10 20 10Z" fill="#280C8F"/>
+              </svg>
+          </div>
+          <div class="w-full mx-auto block mt-8 text-center text-primary font-semibold text-4xl leading-10">
+            {{slotData.language.orderCancellation.expireCancellationText}}
+          </div>
+          <div class="w-full text-center mt-6 mb-6 md:mb-14 text-base text-black">
+            {{slotData.language.orderCancellation.expireCancellationDescription}}
+          </div>
+        </template>
+        <template v-else-if="slotData.pageType">
+          <template v-if="slotData.pageType == 'success'">
+                <div
+                class="px-4 lg:px-5 pt-0 md:pt-4 rounded-md text-heading text-sm md:text-base"
+              >
+                <div class="w-full h-20 text-center flex items-center justify-center">
+                  <div class="w-20 h-20 bg-[#1D9A3E2B] text-white rounded-full shadow-md border-none">
+                    <svg
+                      stroke="currentColor"
+                      fill="currentColor"
+                      stroke-width="0"
+                      viewBox="0 0 512 512"
+                      class="w-20 h-20 text-green-600"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm108.25 138.29l-134.4 160a16 16 0 01-12 5.71h-.27a16 16 0 01-11.89-5.3l-57.6-64a16 16 0 1123.78-21.4l45.29 50.32 122.59-145.91a16 16 0 0124.5 20.58z"
+                      ></path></svg>
+                  </div>
+                </div>
+                
+                <h3 class="block mt-8 mb-10 text-center w-full text-primary font-semibold text-3xl md:text-[40px] leading-10">
+                  {{slotData.language.orderCancellation.success.title}}
+                </h3>
+
+                <div class="text-xl md:text-2xl text-center text-[#5E5E5E] leading-6 md:leading-8 mb-4">
+                  {{slotData.language.orderCancellation.success.descriptionText1}} 
+                  <span class="text-black font-semibold">#{{slotData.orderRef}}</span> <br> 
+                  {{slotData.language.orderCancellation.success.descriptionText2}}
+                </div>
+                <div class="text-base md:text-2xl text-center text-[#5E5E5E] leading-6 md:leading-8 mb-12">
+                  {{slotData.language.orderCancellation.success.descriptionText3}}
+                </div>
+              </div>
+          </template>
+          <template v-else-if="slotData.pageType == 'error'">
+              <div
+              class="px-4 lg:px-5 pt-0 md:pt-4 rounded-md text-heading text-sm md:text-base"
+            >
+              <div class="w-full h-20 text-center flex items-center justify-center">
+                <div class="w-20 h-20 flex items-center justify-center bg-[#CE14142B] text-white rounded-full shadow-md">
+                  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M32 4C16.4 4 4 16.4 4 32C4 47.6 16.4 60 32 60C47.6 60 60 47.6 60 32C60 16.4 47.6 4 32 4ZM42.8 46L32 35.2L21.2 46L18 42.8L28.8 32L18 21.2L21.2 18L32 28.8L42.8 18L46 21.2L35.2 32L46 42.8L42.8 46Z" fill="#CE1414"/>
+                    </svg>
+                </div>
+              </div>
+              
+              <h3 class="block mt-8 mb-10 text-center w-full text-primary font-semibold text-3xl md:text-[40px] leading-10">
+                {{slotData.language.orderCancellation.error.title}} 
+              </h3>
+
+              <div class="text-xl md:text-2xl text-center text-[#5E5E5E] leading-8 mb-12">
+                {{slotData.language.orderCancellation.error.descriptionText1}} 
+                <span class="text-black font-semibold">#{{slotData.orderRef}},</span> <br> 
+                {{slotData.language.orderCancellation.error.descriptionText2}}
+              </div>
+              
+            </div>
+          </template>
+        </template>
+        <template v-else>
+          <div class="min-h-[200px]"></div>
+          <order-cancellation-popup-section :is_active="slotData.isPopupActive"  @closeModal="closePopup"></order-cancellation-popup-section>
+        </template>
+
+        <div class="inner-button-wrapper flex-none md:flex justify-center gap-3 mb-2">
+          
+          <template v-if="slotData.isLoginCustomer">
+            <a class="uppercase text-base mb-3 md:mb-0 md:text-2xl leading-8 md:leading-6 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-[#E0E0E0] text-[#2F2E41] px-5 md:px-6 lg:px-8 py-2 md:py-[10px] hover:bg-gray-300 hover:shadow-md w-full sm:w-auto" href="/order-history">
+                <span class="button-label">
+                  {{slotData.language.orderCancellation.viewOrdersText}}
+                </span>
+            </a>
+          </template>
+          
+          <a class="uppercase text-base md:text-2xl leading-8 md:leading-6 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-primary text-white px-4 md:px-6 lg:px-8 py-2 md:py-[10px] hover:text-white hover:bg-gray-600 hover:shadow-md w-full sm:w-auto" href="/">
+              <span class="button-label">
+                {{slotData.language.orderCancellation.continueShoppingText}}
+              </span>
+          </a>
+        </div>
+
+        <div class="text-center my-6 text-base text-black">
+          {{slotData.language.orderCancellation.needHelpText}}
+          <a href="mailto:$$__business_email__$$" class="underline text-black">{{slotData.language.orderCancellation.customerSupportText}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  

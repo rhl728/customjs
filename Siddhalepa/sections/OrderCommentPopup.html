@@ -1,0 +1,6 @@
+<div>
+    <b-modal id="orderCommentPopup" :title="slotData.language.orderConfirmation.fields.orderInstruction" hide-footer no-close-on-backdrop>
+        <order-comment-section  />
+        <b-button class="submit-button" v-on:click="saveOrderInstruction">Save</b-button>
+    </b-modal>
+</div>

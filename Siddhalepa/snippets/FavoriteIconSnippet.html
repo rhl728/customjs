@@ -1,0 +1,31 @@
+
+<div v-if="!slotData.isFavorite"   
+  :class="[
+    'right-2 bg-[#F2F2F2] rounded-full flex justify-center items-center shadow transition-all duration-200 ease-in-out',
+    isListView || isDetailsPage ? '' : 'absolute',
+    isDetailsPage
+      ? slotData.clicked ? 'w-42px h-42px ml-3' : 'w-[40px] h-[40px] ml-3'
+      : slotData.clicked
+        ? 'w-[28px] h-[28px] bottom-2'
+        : 'w-[26px] h-[26px] bottom-2'
+  ]" 
+  @click.stop.prevent="handleFavoriteClick">
+    <b-icon
+        icon="heart" class="text-primary" :class="isDetailsPage ? 'w-6 h-6' : slotData.clicked ? 'w-5 h-5' : 'w-4 h-4'"
+    ></b-icon>
+</div>
+<div v-else   
+  :class="[
+    'right-2 bg-[#F2F2F2] rounded-full flex justify-center items-center shadow transition-all duration-200 ease-in-out',
+    isListView || isDetailsPage  ? '' : 'absolute',
+    isDetailsPage
+      ? slotData.clicked ? 'w-42px h-42px ml-3' : 'w-[40px] h-[40px] ml-3'
+      : slotData.clicked
+        ? 'w-[28px] h-[28px] bottom-2'
+        : 'w-[26px] h-[26px] bottom-2'
+  ]" 
+  @click.stop.prevent="handleRemoveFavoriteProduct">
+        <b-icon
+        icon="heart-fill" class="text-primary" :class="isDetailsPage ? 'w-6 h-6' : slotData.clicked ? 'w-5 h-5' : 'w-4 h-4'"
+        ></b-icon>
+</div>

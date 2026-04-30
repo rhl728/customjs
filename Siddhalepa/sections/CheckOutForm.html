@@ -1,0 +1,1391 @@
+<div class="item-wrp">
+  <template v-if="slotData.settings.enable_address_separation != '1'">
+    <div class="mb-6">
+      <div class="section-title">
+        <h2
+          class="text-lg md:text-xl xl:text-2xl font-bold text-heading mb-6 xl:mb-8 mt-0"
+        >
+          {{ slotData.language.editDeliveryDetails.tabs.user.billingText }}
+        </h2>
+      </div>
+      <div class="item-wrapper" v-if="slotData.settingsLoaded">
+        <section class="form w-full mx-auto flex flex-col justify-center">
+          <div class="flex flex-col space-y-4 lg:space-y-5 f">
+            <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0">
+              <!-- name field -->
+              <div class="w-full lg:w-1/2 field name">
+                <div
+                  :invalid-feedback="slotData.language.cart.enterValid + ' ' + slotData.language.editDeliveryDetails.userInfo.formLabels.name"
+                >
+                  <label
+                    for="name"
+                    class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer required"
+                  >
+                    {{slotData.language.editDeliveryDetails.userInfo.formLabels.name}}
+                    *
+                  </label>
+                  <input
+                    class="xx py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12 placeholder-slate-400"
+                    type="text"
+                    id="name"
+                    v-model="slotData.formData.name"
+                    @input="validateField('name', null, true)"
+                    :placeholder="slotData.language.editDeliveryDetails.userInfo.formLabels.name"
+                    maxlength="240"
+                    required
+                  />
+                </div>
+
+                <p
+                  v-if="slotData.formData.nameInvalid"
+                  class="error my-2 text-xs text-red-500"
+                >
+                  {{slotData.language.cart.enterValid + ' ' +
+                  slotData.language.editDeliveryDetails.userInfo.formLabels.name}}
+                </p>
+              </div>
+
+              <!-- phone number field -->
+              <div
+                cols="12"
+                lg="6"
+                class="w-full lg:w-1/2 lg:ml-3 mt-2 md:mt-0 field contact-number"
+              >
+                <div
+                  :invalid-feedback="slotData.language.cart.enterValid + ' ' + slotData.language.editDeliveryDetails.userInfo.formLabels.contactNumber"
+                  @input="validateField('contact', slotData.pattern.contact, true)"
+                >
+                  <label
+                    for="contact"
+                    class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer required"
+                  >
+                    {{slotData.language.editDeliveryDetails.userInfo.formLabels.contactNumber}}
+                    *
+                  </label>
+
+                  <div class="contact-wrapper">
+                    <div class="flex">
+                      <div class="w-1/4">
+                        <!-- calling code -->
+                        
+                        <multiselect
+                          id="calling_code"
+                          :options="slotData.countries"
+                          class="calling-code-dropdown h-full"
+                          track-by="code"
+                          v-model="slotData.dropdown.billing.callingCode"
+                          label="calling_code"
+                          :searchable="true"
+                          :allow-empty="false"
+                          select-label=""
+                          deselect-label=""
+                          selected-label=""
+                          placeholder=""
+                          @select="onChangeCallingCode"
+                        >
+                          <template slot="singleLabel" slot-scope="{ option }">
+                            <span class="h-[23px] mt-1 block"
+                              >{{ option.calling_code }}</span
+                            >
+                          </template>
+
+                          <template
+                            slot="option"
+                            slot-scope="props"
+                            select-label=""
+                          >
+                            <span class="calling-code-value">
+                              <img
+                                :src="props.option.flag"
+                                mr="1"
+                                class="inline-block"
+                                loading="lazy" decoding="async"
+                              />
+                              <span class="name"
+                                >{{props.option.calling_code}}</span
+                              >
+                            </span>
+                          </template>
+
+                          <template slot="noResult">
+                            <span class="block">No records found.</span>
+                          </template>
+                        </multiselect>
+                      </div>
+
+                      <input
+                        class="ml-2 w-3/4 py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12 placeholder-slate-400"
+                        type="text"
+                        id="contact-number"
+                        v-model="slotData.formData.contact"
+                        :placeholder="slotData.language.editDeliveryDetails.userInfo.formLabels.contactNumber"
+                        maxlength="15"
+                        @input="checkValidate(field)"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <p
+                  v-if="slotData.formData.contactInvalid"
+                  class="error my-2 text-xs text-red-500"
+                >
+                  {{slotData.language.cart.enterValid + ' ' +
+                  slotData.language.editDeliveryDetails.userInfo.formLabels.contactNumber}}
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0">
+              <!-- email field -->
+              <div cols="12" lg="6" class="w-full lg:w-1/2 field email">
+                <div
+                  :invalid-feedback="slotData.language.cart.enterValid + ' ' + slotData.language.editDeliveryDetails.userInfo.formLabels.email"
+                >
+                  <label
+                    for="email"
+                    class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer"
+                    :class="{'required': slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('email')}"
+                  >
+                    {{slotData.language.editDeliveryDetails.userInfo.formLabels.email}}
+                    <template
+                      v-if="slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('email')"
+                      >*</template
+                    >
+                  </label>
+                  <input
+                    class="py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12 placeholder-slate-400"
+                    type="email"
+                    id="email"
+                    v-model="slotData.formData.email"
+                    @input="validateField('email', slotData.pattern.email, slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('email'))"
+                    autocomplete="off"
+                    :placeholder="slotData.language.editDeliveryDetails.userInfo.formLabels.email"
+                    maxlength="255"
+                  />
+                </div>
+
+                <p
+                  v-if="slotData.formData.emailInvalid"
+                  class="error my-2 text-xs text-red-500"
+                >
+                  {{slotData.language.cart.enterValid + ' ' +
+                  slotData.language.editDeliveryDetails.userInfo.formLabels.email}}
+                </p>
+              </div>
+
+              <!-- address field -->
+              <div
+                cols="12"
+                lg="6"
+                class="w-full lg:w-1/2 lg:ml-3 mt-2 md:mt-0 field address"
+              >
+                <div
+                  :invalid-feedback="slotData.language.cart.enterValid + ' ' + slotData.language.editDeliveryDetails.userInfo.formLabels.address"
+                >
+                  <label
+                    for="address"
+                    class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer"
+                    :class="{'required': slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('address')}"
+                  >
+                    {{slotData.language.editDeliveryDetails.userInfo.formLabels.address}}
+                    <template
+                      v-if="slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('address')"
+                      >*</template
+                    >
+                  </label>
+                  <input
+                    class="py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12 placeholder-slate-400"
+                    type="text"
+                    id="address"
+                    v-model="slotData.formData.address"
+                    @input="validateField('address', null, slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('address'))"
+                    :placeholder="slotData.language.editDeliveryDetails.userInfo.formLabels.address"
+                    maxlength="255"
+                  />
+                </div>
+
+                <p
+                  v-if="slotData.formData.addressInvalid"
+                  class="error my-2 text-xs text-red-500"
+                >
+                  {{slotData.language.cart.enterValid + ' ' +
+                  slotData.language.editDeliveryDetails.userInfo.formLabels.address}}
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0">
+              <!-- state field -->
+              <div cols="12" lg="6" class="w-full lg:w-1/2 field state">
+                <div
+                  :invalid-feedback="slotData.language.cart.enterValid + ' ' + slotData.language.editDeliveryDetails.userInfo.formLabels.state"
+                >
+                  <label
+                    for="state"
+                    class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer"
+                    :class="{'required': slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('state')}"
+                  >
+                    {{slotData.language.editDeliveryDetails.userInfo.formLabels.state}}
+                    <template
+                      v-if="slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('state')"
+                      >*</template
+                    >
+                  </label>
+                  <input
+                    class="py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12 placeholder-slate-400"
+                    type="text"
+                    id="state"
+                    v-model="slotData.formData.state"
+                    @input="validateField('state', null, slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('state'))"
+                    :placeholder="slotData.language.editDeliveryDetails.userInfo.formLabels.state"
+                    maxlength="255"
+                  />
+                </div>
+
+                <p
+                  v-if="slotData.formData.stateInvalid"
+                  class="error my-2 text-xs text-red-500"
+                >
+                  {{slotData.language.cart.enterValid + ' ' +
+                  slotData.language.editDeliveryDetails.userInfo.formLabels.state}}
+                </p>
+              </div>
+
+              <!-- country field -->
+              <div
+                cols="12"
+                lg="6"
+                class="w-full lg:w-1/2 lg:ml-3 mt-2 md:mt-0 field country"
+              >
+                <div
+                  :invalid-feedback="slotData.language.cart.enterValid + ' ' + slotData.language.editDeliveryDetails.userInfo.formLabels.country"
+                  @input="validateField('country', null, slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('country'))"
+                >
+                  <label
+                    for="country"
+                    class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer"
+                    :class="{'required': slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('country')}"
+                  >
+                    {{slotData.language.editDeliveryDetails.userInfo.formLabels.country}}
+                    <template
+                      v-if="slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('country')"
+                      >*</template
+                    >
+                  </label>
+                  <div class="h-11 md:h-12">
+                    <multiselect
+                      id="country"
+                      :options="slotData.countries"
+                      class="select-item h-full"
+                      track-by="name"
+                      v-model="slotData.dropdown.billing.country"
+                      label="name"
+                      select-label=""
+                      deselect-label=""
+                      selected-label=""
+                      placeholder=""
+                      @select="onChangeCountry"
+                    >
+                      <template slot="noResult">
+                        <span class="block">No records found.</span>
+                      </template>
+                    </multiselect>
+                  </div>
+                </div>
+
+                <p
+                  v-if="slotData.formData.countryInvalid"
+                  class="error my-2 text-xs text-red-500"
+                >
+                  {{slotData.language.cart.enterValid + ' ' +
+                  slotData.language.editDeliveryDetails.userInfo.formLabels.country}}
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0">
+              <!-- city field -->
+              <div cols="12" lg="6" class="w-full lg:w-1/2 field city">
+                <div
+                  :invalid-feedback="slotData.language.cart.enterValid + ' ' + slotData.language.editDeliveryDetails.userInfo.formLabels.city"
+                >
+                  <label
+                    for="city"
+                    class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer"
+                    :class="{'required': slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('city')}"
+                  >
+                    {{slotData.language.editDeliveryDetails.userInfo.formLabels.city}}
+                    <template
+                      v-if="slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('city')"
+                      >*</template
+                    >
+                  </label>
+
+                  <input
+                    class="py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12 placeholder-slate-400"
+                    type="text"
+                    id="city"
+                    v-model="slotData.formData.city"
+                    @input="validateField('city', null, slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('city'))"
+                    :placeholder="slotData.language.editDeliveryDetails.userInfo.formLabels.city"
+                    maxlength="255"
+                  />
+                </div>
+
+                <p
+                  v-if="slotData.formData.cityInvalid"
+                  class="error my-2 text-xs text-red-500"
+                >
+                  {{slotData.language.cart.enterValid + ' ' +
+                  slotData.language.editDeliveryDetails.userInfo.formLabels.city}}
+                </p>
+              </div>
+
+              <!-- postal code field -->
+              <div
+                cols="12"
+                lg="6"
+                class="w-full lg:w-1/2 lg:ml-3 mt-2 md:mt-0 field postal_code"
+              >
+                <div
+                  :invalid-feedback="slotData.language.cart.enterValid + ' ' + slotData.language.editDeliveryDetails.userInfo.formLabels.postalCode"
+                >
+                  <label
+                    for="postal_code"
+                    class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer"
+                    :class="{'required': slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('postal_code')}"
+                  >
+                    {{slotData.language.editDeliveryDetails.userInfo.formLabels.postalCode}}
+                    <template
+                      v-if="slotData.settings.user_info_required_fields && slotData.settings.user_info_required_fields.includes('postal_code')"
+                      >*</template
+                    >
+                  </label>
+
+                  <input
+                    class="py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12 placeholder-slate-400"
+                    type="text"
+                    id="postal-code"
+                    v-model="slotData.formData.postal_code"
+                    :placeholder="slotData.language.editDeliveryDetails.userInfo.formLabels.postalCode"
+                    @input="validateField('postal_code', slotData.pattern.postalCode, slotData.settings.user_info_required_fields &&slotData.settings.user_info_required_fields.includes('postal_code'))"
+                    @change="onChangePostalCode"
+                    maxlength="20"
+                  />
+                </div>
+
+                <p
+                  v-if="slotData.formData.postalCodeInvalid"
+                  class="error my-2 text-xs text-red-500"
+                >
+                  {{slotData.language.cart.enterValid + ' ' +
+                  slotData.language.editDeliveryDetails.userInfo.formLabels.postalCode}}
+                </p>
+              </div>
+            </div>
+
+            <!-- custom fields -->
+            <template v-if="slotData.customFields">
+              <div class="grid gap-4 mt-4 grid-cols-2">
+                <template v-for="field in slotData.customFields">
+                  <template
+                    v-if="slotData.helpers.InArray('INFO', field.type) && field.is_visible"
+                  >
+                    <form-custom-field-snippet :field="field" />
+                  </template>
+                </template>
+              </div>
+            </template>
+          </div>
+        </section>
+      </div>
+    </div>
+  </template>
+
+  <!-- Start: Delivery section-->
+  <div class="mb-6">
+    <div class="section-title">
+      <h2
+        class="text-lg md:text-xl xl:text-2xl font-bold text-heading mb-6 xl:mb-8 mt-0"
+      >
+        {{ slotData.language.editDeliveryDetails.tabs.delivery.text }}
+      </h2>
+    </div>
+
+    <div class="item-wrapper">
+      <section class="form w-full mx-auto flex flex-col justify-center">
+        <div class="flex flex-col space-y-4 lg:space-y-5">
+          <!-- order types -->
+          <div
+            class="flex flex-col lg:flex-row space-y-4 lg:space-y-0"
+            v-if="slotData.orderTypes"
+          >
+            <div id="orderType">
+              <label
+                class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer order-type-title"
+              >
+                {{
+                slotData.language.editDeliveryDetails.deliveryInfo.orderType.title
+                }}:
+              </label>
+              <!-- order type selection -->
+              <div class="flex flex-col lg:flex-row lg:justify-center gap-4">
+                <template v-for="(orderType, index) in slotData.orderTypes">
+                  <label class="inline-flex items-center mr-3">
+                    <input
+                      v-model="slotData.formData.orderType"
+                      @change="onChangeOrderType"
+                      type="radio"
+                      class="form-radio form-check-input appearance-none rounded-full h-4 w-4 border border-gray-500 bg-white checked:bg-primary checked:border-heading focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                      name="orderType"
+                      :value="orderType.text"
+                      :checked="{ 'checked': index === 0 }"
+                    />
+                    <span class="ml-2 text-sm"> {{ orderType.text }}</span>
+                  </label>
+                </template>
+              </div>
+            </div>
+          </div>
+
+          <template v-for="(location, index) in slotData.settings.locations">
+            <template v-if="location.id == slotData.currentLocation">
+              <template v-for="(orderType, index) in location.order_types">
+                <template v-if="orderType.text == slotData.formData.orderType">
+                  <!-- delivery date -->
+                  <div
+                    v-if="orderType.enable_date_picker == '1' || orderType.enable_time_picker == '1'"
+                    class="date-time-wrapper flex flex-col lg:flex-row space-x-0 lg:space-x-4 space-y-4 lg:space-y-0 mt-4"
+                  >
+                    <div
+                      v-if="orderType.enable_date_picker == '1'"
+                      class="w-full lg:w-1/2 mt-2 md:mt-0 delivery-date field"
+                    >
+                      <label
+                        for="delivery-date"
+                        class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer required"
+                      >
+                        {{
+                        slotData.language.editDeliveryDetails.deliveryInfo.formLabels.date
+                        }}
+                      </label>
+                      <div class="date-picker w-full">
+                        <date-picker
+                          id="delivery-date"
+                          class="w-full"
+                          :input-attr="{'required': true, 'class': slotData.formData.date == null ? 'mx-input error-field py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12' : 'mx-input py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12'}"
+                          v-model="slotData.formData.date"
+                          valueType="format"
+                          :editable="false"
+                          :placeholder="slotData.language.editDeliveryDetails.deliveryInfo.formLabels.date"
+                          v-on:change="onChangeDeliveryDate"
+                          :disabled="slotData.disableDate"
+                          :disabled-date="disabledDates"
+                        >
+                        </date-picker>
+                      </div>
+                      <p
+                        v-if="slotData.formData.deliveryDateInvalid"
+                        class="error my-2 text-xs text-red-500"
+                      >
+                        {{slotData.language.cart.enterValid}}
+                        {{slotData.language.editDeliveryDetails.deliveryInfo.formLabels.date}}
+                      </p>
+                    </div>
+
+                    <!-- delivery time -->
+                    <div
+                      v-if="orderType.enable_time_picker == '1'"
+                      class="w-full lg:w-1/2 mt-2 md:mt-0 delivery-time field"
+                    >
+                      <label
+                        for="delivery-time"
+                        class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer"
+                      >
+                        {{
+                        slotData.language.editDeliveryDetails.deliveryInfo.formLabels.time
+                        }}
+                      </label>
+                      <!-- {{slotData.deliveryTimepicker.startTime}} dd
+                                          {{slotData.deliveryTimepicker.endTime}} ee -->
+                      <div class="date-picker w-full">
+                        <date-picker
+                          id="delivery-time"
+                          class="w-full"
+                          :input-attr="{'required': true, 'class': 'py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12'}"
+                          v-model="slotData.formData.time"
+                          format="hh:mm a"
+                          value-type="format"
+                          type="time"
+                          :time-picker-options="{
+                                                      start: slotData.deliveryTimepicker.startTime,
+                                                      step: orderType.time_interval ? orderType.time_interval : '00:30',
+                                                      end: slotData.deliveryTimepicker.endTime
+                                                  }"
+                          :placeholder="slotData.language.editDeliveryDetails.deliveryInfo.formLabels.time"
+                          :disabled-time="disabledTimes"
+                        >
+                        </date-picker>
+                      </div>
+                    </div>
+                  </div>
+                  <span
+                    v-if="orderType.checkout_message && slotData.settings.enable_address_separation != '1'"
+                    class="text-body text-sm block"
+                  >
+                    {{orderType.checkout_message}}
+                  </span>
+
+                  <!-- custom fields -->
+                  <template
+                    v-if="orderType.customFields && orderType.customFields.length > 0"
+                  >
+                    <div class="grid gap-4 mt-4 grid-cols-1 md:grid-cols-2">
+                      <template v-for="field in orderType.customFields">
+                        <form-custom-field-snippet :field="field" />
+                      </template>
+                    </div>
+                  </template>
+                </template>
+              </template>
+            </template>
+          </template>
+
+          <template v-if="slotData.settings.enable_address_separation == '1'">
+            <address-book-popup-section
+              :type="slotData.addressBookType"
+              :currId="slotData.selectedAddress"
+              :is_active="slotData.isAddressBookActive"
+              @closeModal="closeAddressBook"
+            />
+
+            <section
+              v-if="slotData.formData.orderType == 'Delivery' && slotData.settings.sys_attribute"
+              class="form w-full mx-auto flex flex-col justify-center"
+            >
+              <template v-if="slotData.defaultDeliveryAddress">
+                <div class="border p-4 rounded-md">
+                  <div class="flex items-center">
+                    <h3 class="mb-2 text-heading font-semibold">
+                      {{
+                      slotData.language.addressBook.selectAddressPopup.shippingAddressText
+                      }}
+                    </h3>
+                    <button
+                      class="ml-4 border border-light py-1 p-3 text-body uppercase text-xs rounded-lg hover:bg-gray-100"
+                      v-on:click="showAddressBook('DELIVER', slotData.defaultDeliveryAddress.id)"
+                    >
+                      Change
+                    </button>
+                  </div>
+                  <div
+                    v-html="slotData.defaultDeliveryAddressStr"
+                    class="whitespace-pre-line text-sm text-body break-all"
+                  ></div>
+                  <span
+                    class="text-sm text-body"
+                    v-if="slotData.defaultDeliveryAddress.contact_number"
+                  >
+                    {{slotData.defaultDeliveryAddress.calling_code}}
+                    {{slotData.defaultDeliveryAddress.contact_number}}
+                  </span>
+                </div>
+              </template>
+<!-- delivery details -->
+              <div
+                class="grid gap-4 mt-4 grid-cols-1 lg:grid-cols-2"
+                v-if="slotData.settingsLoaded"
+              >
+                <template
+                  v-for="(field, index) in slotData.settings.sys_attribute"
+                >
+                  <template
+                    v-if="slotData.helpers.InArray('DELIVER', field.type) && field.is_visible &&   !( slotData.helpers.isInAddress( slotData.addressFormats.shipping_address, field.variable ) && slotData.defaultDeliveryAddress ) && !( field.code == 'shipping_contact_number' && slotData.defaultDeliveryAddress)"
+                  >
+                    <div
+                      class="w-full field"
+                      :class="field.code"
+                      v-bind:key="field.code"
+                      :key="field.code"
+                    >
+                      <template
+                        v-if="field.code == 'shipping_country'  || field.code == 'shipping_contact_number' || (field.code == 'shipping_city' && slotData.cityListType == 'custom')"
+                      >
+                        <label
+                          :for="field.id"
+                          class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer"
+                          :class="{'required': field.is_required}"
+                          :data-des="field.description"
+                        >
+                          {{field.label}}
+                          <template v-if="field.is_required">*</template>
+                        </label>
+                      </template>
+                      <template v-if="field.code == 'shipping_country'">
+                        <div class="h-12">
+                            
+                          <!--<multiselect
+                            :id="field.code"
+                            :options="slotData.countries"
+                            class="select-item h-full"
+                            track-by="name"
+                            v-model="slotData.dropdown.shipping.country"
+                            label="name"
+                            :searchable="true"
+                            :allow-empty="false"
+                            :show-no-options="false"
+                            select-label=""
+                            deselect-label=""
+                            selected-label=""
+                            placeholder=""
+                            @select="onChangeCountry"
+                            disabled="true"
+                          >
+                            <template slot="noResult">
+                              <span class="block">No records found.</span>
+                            </template>
+                          </multiselect>-->
+                          <span class="block mt-5">Sri Lanka</span>
+                        </div>
+                      </template>
+
+                      <template
+                        v-else-if="field.code == 'shipping_city' && slotData.cityListType == 'custom'"
+                      >
+                        <div class="h-12">
+                          <multiselect
+                            :id="field.code"
+                            :options="slotData.cityList"
+                            class="select-item h-full"
+                            track-by="city"
+                            v-model="slotData.dropdown.shipping.city"
+                            label="city"
+                            :searchable="true"
+                            :allow-empty="false"
+                            :show-no-options="false"
+                            select-label=""
+                            deselect-label=""
+                            selected-label=""
+                            placeholder=""
+                            @select="onChangeCityFn"
+                          >
+                            <template slot="noResult">
+                              <span class="block">No records found.</span>
+                            </template>
+                          </multiselect>
+                        </div>
+                      </template>
+
+                      <template
+                        v-else-if="field.code == 'shipping_contact_number'"
+                      >
+                        <div class="flex">
+                          <div class="w-1/4">
+                            <!--<multiselect
+                              id="shipping_calling_code"
+                              :options="slotData.countries"
+                              class="calling-code-dropdown h-full"
+                              track-by="code"
+                              v-model="slotData.dropdown.shipping.callingCode"
+                              label="calling_code"
+                              :searchable="true"
+                              :allow-empty="false"
+                              select-label=""
+                              deselect-label=""
+                              selected-label=""
+                              placeholder=""
+                              @select="onChangeCallingCode"
+                              disabled="true"
+                            >
+                              <template
+                                slot="singleLabel"
+                                slot-scope="{ option }"
+                              >
+                                <span class="h-[23px] mt-1 block"
+                                  >{{ option.calling_code }}</span
+                                >
+                              </template>
+
+                              <template
+                                slot="option"
+                                slot-scope="props"
+                                select-label=""
+                              >
+                                <span class="calling-code-value">
+                                  <img
+                                    :src="props.option.flag"
+                                    mr="1"
+                                    class="inline-block"
+                                    loading="lazy" decoding="async"
+                                  />
+                                  <span class="name"
+                                    >{{props.option.calling_code}}</span
+                                  >
+                                </span>
+                              </template>
+
+                              <template slot="noResult"
+                                >No records found.</template
+                              >
+                            </multiselect>-->
+                            <span class="block mt-3 text-center">+94</span>
+                          </div>
+                          <input
+                            class="ml-2 w-3/4 py-2 px-4 md:px-5 w-full appearance-none border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-12 placeholder-slate-400"
+                            type="text"
+                            :id="field.code"
+                            v-model="field.value"
+                            :placeholder="field.name"
+                            onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 45"
+                            maxlength="15"
+                            @input="checkValidate(field)"
+                          />
+                        </div>
+                      </template>
+                      <template v-else>
+                        <form-custom-field-snippet
+                          :field="field"
+                          @input-focusOut="handleInputFocusOut"
+                          @doneChanges="isChanged"
+                        />
+                      </template>
+
+                      <template
+                        v-if="field.code == 'shipping_country'  || field.code == 'shipping_contact_number'"
+                      >
+                        <span
+                          class="error my-2 text-xs text-red-500"
+                          v-if="field.error"
+                        >
+                          {{slotData.language.cart.enterValid}} {{field.label}}
+                        </span>
+                      </template>
+                    </div>
+                  </template>
+                </template>
+              </div>
+
+              <template
+                v-for="(location, index) in slotData.settings.locations"
+              >
+                <template v-if="location.id == slotData.currentLocation">
+                  <template v-for="(orderType, index) in location.order_types">
+                    <template
+                      v-if="orderType.text == slotData.formData.orderType"
+                    >
+                      <span
+                        v-if="orderType.checkout_message"
+                        class="text-body text-sm block mt-4"
+                      >
+                        {{orderType.checkout_message}}
+                      </span>
+                    </template>
+                  </template>
+                </template>
+              </template>
+            </section>
+          </template>
+
+          <!-- delivery methods -->
+          <div
+            id="target-component"
+            class="delivery-method-wrapper"
+            v-if="slotData.formData.orderType == 'Delivery' && !slotData.orderTypeError"
+          >
+            <div class="delivery-methods" v-if="slotData.shippingLoaded">
+              <div id="deliveryMethods">
+                <div
+                  v-for="deliveryMethod in slotData.deliveryMethods"
+                  class="delivery-method my-4 lg:flex"
+                  :class="deliveryMethod.delivery_method_code"
+                >
+                  <label class="inline-flex items-center mr-3">
+                    <input
+                      v-model="slotData.formData.deliveryMethod"
+                      @change="onChangeDeliveryMethod(deliveryMethod.delivery_method_code)"
+                      :value="deliveryMethod.delivery_method_code"
+                      class="form-radio form-check-input appearance-none rounded-full h-4 w-4 border border-gray-500 bg-white checked:bg-primary checked:border-heading focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2"
+                      type="radio"
+                      name="deliveryMethod"
+                      :disabled="!deliveryMethod.success"
+                      :class="[ deliveryMethod.success ? 'cursor-pointer' : 'opacity-20' ]"
+                    />
+                    <span class="ml-2 text-sm text-gray-700 font-semibold">
+                      {{ deliveryMethod.delivery_method }}
+                    </span>
+                  </label>
+
+                  <div class="text-sm text-gray-700 lg:flex items-center">
+                    <div
+                      class="region-dropdown flex items-center"
+                      :class="{'invalid-region': slotData.formError && !deliveryMethod.region && slotData.formData.deliveryMethod == deliveryMethod.delivery_method_code}"
+                      v-if="deliveryMethod.data && deliveryMethod.config.address.includes('region') && deliveryMethod.data.region"
+                    >
+                      <multiselect
+                        :id="deliveryMethod.delivery_method_code"
+                        :options="deliveryMethod.data.region"
+                        class="select-item my-1 lg:my-0 w-full"
+                        track-by="code"
+                        v-model="deliveryMethod.region"
+                        label="name"
+                        :searchable="true"
+                        :allow-empty="false"
+                        select-label=""
+                        deselect-label=""
+                        selected-label=""
+                        :placeholder="slotData.language.editDeliveryDetails.deliveryInfo.shipping.fields.selectRegion"
+                        @select="onChangeRegion"
+                      >
+                        <template slot="noResult">No records found.</template>
+                      </multiselect>
+
+                      <label
+                        class="block text-error whitespace-nowrap ml-3"
+                        :for="deliveryMethod.delivery_method_code"
+                      >
+                        {{ deliveryMethod.message }}
+                      </label>
+                    </div>
+                    <!-- enter valid city message -->
+                    <div
+                      class="message inline-block flex items-center text-error"
+                      v-else-if="deliveryMethod.message"
+                    >
+                      {{ deliveryMethod.message }}
+
+                      <b-icon
+                        icon="arrow-clockwise"
+                        class="ml-2 reload-icon min-w-[24px] min-h-[24px] text-heading cursor-pointer"
+                        v-on:click="reloadCity"
+                        title="Reload"
+                      ></b-icon>
+                    </div>
+
+                    <div class="price mt-1 lg:mt-0 lg:ml-2" v-if="deliveryMethod.delivery_price">
+                      {{  slotData.language.editDeliveryDetails.deliveryInfo.shipping.priceLabel }}: {{ slotData.display_currency }} {{ slotData.helpers.PriceFormat(deliveryMethod.delivery_price) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- calculating message -->
+            <div
+              class="calculating-text text-sm text-gray-500 flex items-center"
+              v-else
+            >
+              <svg
+                class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-700"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              {{
+              slotData.language.editDeliveryDetails.deliveryInfo.shipping.calculateShippingPrice}}...
+            </div>
+
+            <span v-if="slotData.shippingError" class="text-error text-sm">
+              {{ slotData.shippingError }}
+            </span>
+
+            <p
+              v-if="slotData.deliveryMethods?.length && slotData.formData.deliveryMethodInvalid"
+              class="error my-2 text-xs text-red-500"
+            >
+              {{slotData.language.cart.enterValid + ' ' +
+              slotData.language.editDeliveryDetails.deliveryInfo.shipping.method}}
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <!-- End: Delivery section-->
+
+  <!-- Payment section-->
+  <div class="mt-6 xl:mt-8 mb-6">
+    <div class="section-title">
+      <h2 class="text-lg md:text-xl xl:text-2xl font-bold text-heading mb-8">
+        {{ slotData.language.editDeliveryDetails.tabs.payment.text }}
+      </h2>
+    </div>
+    <div class="item-wrapper">
+      <!-- custom fields -->
+      <template v-if="slotData.settingsLoaded && slotData.customFields">
+        <div class="grid gap-4 mt-4 grid-cols-2">
+          <template v-for="field in slotData.customFields">
+            <template
+              v-if="slotData.helpers.InArray('PAY', field.type) && field.is_visible"
+            >
+              <form-custom-field-snippet :field="field" />
+            </template>
+          </template>
+        </div>
+      </template>
+
+      <!-- payment methods -->
+
+      <div
+        v-if="!slotData.payment_methods"
+        class="text-sm text-gray-500 flex items-center mt-4 mb-4"
+      >
+        <svg
+          class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-700"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+        {{slotData.language.editDeliveryDetails.paymentInfo.loading}}
+      </div>
+      <div
+        id="paymentMethod"
+        class="payment-method-wrapper mb-4"
+        v-if="slotData.payment_methods"
+      >
+        <template v-for="(method, index) in slotData.payment_methods">
+          <label
+            class="payment-method my-4 shadow rounded-md p-4 block bg-gray-50 cursor-pointer hover:bg-gray-100"
+            :class="{ 'bg-gray-100' : slotData.formData.paymentMethod == method}"
+          >
+            <div class="flex items-center mr-3 w-full relative min-h-[30px]">
+              <input
+                v-model="slotData.formData.paymentMethod"
+                type="radio"
+                class="form-radio form-check-input appearance-none rounded-full h-4 w-4 border border-gray-500 bg-white checked:bg-primary checked:border-heading focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                name="paymentMethod"
+                :value="method"
+                :title="slotData.language.editDeliveryDetails.paymentInfo.selectTitle"
+                @change="onChangePaymentMethod(method)"
+                :checked="slotData.payment_methods.length == 1"
+              />
+
+              <div class="mx-2 grid">
+                <span class="text-sm text-heading font-semibold">
+                  {{ method.name }}
+                </span>
+                <template v-if="method.pre_order_instructions">
+                  <div
+                    v-html="method.pre_order_instructions"
+                    class="text-sm text-body pre-order-msg grid mt-1"
+                  ></div>
+                </template>
+                <!-- Include MintPay pricing block -->
+                <template>
+                  <div v-if="method.code == 'Mintpay'">
+                    <mint-pay-price-block-snippet pageView="checkout" />
+                  </div>
+                </template>
+                <!-- Include KokoPay pricing block -->
+                <template>
+                  <div v-if="method.code == 'koko'">
+                    <koko-pay-price-block-snippet pageView="checkout" />
+                  </div>
+                </template>
+              </div>
+              <template v-if="method.logo">
+                <div
+                  class="ml-auto min-w-[100px] max-h-full h-10 bg-contain bg-top bg-no-repeat"
+                  v-bind:style="{'background-image': 'url(' + method.logo + ')'}"
+                ></div>
+              </template>
+              <template v-else-if="method.online_pay == '1'">
+                <b-icon
+                  class="ml-auto min-w-[36px] h-10 text-heading"
+                  icon="credit-card"
+                ></b-icon>
+              </template>
+              <template v-else>
+                <b-icon
+                  class="ml-auto min-w-[36px] h-10 text-heading"
+                  icon="cash"
+                ></b-icon>
+              </template>
+            </div>
+          </label>
+        </template>
+
+        <p
+          v-if="slotData.formData.paymentMethodInvalid"
+          class="error my-2 text-xs text-red-500"
+        >
+          {{slotData.language.cart.enterValid + ' ' +
+          slotData.language.editDeliveryDetails.paymentInfo.formLabels.paymentMethod}}
+        </p>
+      </div>
+
+      <!-- loyalty points -->
+      <div
+        class="loyalty-points-wrapper border p-6 rounded-md"
+        v-if="slotData.settings.is_loyalty_integrate == '1'"
+      >
+        <span class="loyalty-title block mb-2 text-gray-700 font-semibold">
+          {{slotData.language.editDeliveryDetails.paymentInfo.loyalty.title}}
+        </span>
+
+        <template v-if="slotData.showLoyaltyPoints">
+          <div class="loyalty-points-section text-center">
+            <div
+              class="balance-wrapper block text-sm mb-4 text-gray-700 font-semibold"
+            >
+              <span class="balance-label"
+                >{{slotData.language.editDeliveryDetails.paymentInfo.loyalty.balance_label}}:</span
+              >
+              <span class="balance-text-wrapper relative">
+                <span
+                  class="balance-text py-1.5 px-3 bg-primary text-white rounded-md"
+                >
+                  {{ slotData.loyaltyTotalBalance }}
+                </span>
+                <!--  <span class="loader-wrapper">
+                                  <span class="loader"></span>
+                              </span> -->
+              </span>
+            </div>
+
+            
+            <div class="redeem-wrapper">
+              <template v-if="slotData.loyaltyTotalBalance > 0">
+              <input
+                class="py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12 max-w-xs"
+                type="number"
+                v-model="slotData.formData.loyaltyPoints"
+                min="0"
+                step="1"
+                v-on:change="onChangeLoyaltyPoints"
+                :state="validateLoyaltyPoints()"
+                :disabled="slotData.loyaltyPointsDisabled"
+              />
+              </template>
+              <template v-else-if="!slotData.isValidContact">
+                <div class="text-sm text-gray-500 italic mb-2 max-w-sm mx-auto text-center">
+                  {{slotData.language.loyaltySummary.completeProfile1}} 
+                  <a href="/profile" class="underline">
+                    {{slotData.language.loyaltySummary.completeProfile2}}
+                  </a>
+                  {{slotData.language.loyaltySummary.completeProfile3}}
+                </div>
+              </template>
+              <template v-else>
+                <div class="text-sm text-gray-500 italic mb-4">
+                  {{slotData.language.editDeliveryDetails.paymentInfo.loyalty.earn_points}}
+                </div>
+              </template>
+            </div>
+            
+
+            <span class="point-equality block text-sm mt-2">
+              1
+              {{slotData.language.editDeliveryDetails.paymentInfo.loyalty.point}}
+              = {{slotData.display_currency}} 1.00
+            </span>
+
+            <span
+              class="error-msg block text-xs text-red-500 mt-0.5"
+              v-if="slotData.loyaltyPointsError && slotData.isValidContact"
+            >
+              {{ slotData.loyaltyPointsError }}
+            </span>
+          </div>
+        </template>
+
+        <template v-else>
+          <div class="not-logged-in text-sm text-gray-500">
+            {{slotData.language.editDeliveryDetails.paymentInfo.loyalty.login}}
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+  <!-- Billing info-->
+  <div v-if="slotData.settings.enable_address_separation == '1'" class="mb-6">
+    <div class="section-title">
+      <h2
+        class="text-lg md:text-xl xl:text-2xl font-bold text-heading mb-6 xl:mb-8 mt-0"
+      >
+        {{ slotData.language.editDeliveryDetails.tabs.user.billingText }}
+      </h2>
+    </div>
+    <div class="item-wrapper">
+      <section class="form w-full mx-auto flex flex-col justify-center">
+        <template v-if="slotData.defaultBillingAddress">
+          <div class="border p-4 rounded-md">
+            <div class="flex items-center">
+              <h3 class="mb-2 text-heading font-semibold">
+                {{
+                slotData.language.addressBook.selectAddressPopup.billingAddressText
+                }}
+              </h3>
+              <button
+                class="ml-4 border border-light py-1 p-3 text-body uppercase text-xs rounded-lg hover:bg-gray-100"
+                v-on:click="showAddressBook('INFO', slotData.defaultBillingAddress.id)"
+              >
+                Change
+              </button>
+            </div>
+            <div
+              v-html="slotData.defaultBillingAddressStr"
+              class="whitespace-pre-line text-sm text-body"
+            ></div>
+            <span
+              class="text-sm text-body"
+              v-if="slotData.defaultBillingAddress.contact_number"
+            >
+              {{slotData.defaultBillingAddress.calling_code}}
+              {{slotData.defaultBillingAddress.contact_number}}
+            </span>
+          </div>
+        </template>
+        <template v-if="slotData.settings.sys_attribute">
+          <div
+            v-if="!slotData.defaultBillingAddress && slotData.formData.orderType == 'Delivery'"
+            class="address-section flex items-center mt-4 mb-8"
+          >
+            <label class="flex items-center">
+              <input
+                type="checkbox"
+                class="form-checkbox appearance-none h-4 w-4 border border-gray-500 rounded-sm bg-white checked:bg-primary checked:border-heading focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                :checked="slotData.useSameAddress"
+                @change="switchBilling"
+              />
+              <span
+                class="block text-gray-600 text-sm leading-none cursor-pointer"
+              >
+                {{
+                slotData.language.editDeliveryDetails.deliveryInfo.shipping.shippingAsBillingLabel
+                }}</span
+              >
+            </label>
+          </div>
+          <div
+            class="billing-address-wrp"
+            :data-class="{'hidden' : slotData.useSameAddress}"
+          >
+            <div
+              class="grid gap-4 mt-4 grid-cols-1 lg:grid-cols-2"
+              v-if="slotData.settingsLoaded"
+            >
+              <template
+                v-for="(field, index) in slotData.settings.sys_attribute"
+              >
+                <template
+                  v-if="slotData.helpers.InArray('INFO', field.type) && field.is_visible && !( slotData.addressFormats && slotData.helpers.isInAddress( slotData.addressFormats.billing_address, field.variable ) && slotData.defaultBillingAddress ) && !( field.code == 'contact_number' && slotData.defaultBillingAddress)"
+                >
+                  <template
+                    v-if="(!slotData.useSameAddress && field.default_field && field.code != 'email') || slotData.formData.orderType != 'Delivery'"
+                  >
+                    <div
+                      cols="12"
+                      lg="6"
+                      class="w-full field"
+                      :class="{ 'col-span-full' : field.input_model == 'textarea'}"
+                    >
+                      <template
+                        v-if="field.code == 'country' || field.code == 'contact_number' || (field.code == 'city' && slotData.cityListType == 'custom')"
+                      >
+                        <label
+                          :for="field.id"
+                          class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer"
+                          :class="{'required': field.is_required}"
+                          :data-des="field.description"
+                        >
+                          {{field.label}}
+                          <template v-if="field.is_required">*</template>
+                        </label>
+                      </template>
+
+                      
+                      <template v-if="field.code == 'country'">
+                        <div class="h-12">
+                            
+                          <!--<multiselect
+                            :id="field.code"
+                            :options="slotData.countries"
+                            class="select-item h-full"
+                            track-by="name"
+                            v-model="slotData.dropdown.billing.country"
+                            label="name"
+                            select-label=""
+                            deselect-label=""
+                            selected-label=""
+                            placeholder=""
+                            @select="onChangeCountry"
+                            disabled="true"
+                          >
+                            <template slot="noResult"
+                              >No records found.</template
+                            >
+                          </multiselect>-->
+                          <span class="block mt-5">Sri Lanka</span>
+                        </div>
+                      </template>
+
+                      <template
+                        v-else-if="field.code == 'city' && slotData.cityListType == 'custom'"
+                      >
+                        <div class="h-12">
+                          <multiselect
+                            :id="field.code"
+                            :options="slotData.cityList"
+                            class="select-item h-full"
+                            track-by="city"
+                            v-model="slotData.dropdown.billing.city"
+                            label="city"
+                            :searchable="true"
+                            :allow-empty="false"
+                            :show-no-options="false"
+                            select-label=""
+                            deselect-label=""
+                            selected-label=""
+                            placeholder=""
+                            @select="onChangeCityFn"
+                          >
+                            <template slot="noResult">
+                              <span class="block">No records found.</span>
+                            </template>
+                          </multiselect>
+                        </div>
+                      </template>
+
+                      <template v-else-if="field.code == 'contact_number'">
+                        <div class="flex">
+                          <div class="w-1/4">
+                            <!--<multiselect
+                              id="calling_code"
+                              :options="slotData.countries"
+                              class="calling-code-dropdown h-full"
+                              track-by="code"
+                              v-model="slotData.dropdown.billing.callingCode"
+                              label="calling_code"
+                              :searchable="true"
+                              :allow-empty="false"
+                              select-label=""
+                              deselect-label=""
+                              selected-label=""
+                              placeholder=""
+                              @select="onChangeCallingCode"
+                              disabled="true"
+                            >
+                              <template
+                                slot="option"
+                                slot-scope="props"
+                                select-label=""
+                              >
+                                <span class="calling-code-value">
+                                  <img
+                                    :src="props.option.flag"
+                                    mr="1"
+                                    class="inline-block"
+                                    loading="lazy" decoding="async"
+                                  />
+                                  <span class="name"
+                                    >{{props.option.calling_code}}</span
+                                  >
+                                </span>
+                              </template>
+
+                              <template slot="noResult"
+                                >No records found.</template
+                              >
+                            </multiselect>-->
+                            <span class="block mt-3 text-center">+94</span>
+                          </div>
+                          <input
+                            class="ml-2 w-3/4 py-2 px-4 md:px-5 w-full appearance-none border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-12 placeholder-slate-400"
+                            type="text"
+                            :id="field.code"
+                            v-model="field.value"
+                            :placeholder="field.name"
+                            onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 45"
+                            maxlength="15"
+                            @input="checkValidate(field)"
+                          />
+                        </div>
+                      </template>
+                      <template v-else>
+                        <form-custom-field-snippet
+                          :field="field"
+                          :key="index"
+                        />
+                      </template>
+
+                      <template
+                        v-if="field.code == 'country'  || field.code == 'contact_number'"
+                      >
+                        <span
+                          class="error my-2 text-xs text-red-500"
+                          v-if="field.error"
+                        >
+                          {{slotData.language.cart.enterValid}} {{field.label}}
+                        </span>
+                      </template>
+                    </div>
+                  </template>
+                  <template
+                    v-if="(!field.default_field || field.code == 'email') && slotData.formData.orderType == 'Delivery'"
+                  >
+               
+                    <div
+                      cols="12"
+                      lg="6"
+                      class="w-full field"
+                      :class="{ 'col-span-full' : field.input_model == 'textarea'}"
+                    >
+                      <form-custom-field-snippet :field="field" :key="index" />
+                    </div>
+                  </template>
+                </template>
+              </template>
+            </div>
+          </div>
+        </template>
+      </section>
+    </div>
+  </div>
+
+  <!-- Order comments -->
+  <div class="mt-6 xl:mt-8">
+    <div class="item-title">
+      <h2 class="text-lg md:text-xl xl:text-2xl font-bold text-heading mb-3">
+        {{ slotData.language.orderConfirmation.fields.orderInstruction }}
+      </h2>
+    </div>
+
+    <div class="instruction-wrapper">
+      <textarea
+        v-model="slotData.formData.instruction"
+        rows="4"
+        :maxlength="500"
+        class="px-4 py-3 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 bg-white border border-gray-300 focus:shadow focus:outline-none focus:border-heading placeholder-body"
+      >
+      </textarea>
+    </div>
+  </div>
+</div>

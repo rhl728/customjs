@@ -1,0 +1,303 @@
+
+
+        <section class="form  w-full mx-auto flex flex-col justify-center">
+
+            <div class="flex flex-col space-y-4 lg:space-y-5 p-4 space-y-6 max-h-[60vh] overflow-auto">
+                <!-- order types -->
+                <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0" v-if="slotData.orderTypes">
+                    <div id="orderType">
+                        <label class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer  order-type-title"> 
+                            {{ slotData.language.editDeliveryDetails.deliveryInfo.orderType.title }}:
+                        </label>
+                        <div class="flex lg:justify-center">
+                            <template v-for="(orderType, index) in slotData.orderTypes">
+                                <label class="inline-flex items-center mr-3">
+
+                                    <input  v-model="slotData.formData.orderType"  @change="onChangeOrderType"  type="radio" class="form-radio form-check-input appearance-none rounded-full h-4 w-4 border border-gray-500 bg-white checked:bg-primary checked:border-heading focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" name="orderType" :value="orderType.text"  :checked="{ 'checked': index === 0 }">
+                                    <span class="ml-2 text-sm"> {{ orderType.text }}</span>
+
+                                </label>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+            <template v-for="(location, index) in slotData.settings.locations">
+               <template v-if="location.id == slotData.currentLocation">
+                    <template v-for="(orderType, index) in location.order_types">
+                        <template v-if="orderType.text == slotData.formData.orderType">
+                            <!-- delivery date -->
+                            <div  v-if="orderType.enable_date_picker == '1' || orderType.enable_time_picker == '1'" class="date-time-wrapper flex flex-col lg:flex-row space-y-4 lg:space-y-0 mt-4">
+                                <div v-if="orderType.enable_date_picker == '1'"  class="w-full lg:w-1/2 mt-2 md:mt-0 delivery-date field">
+                                    <label for="delivery-date" class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer required"> 
+                                        {{ slotData.language.editDeliveryDetails.deliveryInfo.formLabels.date }} 
+                                    </label>
+                                    <div class="date-picker  w-full"> 
+                                        <date-picker id="delivery-date" class="w-full"
+                                            :input-attr="{'required': true, 'class': slotData.formData.date == null ? 'mx-input error-field py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12' : 'mx-input py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12'}"
+                                            v-model="slotData.formData.date"
+                                            valueType="format"
+                                            :editable="false" 
+                                            :placeholder="slotData.language.editDeliveryDetails.deliveryInfo.formLabels.date"
+                                            v-on:change="onChangeDeliveryDate"
+                                            :disabled="slotData.disableDate"
+                                            :disabled-date="disabledDates">
+                                        </date-picker>
+                                    </div>
+
+                                    <p v-if="slotData.formData.deliveryDateInvalid" class="error my-2 text-xs text-red-500">
+                                        {{slotData.language.cart.enterValid}} {{slotData.language.editDeliveryDetails.deliveryInfo.formLabels.date}}
+                                    </p>
+                                </div>
+
+                                <!-- delivery time -->
+                                <div v-if="orderType.enable_time_picker == '1'"  class="w-full lg:w-1/2 lg:ml-3 mt-2 md:mt-0 delivery-time field">
+                                    <label for="delivery-time" class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer"> 
+                                        {{ slotData.language.editDeliveryDetails.deliveryInfo.formLabels.time }} 
+                                    </label>
+                                    <div class="date-picker  w-full">
+                                        <date-picker id="delivery-time" class="w-full"
+                                            :input-attr="{'required': true, 'class': 'py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12'}"
+                                            v-model="slotData.formData.time"
+                                            format="hh:mm a"
+                                            value-type="format"
+                                            type="time"
+                                            :time-picker-options="{
+                                            start: slotData.deliveryTimepicker.startTime,
+                                            step: orderType.time_interval ? orderType.time_interval : '00:30',
+                                            end: slotData.deliveryTimepicker.endTime
+                                            }"
+                                            :placeholder="slotData.language.editDeliveryDetails.deliveryInfo.formLabels.time"
+                                            :disabled-time="disabledTimes">
+                                        </date-picker>
+                                    </div>
+                                </div>
+                            </div>
+                            <span v-if="orderType.checkout_message && slotData.settings.enable_address_separation != '1'" class="text-body text-sm block">
+                                {{orderType.checkout_message}}
+                            </span>
+                        </template>
+
+                    </template>
+               </template>
+            </template>
+
+
+            <template  v-if="slotData.settings.enable_address_separation != '1'" >
+                <!-- custom fields -->
+                <div v-if="slotData.customFields">
+                    <template v-for="field in slotData.customFields">
+                        <div cols="12" lg="6" class="w-full lg:w-1/2 lg:ml-3 mt-2 md:mt-0 field" :class="field.code">
+                            <form-custom-field-snippet :field="field"  />
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <template v-else>
+                <section v-if="slotData.formData.orderType == 'Delivery' && slotData.settings.sys_attribute" class="form w-full mx-auto flex flex-col justify-center">
+                    <div class="grid gap-4 mt-4 grid-cols-2">
+                        <template v-for="(field, index) in slotData.settings.sys_attribute" >
+                            <template v-if="slotData.helpers.InArray('DELIVER', field.type)">          
+                                <div class="w-full field" :class="field.code"   v-bind:key="field.code" :key="field.code">
+                                    <template v-if="field.code == 'shipping_country' || field.code == 'shipping_city' || field.code == 'shipping_contact_number'">
+                                        <label :for="field.id" class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer" :class="{'required': field.is_required}"> 
+                                            {{field.label}} 
+                                            <template v-if="field.is_required">*</template>
+                                        </label>
+                                    </template>
+                                    <template v-if="field.code == 'shipping_country'">
+                                        <multiselect
+                                            :id="field.code"
+                                            :options="slotData.countries"
+                                            class='select-item h-full' 
+                                            track-by="name" 
+                                            v-model="field.value"
+                                            label="name"
+                                            :searchable="true" 
+                                            :allow-empty="false"
+                                            :show-no-options="false"
+                                            select-label=""
+                                            deselect-label=""
+                                            selected-label=""
+                                            placeholder=""
+                                            @select="onChangeCountry"
+                                            >
+
+                                            <template slot="noResult">
+                                                <span class="block">No records found.</span>
+                                            </template>
+                                        </multiselect>        
+                                    </template>
+                                    <template v-else-if="field.code == 'shipping_city'">
+                                        <multiselect
+                                            :id="field.code"
+                                            :options="slotData.cityList"
+                                            class='select-item h-full' 
+                                            v-model="field.value"
+                                            label="city"
+                                            :searchable="true" 
+                                            :allow-empty="false"
+                                            :show-no-options="false"
+                                            select-label=""
+                                            deselect-label=""
+                                            selected-label=""
+                                            placeholder=""
+                                            :taggable="true"
+                                            @tag="addNewCity"
+                                            @select="onChangeCity"
+                                            >
+
+                                            <template slot="noResult">
+                                                <span class="block">No records found.</span>
+                                            </template>
+                                        </multiselect>
+                                    </template>
+                                    <template v-else-if="field.code == 'shipping_contact_number'">
+                                        <div class="flex">
+                                            <div class="w-1/4">
+                                                <multiselect
+                                                    id="calling-code"
+                                                    name="calling-code"
+                                                    :options="slotData.countries"
+                                                    class='calling-code-dropdown h-full' 
+                                                    track-by="code" 
+                                                    v-model="slotData.dropdown.shipping.callingCode"
+                                                    label="calling_code"
+                                                    :searchable="true" 
+                                                    :allow-empty="false"
+                                                    select-label=""
+                                                    deselect-label=""
+                                                    selected-label=""
+                                                    placeholder=""
+                                                    >
+                                                    <template slot="singleLabel" slot-scope="{ option }">
+                                                        <span class="h-[23px]  mt-1 block">{{ option.calling_code }}</span>
+                                                    </template>
+                                                    
+                                                    <template slot="option" slot-scope="props" select-label="">
+                                                        <span class="calling-code-value">
+                                                            <img :src="props.option.flag" mr="1" class="inline-block" loading="lazy" decoding="async" />
+                                                            <span class='name'>{{props.option.calling_code}}</span>
+                                                        </span>
+                                                    </template>
+
+                                                    <template slot="noResult">No records found.</template>
+                                                </multiselect>
+                                            </div>
+                                            <input class="ml-2 w-3/4 py-2 px-4 md:px-5 w-full appearance-none border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-12" type="tel" :id="field.code"  v-model="field.value"  :placeholder="field.name" @input="checkValidate(field)"
+                                            maxlength="15" />
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <form-custom-field-snippet :field="field"   />
+                                    </template>   
+
+                                    <template v-if="field.code == 'shipping_country' || field.code == 'shipping_city' || field.code == 'shipping_contact_number'">
+                                        <span  class="error my-2 text-xs text-red-500" v-if="field.error"> 
+                                            {{slotData.language.cart.enterValid}} {{field.label}}
+                                        </span>
+                                    </template>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                    <template v-for="(location, index) in slotData.settings.locations">
+                        <template v-if="location.id == slotData.currentLocation">
+                                <template v-for="(orderType, index) in location.order_types">
+                                    <template v-if="orderType.text == slotData.formData.orderType">
+                                        <span v-if="orderType.checkout_message" class="text-body text-sm block  mt-4">
+                                            {{orderType.checkout_message}}
+                                        </span>
+                                    </template>
+                                </template>
+                        </template>
+                    </template>
+                </section>   
+            </template>
+
+
+            <!-- delivery methods -->
+            <div class="delivery-method-wrapper" v-if="slotData.formData.orderType == 'Delivery' && !slotData.orderTypeError">
+                <div class="delivery-methods" v-if="slotData.shippingLoaded">
+                    <div
+                        id="deliveryMethods"
+                        >
+
+                        <div v-for="deliveryMethod in slotData.deliveryMethods" class="delivery-method my-4 lg:flex" :class="deliveryMethod.delivery_method_code">
+                            <label class="inline-flex items-center mr-3">
+
+                                <input v-model="slotData.formData.deliveryMethod"
+                        @change="onChangeDeliveryMethod(deliveryMethod.delivery_method_code)"  :value="deliveryMethod.delivery_method_code" class="form-radio form-check-input appearance-none rounded-full h-4 w-4 border border-gray-500 bg-white checked:bg-primary checked:border-heading focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 " type="radio" name="deliveryMethod" :disabled="!deliveryMethod.success" :class="[ deliveryMethod.success ? 'cursor-pointer' : 'opacity-20' ]"> 
+                                    <span class="ml-2 text-sm text-gray-700 font-semibold"> 
+                                        {{ deliveryMethod.delivery_method }}
+                                    </span>
+                                
+                            </label>
+
+                            <div class="text-sm text-gray-700 lg:flex items-center">
+
+                        
+                            <div class="region-dropdown flex items-center" :class="{'invalid-region': slotData.formError && !deliveryMethod.region && slotData.formData.deliveryMethod == deliveryMethod.delivery_method_code}" v-if="deliveryMethod.data && deliveryMethod.config.address.includes('region') && deliveryMethod.data.region">
+                                <label class="block text-error whitespace-nowrap mr-3" :for="deliveryMethod.delivery_method_code"> 
+                                    {{ deliveryMethod.message }} 
+                                </label>
+                                <multiselect
+                                    :id="deliveryMethod.delivery_method_code"
+                                    :options="deliveryMethod.data.region"
+                                    class='select-item my-1 lg:my-0' 
+                                    track-by="code" 
+                                    v-model="deliveryMethod.region"
+                                    label="name"
+                                    :searchable="true" 
+                                    :allow-empty="false"
+                                    select-label=""
+                                    deselect-label=""
+                                    selected-label=""
+                                    :placeholder="slotData.language.editDeliveryDetails.deliveryInfo.shipping.fields.selectRegion"
+                                    @select="onChangeRegion"
+                                    >
+                                    <template slot="noResult">No records found.</template>
+                                </multiselect>
+                            </div>
+
+                            <div class="message inline-block flex items-center text-error" v-else-if="deliveryMethod.message">
+                                {{ deliveryMethod.message }}
+
+                                <b-icon icon="arrow-clockwise" class="ml-2 reload-icon min-w-[24px] min-h-[24px]  text-heading cursor-pointer" v-on:click="loadShippingPrimaryPrice" title="Reload"></b-icon>
+                            </div>
+
+                            <div class="price mt-1 lg:mt-0 lg:ml-2" v-if="deliveryMethod.delivery_price">
+                                {{ slotData.language.editDeliveryDetails.deliveryInfo.shipping.priceLabel }}: {{ slotData.display_currency }} {{ slotData.helpers.PriceFormat(deliveryMethod.delivery_price) }}
+                            </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="calculating-text text-sm text-gray-500 flex items-center" v-else>
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    {{ slotData.language.editDeliveryDetails.deliveryInfo.shipping.calculateShippingPrice}}...
+                </div>
+
+                <span v-if="slotData.shippingError" class="text-error text-sm">
+                    {{ slotData.shippingError }}
+                </span>
+            </div>
+
+            </div>
+
+            <div class="flex border-t p-2 px-4">
+
+                <button  @click="saveShippingData" type="button" class="md:text-base md:leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold  text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-primary text-white px-5 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white hover:bg-gray-600 hover:shadow-md ml-auto">Save</button>
+            </div>
+        </section>
+  
+
+

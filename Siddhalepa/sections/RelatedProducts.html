@@ -1,0 +1,78 @@
+<div class="mb-14 product-block">
+  <div
+    class="related-products-title flex items-center justify-between -mt-2 pb-0.5 mb-4 md:mb-5 lg:mb-6 2xl:mb-7 3xl:mb-8"
+  >
+    <h2
+      class="text-primary text-lg md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 font-bold m-0"
+    >
+      {{slotData.language.itemDetailPopup.relatedProducts.title}}
+    </h2>
+  </div>
+  <div
+    class="related-products-list product-row grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-x-3 md:gap-x-5 xl:gap-x-7 gap-y-3 xl:gap-y-5 2xl:gap-y-8"
+  >
+    <div
+      class="related-product box-border overflow-hidden rounded-md cursor-pointer bg-white transition duration-200 ease-in-out transform hover:-translate-y-1 hover:md:-translate-y-1.5 shadow hover:shadow-md"
+      v-for="product in data"
+    >
+      <div class="card relative h-full flex flex-col">
+        <div v-if="product.images != null">
+          <div v-for="image in product.images">
+            <a v-bind:href="'/'+product.seo_url">
+
+              <img 
+              class="thumb object-contain object-center h-32 md:h-48 xl:h-64 w-full"
+              :src="image.small" 
+              :alt="product.name"
+              :title="product.name"
+              loading="lazy" decoding="async"
+              >
+
+            </a>
+          </div>
+        </div>
+        <div v-else>
+          <a v-bind:href="'/'+product.seo_url">
+
+            <img 
+            class="thumb object-contain object-center h-32 md:h-48 xl:h-64 w-full"
+            src="$$__client_media_url__$$/$$__client_media_path__$$/no-image.png" 
+            :alt="product.name"
+            :title="product.name"
+            loading="lazy" decoding="async"
+            >
+
+
+          </a>
+        </div>
+        <div class="info p-4 grow flex flex-col">
+          <a v-bind:href="'/'+product.seo_url" class="name-product-link">
+            <div class="head">
+              <h3
+                class="text-heading font-semibold truncate mt-0 mb-1 text-sm md:text-base"
+              >
+                <span itemprop="name"> {{product.name}} </span>
+              </h3>
+              <div v-if="product.display_price != null">
+                <div class="price font-semibold text-primary text-sm sm:text-base lg:text-lg mb-2">
+                  <span class="currency">{{slotData.display_currency}}</span>
+                  <span class="inline-block">{{slotData.helpers.PriceFormat(product.display_price)}}</span>
+                </div>
+              </div>
+              <div v-else>
+                <div class="price font-semibold text-primary text-sm sm:text-base lg:text-lg mb-2"></div>
+              </div>
+            </div>
+          </a>
+          <div v-if="disableCheckout != true">
+            <div class="action-buttons flex justify-center mt-auto">
+              <item-add-to-cart-snippet
+                :data="product"
+              ></item-add-to-cart-snippet>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

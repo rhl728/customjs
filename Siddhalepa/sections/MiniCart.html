@@ -1,0 +1,94 @@
+<div>
+
+    <template v-if="slotData.showCartIcon">
+        <div class="cart-popup-wrapper" v-if="slotData.showPopup">
+
+            <template v-if="slotData.showCartHeader">
+
+                <div class="cart-header-wrapper">
+                    <div class="collapse-menu" :title="slotData.language.expandCart" v-on:click="gotoShoppingCart()">
+                        <b-icon icon="box-arrow-in-left" class="collapse-icon"></b-icon>
+                    </div>
+                    <h3 class="title"> {{slotData.cartTitle}} </h3>
+                    <div class="item-count-wrapper" :title="slotData.language.cart.itemCount">
+                        <cart-icon-snippet  />
+                    </div>
+                    <div class="cart-close-wrapper" v-on:click="showPopupContent(false)">
+                        <b-icon icon="x" class="close-cart"></b-icon>
+                    </div>
+                </div>
+
+            </template>
+
+            <mini-cart-content-section
+                :title="slotData.cartTitle"
+                :description="slotData.description"
+                :showButton="slotData.showButton"
+                :buttonText="button_text"
+                :buttonUrl="button_url"
+                :showDiscountCode="slotData.showDiscountCode"
+                :showOrderInfoButtons="slotData.showOrderInfoButtons"
+                :showCartInstruction="slotData.showCartInstruction"
+                :showProducts="slotData.showProducts"
+                :submitOrder="slotData.submitOrder"
+                :minimumOrderText="slotData.minimumOrderText"
+                :showDiscountBox="slotData.showDiscountBox"
+                :showTotalSave="slotData.showTotalSave"
+                
+                 />
+        </div>
+
+        <template v-if="slotData.showPopup">
+            <div class="mobile-cart-button active-cart" v-on:click="showPopupContent(false)">
+                <b-icon icon="chevron-double-right" class="close-icon cart-icon"></b-icon>
+            </div>
+        </template>
+        <template v-else>
+            <div class="mobile-cart-button" v-on:click="showPopupContent(true)">
+                <div class="mobile-cart-button-inner">
+                    <cart-icon-snippet  />
+                </div>
+            </div>
+        </template>
+
+    </template>
+    <template v-else>
+
+        <template v-if="slotData.showCartHeader">
+
+            <div class="cart-header-wrapper">
+                <div class="collapse-menu" :title="slotData.language.expandCart" v-on:click="gotoShoppingCart()">
+                    <b-icon icon="box-arrow-in-left" class="collapse-icon"></b-icon>
+                </div>
+                <h3 class="title"> {{slotData.cartTitle}} </h3>
+                <div class="item-count-wrapper" :title="slotData.language.cart.itemCount">
+                    <cart-icon-snippet  />
+                </div>
+                <div class="cart-close-wrapper" v-on:click="showPopupContent(false)">
+                    <b-icon icon="x" class="close-cart"></b-icon>
+                </div>
+            </div>
+
+        </template>
+        <mini-cart-content-section
+            :title="slotData.cartTitle"
+            :showButton="slotData.showButton"
+            :buttonText="button_text"
+            :buttonUrl="button_url"
+            :showDiscountCode="slotData.showDiscountCode"
+            :showOrderInfoButtons="slotData.showOrderInfoButtons"
+            :showCartInstruction="slotData.showCartInstruction"
+            :showProducts="slotData.showProducts"
+            :submitOrder="slotData.submitOrder"
+            :minimumOrderText="slotData.minimumOrderText"
+            :showDiscountBox="slotData.showDiscountBox"
+            :hidePrices="slotData.hidePrices"
+            :buttonPrice="slotData.buttonPrice"
+            :showTotalSave="slotData.showTotalSave"
+            :drawerMode="slotData.drawerMode"
+            :skipSummaryPage="slotData.skipSummaryPage"
+            :showTotalSavingViewCart="slotData.showTotalSaving"
+             />
+    </template>
+
+</div>

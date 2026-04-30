@@ -1,0 +1,26 @@
+<div v-if="slotData.settingLoaded">
+    <header-block-section  />
+    <div class="content-wrapper mx-auto max-w-[1920px] px-4 md:px-8 2xl:px-16 mt-[90px] xl:px-32 2xl:px-44 3xl:px-56 py-8 lg:py-10">
+
+      <div class="breadcrumb mb-8">
+          <div class="breadcrumb-inner flex items-center">
+              <ul class="flex items-center w-full overflow-hidden text-gray-500 list-none my-0">
+                  <li class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 "><a href="/" class="text-body hover:text-primary">Home</a></li>
+                  <li class="text-base mt-0.5">/</li>
+                  <li class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 text-primary">Check My Order</li>
+              </ul>
+          </div>
+      </div>
+
+      <div class="main-title-wrapper flex items-start">
+        <h1 class="text-lg md:text-xl xl:text-2xl font-bold text-heading mt-0">
+          {{slotData.language.checkOrder.title}}
+        </h1>
+      </div>
+
+      <check-order-content-template></check-order-content-template>
+  
+    </div>
+    <footer-block-section  />
+</div>
+  

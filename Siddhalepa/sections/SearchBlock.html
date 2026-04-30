@@ -1,0 +1,121 @@
+<div class="ml-4 search-wrapper md:ml-8">
+  <b-icon icon="search" class="w-5 h-5 cursor-pointer" v-on:click="enableSearch"></b-icon>
+  <div class="input-group" :class="{active: isActive}">
+
+
+    <!--   <input
+    class="h-10 p-3 border border-gray-300 form-control focus:outline-none rounded-xl text-slate-600"
+    type="search"
+    :placeholder="slotData.language.productSearchPlaceholderText"
+    id="search-input"
+    v-model="slotData.searchText"
+    v-on:keyup.enter="searchProducts"
+    autocomplete="off"
+  />
+ -->
+
+    <!-- <span class="input-group-append">
+        <button class="border-0 btn rounded-pill ml-n5" type="button" v-on:click="searchProducts()">
+            <b-icon icon="search"></b-icon>
+        </button>
+    </span> -->
+
+
+    <div class="fixed top-0 left-0 z-10 flex w-full h-full transition duration-300 ease-in-out bg-black overlay"
+      role="button" :class="[ isActive ? 'visible opacity-30': 'opacity-0 invisible ']" v-on:click="enableSearch"></div>
+    <div
+      class="drawer-search top-0 z-30 transition duration-300 ease-in-out left-1/2 px-4 w-full md:w-[730px] lg:w-[930px]"
+      :class="[ isActive ? 'opacity-100 block -translate-x-1/2  fixed visible': 'hidden  opacity-0 invisible relative']">
+      <div class="flex flex-col justify-center w-full">
+        <div class="flex-shrink-0 mt-3.5 lg:mt-4 w-full">
+          <div class="flex flex-col mx-auto mb-1.5 w-full">
+            <form class="relative w-full pr-12 overflow-hidden bg-white rounded-md md:pr-14" novalidate=""
+              role="search">
+              <label for="search" class="flex items-center py-0.5"><span
+                  class="flex items-center justify-center flex-shrink-0 w-12 h-full cursor-pointer md:w-14 focus:outline-none">
+                  <b-icon icon="search" class="w-4 h-4"></b-icon>
+
+
+                </span>
+                <input id="search"
+                  class="w-full h-12 text-sm placeholder-gray-400 outline-none text-heading lg:h-14 lg:text-base"
+                  placeholder="Search..." aria-label="Search" autocomplete="off" name="search"
+                  v-model="slotData.searchText" v-on:keyup.enter="searchProducts" @input="getSuggestions"
+                  maxlength="255" />
+              </label>
+
+              <div
+                class="voice-search outline-none text-2xl md:text-3xl text-gray-400 absolute top-0 right-[30px] w-12 md:w-14 h-full flex items-center justify-center transition duration-200 ease-in-out hover:text-heading focus:outline-none"
+                v-if="slotData.enableVoiceSearch">
+                <b-icon :icon="slotData.voiceSearchActive ? 'mic-fill' : 'mic'" class="w-5 h-5 voice-icon"
+                  :class="{'active': slotData.voiceSearchActive}" v-on:click="onClickVoiceSearch">
+                </b-icon>
+              </div>
+
+              <button v-on:click="enableSearch" type="button"
+                class="absolute top-0 right-0 flex items-center justify-center w-12 h-full text-2xl text-gray-400 transition duration-200 ease-in-out outline-none md:text-3xl md:w-14 hover:text-heading focus:outline-none">
+                <b-icon icon="x" class="w-6 h-6"></b-icon>
+              </button>
+            </form>
+            <template v-if="slotData.isLoading">
+              
+              <span class="flex items-center px-2 py-3 text-sm text-black bg-white border-t">
+                <svg class="w-6 h-6 mr-2 text-gray-500 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                  </path>
+                </svg>
+                Finding Matches...
+              </span>
+            </template>
+           
+            <template v-if="slotData.searchResults.length">
+              <div class="search-suggestions-wrp flex flex-col mx-auto mb-1.5 w-full bg-white">
+                <template v-for="item in slotData.searchResults">
+                  <div class="w-full px-2 py-1 border-t item">
+                    <a :href="'/' + item.seo_url" class="flex">
+                      <div v-if="item.images.length"
+                        class="w-24 h-24 mr-2  rounded-md item-thumb min-w-[48px]  bg-gray-50 relative overflow-hidden"
+                        >
+                        <img 
+                        :src="item.images[0].thumb_path" 
+                        :alt="item.name"
+                        class="w-full h-full object-contain object-center absolute top-0 left-0"
+                        loading="lazy" decoding="async"
+                        >
+                      </div>
+                      <div v-else
+                        class="w-12 h-12 mr-2  rounded-md item-thumb min-w-12 bg-gray-50 relative overflow-hidden"
+                        >
+                        <img 
+                        src="$$__client_media_url__$$/$$__client_media_path__$$/no-image.png" 
+                        :alt="item.name"
+                        class="w-full h-full object-contain object-center absolute top-0 left-0"
+                        loading="lazy" decoding="async"
+                        >
+                      </div>
+                      <div class="item-content">
+                        <span class="block text-xs font-semibold item-name md:text-sm text-heading line-clamp-2">
+                          {{ item.name }}
+                        </span>
+                        <span class="block item-price font-semibold text-primary text-xs md:text-sm mt-0.5">
+                          {{ slotData.display_currency }} {{ slotData.helpers.PriceFormat(item.display_price) }}
+                        </span>
+                        <span v-if="item.unit_price - item.display_price > 0" class="block item-price font-semibold text-sm text-red-600 md:text-sm mt-0.5">
+                          {{slotData.language.item.discountText}}: {{ slotData.display_currency }} {{ slotData.helpers.PriceFormat(item.unit_price - item.display_price) }}
+                        </span>
+                        
+                      </div>
+                    </a>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

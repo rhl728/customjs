@@ -1,0 +1,5 @@
+<div class="item-wrapper">
+    <div class="mb-4 transition-all duration-500 bg-white rounded-md item hover:shadow-md hover:-translate-y-1" v-for="product in products">
+            <product-list-item-section v-bind:data="product" :show_attribute_images="true" @updateFavorite="onUpdateFavorite" /> 
+    </div>	
+</div>

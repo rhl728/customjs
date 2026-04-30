@@ -1,0 +1,504 @@
+<div>
+    <div v-if="showSocialLoginPopup">
+       <profile-creation-popup-section />
+       <!-- <profile-creation-popup-section :show="showSocialLoginPopup" /> -->
+    </div>
+    <div class="order-info-wrapper">
+        <div class="order-info-inner-wrapper" >
+            <template v-if="showProducts">
+                <template v-if="slotData.selectedProducts && Object.keys(slotData.selectedProducts).length > 0">
+                    <ul class="product-list">
+                        <li v-for="product in slotData.selectedProducts" class="order-item">
+                            <div class="order-item-inner">
+                                <span class="item-image" v-bind:style="{'background-image': 'url(' + product.item_image + ')'}" v-bind:title="product.item_name"></span>
+
+                                <div class="item-intro">
+                                    <span class="item-name"> 
+                                        <template v-if="product.name">
+                                            {{product.name}}
+                                        </template>
+                                        <template v-else>
+                                            {{product.item_name}}
+                                        </template>
+                                    </span>
+                                    <span class="item-count">
+                                        <span class="quantity-text">{{slotData.language.cart.quantity}}:</span>
+                                        <add-to-cart-button-snippet v-bind:product="product"/>
+                                    </span>
+
+                                    <span class="item-price">
+                                        <span class="no-discount-price" v-if="product.removed_price"> {{ slotData.helpers.PriceFormat(product.removed_price * product.item_qty) }} </span>
+                                        <span class="final-product-price">
+                                            <template v-if="flashOrder">
+                                                {{ slotData.helpers.PriceFormat(product.discount_price * product.item_qty) }}
+                                            </template>
+                                            <template v-else>
+                                                {{ slotData.helpers.PriceFormat(product.item_display_price * product.item_qty) }}
+                                            </template>
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <template v-if="product.flash_order">
+                                    <!-- <template v-if="product.buy_now == 0">
+                                        <span class="quantity-availability">{{slotData.language.cart.quantityAvailability}}</span>
+                                    </template> -->
+                                    <!-- <template v-else> -->
+                                        <template v-if="product.buy_now && product.available_now_qty < product.item_qty && !product.back_order">
+                                            <span class="quantity-availability">{{slotData.language.cart.quantityAvailability}}</span>
+                                        </template>
+                                    <!-- </template> -->
+                                </template>
+
+                                <div class="delivery"></div>
+                            </div>
+                        <b-icon icon="x" class="item-remove" v-on:click="removeItem(product.item_id, product.name)"></b-icon>
+                        </li>
+                    </ul>
+                </template>
+                <template v-else>
+                    <span class="empty-order-info">
+                        <b-icon class="shopping-basket" icon="basket3-fill"></b-icon>
+                        {{slotData.language.cart.emptyText}}
+                    </span>
+                </template>
+            </template>
+
+            <template v-if="showOrderInfoButtons">
+                <order-info-popup-buttons-section />
+            </template>
+
+            <div v-if="!hidePrices" class="p-4 order-charges md:p-6">
+                <template v-if="showDiscountCode && !drawerMode">
+                    <div  class="mb-4" :class="{'hidden' : slotData.discountCode}">
+                        <discount-code-snippet />
+                    </div>
+                </template>
+
+                <div class="flex items-center w-full pb-2 text-sm font-semibold border-b-0 border-gray-300 sub-total text-body last:border-b-0 md:text-base last:pb-0">
+                    <div class="name">{{slotData.languageInfo.subTotal}}:</div>
+                    <div class="flex-shrink-0 ml-auto value">{{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(slotData.subTotal) }} </template></div>
+                </div>
+
+                <div class="flex items-center w-full py-2 text-sm font-semibold border-b-0 border-gray-300 additional-charge text-body last:border-b-0 md:text-base last:pb-0" v-if="slotData.taxCharge">
+                    <div class="name"> {{slotData.languageInfo.tax}} {{slotData.settings.order_tax_rate}}%: </div>
+                    <div class="flex-shrink-0 ml-auto value">{{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else>  {{ slotData.helpers.PriceFormat(slotData.taxCharge) }} </template> </div>
+                </div>
+
+                <div class="flex items-center w-full py-2 text-sm font-semibold border-b-0 border-gray-300 additional-charge text-body last:border-b-0 md:text-base last:pb-0" v-if="slotData.serviceCharge">
+                    <div class="name"> {{slotData.languageInfo.serviceCharges}} {{slotData.settings.order_service_charge_rate}}%: </div>
+                    <div class="flex-shrink-0 ml-auto value">{{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(slotData.serviceCharge) }} </template></div>
+                </div>
+
+                <!-- additional charges -->
+                <template v-if="slotData.additionalCharges">
+                    <div class="flex items-center w-full py-2 text-sm font-semibold border-b-0 border-gray-300 additional-charge text-body last:border-b-0 md:text-base last:pb-0" v-for="charge in slotData.additionalCharges" v-if="charge.display_value > 0">
+                        <div class="name"> {{ charge.name }}: </div>
+                        <div class="flex-shrink-0 ml-auto value">{{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else>  {{ slotData.helpers.PriceFormat(charge.display_value) }} </template> </div>
+                    </div>
+                </template>
+
+                <!-- delivery charges -->
+                <div class="flex items-center w-full py-2 text-sm font-semibold border-b-0 border-gray-300 delivery-charge text-body last:border-b-0 md:text-base last:pb-0" v-if="slotData.deliveryInfoData && slotData.deliveryInfoData.shippingPrice">
+                    <div class="name"> {{slotData.languageInfo.deliveryCharges}}: </div>
+                    <div class="flex-shrink-0 ml-auto value">{{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else>  {{ slotData.helpers.PriceFormat(slotData.deliveryInfoData.shippingPrice) }}  </template></div>
+                </div>
+                <div class="flex items-center w-full py-2 text-sm font-semibold border-b-0 border-gray-300 order-discount text-body last:border-b-0 md:text-base last:pb-0"  :class="{'pb-0': slotData.discountCode && !showDiscountBox}" v-if="slotData.cartOfferDiscount > 0  && !slotData.submitLoading">
+                    <div class="name text-success ">  {{slotData.language.cart.discountCode.discount}}:</div>
+                    <div class="flex-shrink-0 ml-auto value text-success">-{{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(slotData.cartOfferDiscount) }} </template></div>
+                </div>
+
+                <!-- cart offer shipping discount -->
+                <div class="flex items-center w-full py-2 text-sm font-semibold border-b-0 border-gray-300 order-discount text-body last:border-b-0 md:text-base last:pb-0 1" v-if="slotData.cartOfferShippingDiscount > 0  && !slotData.submitLoading && slotData.deliveryInfoData.shippingPrice>0 ">
+                    <div class="name text-success"> {{slotData.languageInfo.shippingDiscount}}: </div>
+                    <div class="flex-shrink-0 ml-auto value text-success">-{{slotData.orderCurrency}}<template v-if="slotData.currencyChanged">   --.--  </template> <template v-else>  {{ slotData.helpers.PriceFormat(slotData.cartOfferShippingDiscount) }} </template> </div>
+                </div>
+
+                <!-- applied coupon code -->
+                <div v-if="slotData.discountCode && !showDiscountBox" class="flex items-center mt-1 mb-2 text-sm applied-discount-code-wrapper text-body ">
+                    {{slotData.language.cart.discountCode.couponText}}:   
+                    <span class="discount-code text-success underline truncate max-w-[200px]" :title="slotData.discountCode"> {{slotData.discountCode}} </span>
+                    <span class="ml-auto cursor-pointer" @click.prevent="clearDiscount">
+                        <b-icon class="w-4 h-4 hover:text-heading" icon="trash" title="Clear coupon" ></b-icon>
+                    </span>
+                    
+                </div>
+
+                <div v-if="slotData.discountCode && !showDiscountBox && !slotData.cartOffersData && !slotData.submitLoading"  class="flex items-center mt-1 mb-2 text-sm text-red-500 discount-code-order-text text-body ">
+                    {{slotData.language.cart.discountCode.orderNotApplyText}}
+                </div>
+
+                <!-- loyalty points discount -->
+                <div class="flex items-center w-full py-2 text-sm font-semibold border-b-0 border-gray-300 loyalty-points text-body last:border-b-0 md:text-base last:pb-0" v-if="slotData.paymentInfo && slotData.paymentInfo.loyaltyPoints && slotData.paymentInfo.loyaltyPoints > 0">
+                    <div class="name"> {{slotData.language.orderConfirmation.fields.redeem_points}}: </div>
+                    <div class="flex-shrink-0 ml-auto value">-{{slotData.orderCurrency}}<template v-if="slotData.currencyChanged">   --.--  </template> <template v-else>  {{ slotData.helpers.PriceFormat(slotData.paymentInfo.loyaltyPoints) }}  </template></div>
+                </div>
+
+               <!--  <div v-if="slotData.totalSavePrice" class="flex items-center w-full text-sm font-semibold border-b-0 border-gray-300 total-discount-price text-body last:border-b-0 md:text-base last:pb-0 text-success"   :class="[ drawerMode ? 'py-0': 'py-2']">
+                    <span class="title"> {{slotData.language.cart.totalDiscountText}}: </span>
+                    <span class="flex-shrink-0 ml-auto value">-{{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.totalSavePrice) }} </span>
+                </div> -->
+
+
+                <div v-if="slotData.totalPrice>=0" class="flex items-center w-full py-2 text-sm font-semibold border-t border-gray-300 total-price text-heading last:border-b-0 md:text-2xl last:pb-0">
+                    <span class="title"> {{slotData.languageInfo.total}}: </span>
+                    <span class="flex-shrink-0 ml-auto value"> {{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(slotData.totalPrice) }} </template> </span>
+                </div>
+
+                <div v-if="slotData.earnPoints > 0" class="flex items-center w-full py-2 text-sm font-semibold border-b-0 border-gray-300 earn-points text-heading last:border-b-0 md:text-base last:pb-0">
+                    <span class="title"> 
+                        {{slotData.language.orderConfirmation.loyalty.startText}} {{ slotData.earnPoints }} {{slotData.language.orderConfirmation.loyalty.endText}} 
+                    </span>
+                </div>
+            
+            </template>
+
+        
+            </div>
+
+            <template v-if="showButton">
+                <template v-if="submitOrder">
+                    <div :class="[this.skipSummaryPage?'order-submit-btn mt-2':'px-4 pb-4 order-submit-btn md:px-6 md:pb-6']">
+
+                        <span v-if="slotData.orderSubmitError" class="block text-xs text-red-500 order-error md:text-sm md:mt-2">
+                            {{ slotData.orderSubmitError }}
+                        </span>
+                        <button @click="onClickSumbitOrderFn()" 
+                            class="proceed-to-checkout text-base inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-primary text-white px-5 py-3.5 hover:text-white hover:bg-gray-600 hover:shadow-md w-full mt-2" :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}"
+                            :disabled="!slotData.validateMinValue ||slotData.isSubmitBtnClicked">
+                            <span class="flex items-center button-label" v-if="slotData.submitLoading || slotData.isSubmitBtnClicked">
+                                <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                {{slotData.language.processing}}
+                            </span>
+                            <span class="button-label" v-else>
+                                <template v-if="buttonText">
+                                    {{buttonText}}
+                                </template>
+                                <template v-else>
+                                    <template v-if="slotData.settings.enable_online_ordering == '1'">
+                                        {{slotData.language.orderConfirmation.goToPayment}}
+                                    </template>
+                                    <template v-else>
+                                        {{slotData.language.cart.inquireText}}
+                                    </template>
+                                </template>
+                            </span>
+                        </button>
+                            
+                    </div>
+
+                </template>
+            </template>
+
+            <template v-if="!drawerMode && showCartInstruction && slotData.settings.cart_instruction">
+                <div class="px-4 text-sm text-center break-words text-heading">
+                    {{slotData.settings.cart_instruction}}
+                </div>
+            </template>
+            
+            <!--minimum order value-->
+            
+    <template v-if="drawerMode && minimumOrderText && slotData.settings.min_order_value && slotData.settings.min_order_value != '0'">
+            <div class="mt-1 mb-2 text-sm text-center text-primary min-val-wrapper text-heading">
+                {{slotData.language.cart.minimumOrderText}}: {{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{slotData.helpers.PriceFormat(slotData.settings.min_order_value)}} </template>
+            </div>
+    </template>
+    
+    
+            <template v-if="drawerMode && slotData.selectedProducts && Object.keys(slotData.selectedProducts).length > 0" >
+                <div :class="{'hidden' : slotData.discountCode}">
+                    <div class="flex text-sm " :class="{'open' : showCoupon}">
+                        <span class="mb-1 ">{{slotData.language.cart.coupon}} <span v-if="!showCoupon" class="underline cursor-pointer text-body hover:text-heading" @click="toggleCoupon()">{{slotData.language.cart.applyCoupon}}</span></span>
+                        <b-icon @click="toggleCoupon()" v-if="showCoupon" class="w-5 h-5 ml-auto cursor-pointer hover:text-heading" icon="chevron-down" ></b-icon>
+                    </div>
+                    <div class="mt-1 mb-4" :class="{'hidden' : !showCoupon}">
+                        <discount-code-snippet :drawerMode="drawerMode" />
+                    </div>
+                </div>
+
+            
+                <div class="sub-total flex items-center pb-0.5  w-full text-heading  text-sm">
+                    <div class="name">{{slotData.languageInfo.subTotal}}:</div>
+                    <div class="flex-shrink-0 ml-auto value">{{slotData.orderCurrency}}<template v-if="slotData.currencyChanged">   --.--  </template> <template v-else>  {{ slotData.helpers.PriceFormat(slotData.subTotal) }} </template></div>
+                </div>
+
+                <div class="additional-charge flex items-center pb-0.5  w-full text-heading text-sm" v-if="slotData.taxCharge">
+                    <div class="name"> {{slotData.languageInfo.tax}} {{slotData.settings.order_tax_rate}}%: </div>
+                    <div class="flex-shrink-0 ml-auto value">{{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(slotData.taxCharge) }} </template></div>
+                </div>
+
+                <div class="additional-charge flex items-center pb-0.5 w-full text-heading text-sm" v-if="slotData.serviceCharge">
+                    <div class="name"> {{slotData.languageInfo.serviceCharges}} {{slotData.settings.order_service_charge_rate}}%: </div>
+                    <div class="flex-shrink-0 ml-auto value">{{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(slotData.serviceCharge) }} </template></div>
+                </div>
+
+                <!-- additional charges -->
+                <template v-if="slotData.additionalCharges">
+                    <div class="additional-charge flex items-center pb-0.5 w-full text-heading text-sm " v-for="charge in slotData.additionalCharges" v-if="charge.display_value > 0">
+                        <div class="name"> {{ charge.name }}: </div>
+                        <div class="flex-shrink-0 ml-auto value">{{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(charge.display_value) }} </template></div>
+                    </div>
+                </template>
+                <!-- delivery charges -->
+                <div class="delivery-charge flex items-center pb-0.5  w-full text-heading text-sm "
+                    v-if="slotData.deliveryInfoData && slotData.deliveryInfoData.shippingPrice">
+                    <div class="name"> {{slotData.languageInfo.deliveryCharges}}: </div>
+                    <div class="flex-shrink-0 ml-auto value">{{slotData.orderCurrency}}
+                        <template v-if="slotData.currencyChanged"> --.-- </template> <template v-else>
+                            <template v-if="!slotData.submitLoading">
+                                {{ slotData.helpers.PriceFormat(slotData.deliveryInfoData.shippingPrice) }}
+                            </template>
+                            <template v-else>
+                                --.--
+                            </template>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- cart offer discount -->
+                <div class="order-discount flex items-center pb-0.5  w-full text-heading text-sm "  :class="{'pb-0': slotData.discountCode && !showDiscountBox}" v-if="slotData.cartOfferDiscount > 0 && !slotData.submitLoading">
+                    <div class="name text-success "> <!-- {{slotData.languageInfo.discount}}: -->
+                        {{slotData.language.cart.discountCode.discount}}:  
+                    </div>
+                    <div class="flex-shrink-0 ml-auto value text-success">-{{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(slotData.cartOfferDiscount) }} </template></div>
+                </div>
+
+                <!-- cart offer shipping discount -->
+                <div class="order-discount flex items-center pb-0.5 w-full text-heading  text-sm " v-if="slotData.cartOfferShippingDiscount > 0 && !slotData.submitLoading && slotData.deliveryInfoData.shippingPrice>0">
+                    <div class="name text-success"> {{slotData.languageInfo.shippingDiscount}}: </div>
+                    <div class="flex-shrink-0 ml-auto value text-success">-{{slotData.orderCurrency}}<template v-if="slotData.currencyChanged">   --.--  </template> <template v-else>  {{ slotData.helpers.PriceFormat(slotData.cartOfferShippingDiscount) }}</template> </div>
+                </div>
+
+                <div v-if="slotData.discountCode && !showDiscountBox" class="flex items-center mb-2 text-sm applied-discount-code-wrapper">
+                    {{slotData.language.cart.discountCode.couponText}}:   
+                    <span class="discount-code text-success underline truncate max-w-[200px]" :title="slotData.discountCode"> {{slotData.discountCode}} </span>
+                    <span class="ml-auto cursor-pointer" @click.prevent="clearDiscount">
+                        <b-icon class="w-4 h-4 text-body hover:text-heading" icon="trash" title="Clear coupon" ></b-icon>
+                    </span>
+                </div>
+
+                <!-- loyalty points discount -->
+                <div class="loyalty-points flex items-center pb-0.5  w-full text-heading text-sm " v-if="slotData.paymentInfo && slotData.paymentInfo.loyaltyPoints && slotData.paymentInfo.loyaltyPoints > 0">
+                    <div class="name"> {{slotData.language.orderConfirmation.fields.redeem_points}}: </div>
+                    <div class="flex-shrink-0 ml-auto value">-{{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(slotData.paymentInfo.loyaltyPoints) }} </template></div>
+                </div>
+
+              <!--   <div v-if="slotData.totalSavePrice" class="total-discount-price flex items-center pb-0.5 w-full text-heading text-sm text-success font-semibold">
+                    <span class="title"> {{slotData.language.cart.totalDiscountText}}: </span>
+                    <span class="flex-shrink-0 ml-auto value">-{{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.totalSavePrice) }} </span>
+                </div> -->
+
+
+               <!--  <div v-if="slotData.totalPrice" class="flex items-center w-full py-2 text-sm font-semibold border-t border-gray-300 total-price text-heading last:border-b-0 md:text-2xl last:pb-0">
+                    <span class="title"> {{slotData.languageInfo.total}}: </span>
+                    <span class="flex-shrink-0 ml-auto value"> {{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.totalPrice) }} </span>
+                </div> -->
+
+                <div v-if="slotData.earnPoints > 0" class="earn-points flex items-center pb-0.5 w-full font-semibold text-heading text-sm">
+                    <span class="title"> 
+                        {{slotData.language.orderConfirmation.loyalty.startText}} {{ slotData.earnPoints }} {{slotData.language.orderConfirmation.loyalty.endText}} 
+                    </span>
+                </div>
+  
+            </template>
+      <!--  loading - {{slotData.submitLoading}},     validateMinValue-{{slotData.validateMinValue}},  show btn - {{showButton}}, sbumit - {{submitOrder}} -->
+            <template v-if="showButton && !submitOrder">
+                <div :class="!hidePrices ? 'p-4' : 'mt-4'">
+                    <template v-if="buttonText">
+                        <button @click="onClickButtonFn()" 
+                            class="proceed-to-checkout md:text-base md:leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-primary text-white px-5 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white hover:bg-gray-600 hover:shadow-md w-full" :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}" 
+                            :disabled="!slotData.validateMinValue">
+                            <span class="flex items-center button-label" v-if="slotData.submitLoading">
+                                <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                {{slotData.language.processing}}
+                            </span>
+                            <span class="button-label" v-else>
+                                <template>
+                                    {{buttonText}} 
+                                </template>
+                            </span>
+                        </button>
+                    </template>
+                    
+                    <template v-if="!buttonText">
+                        <template  v-if="slotData.settings.enable_online_ordering == '1'">
+                            <!-- main checkout button -->
+                            <button 
+                            @click="onClickGoCheckoutValidate()" 
+                            class="proceed-to-checkout md:text-base md:leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-primary text-white px-5 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white hover:bg-gray-600 hover:shadow-md w-full" :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}" 
+                            :disabled="!slotData.validateMinValue">
+                                <span class="flex items-center button-label" v-if="slotData.submitLoading">
+                                    <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    {{slotData.language.processing}}
+                                </span>
+                                <span class="button-label" v-else>
+                                    <template >
+                                        {{slotData.language.cart.submitText}}
+                                    </template>
+                                </span>
+                                
+                            </button>
+                        </template>
+                        <template v-else>
+                            <button 
+                            @click="onClickButtonFn()" 
+                            class="proceed-to-checkout md:text-base md:leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-primary text-white px-5 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white hover:bg-gray-600 hover:shadow-md w-full" :class="{'loading pointer-events-none': slotData.submitLoading, 'pointer-events-none opacity-50' : !slotData.validateMinValue}" 
+                            :disabled="!slotData.validateMinValue">
+                                <span class="flex items-center button-label" v-if="slotData.submitLoading">
+                                    <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    {{slotData.language.processing}}
+                                </span>
+                                <span class="button-label" v-else>
+                                    <template >
+                                        {{slotData.language.cart.inquireText}}
+                                    </template>
+                                </span>
+                                
+                            </button>
+                        </template>
+
+                    </template>
+                    
+                </div>
+            </template>
+
+
+         
+
+            <template v-if="buttonPrice">
+
+                <template v-if="slotData.selectedProducts && Object.keys(slotData.selectedProducts).length > 0">
+
+                    <template v-if="slotData.validateMinValue">
+
+                        <button @click="checkoutValidation(buttonUrl)" class="proceed-to-checkout-btn flex items-center justify-center w-full px-5 py-3 mt-2 text-sm text-white transition duration-300 rounded-md cursor-pointer md:py-4 sm:text-base focus:outline-none bg-primary hover:bg-gray-600" :class="{'loading pointer-events-none': slotData.submitLoading}">
+                            <span class="flex items-center button-label" v-if="slotData.submitLoading || slotData.currencyChanged">
+                                <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                {{slotData.language.processing}}
+                            </span>  
+                            <template v-else>
+                                <span class="checkout-button-text w-full pr-5 -mt-0.5 py-0.5">{{buttonText}}</span>
+                                <span class="checkout-button-amount ml-auto flex-shrink-0 -mt-0.5 py-0.5">
+                                    <span class="border-l border-white pr-5 py-0.5"></span>
+                                    {{slotData.orderCurrency}}  <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(slotData.totalPrice) }} </template>
+                                </span>
+                            </template>
+                        </button>
+                    </template>
+                    <template v-else>
+                        <button  class="flex items-center justify-center w-full px-5 py-3 mt-2 text-sm text-white transition duration-300 rounded-md opacity-50 pointer-events-none md:py-4 sm:text-base focus:outline-none bg-primary hover:bg-gray-600" :class="{'loading pointer-events-none': slotData.submitLoading}">
+                            <span class="flex items-center button-label" v-if="slotData.submitLoading">
+                                <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                {{slotData.language.processing}}
+                            </span>  
+
+
+                            <template v-else>
+                                <span class="w-full pr-5 -mt-0.5 py-0.5">{{buttonText}}</span>
+                                <span class="ml-auto flex-shrink-0 -mt-0.5 py-0.5">
+                                    <span class="border-l border-white pr-5 py-0.5"></span>
+                                    {{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else>  {{ slotData.helpers.PriceFormat(slotData.totalPrice) }} </template>   
+                                </span>
+                            </template>
+                        </button>
+                    </template>
+        
+                </template>
+                <template v-else>
+                    <button class="flex items-center justify-center w-full px-5 py-3 text-sm text-white transition duration-300 bg-gray-400 rounded-md cursor-not-allowed md:py-4 sm:text-base focus:outline-none hover:bg-gray-400">
+                        <span class="w-full pr-5 -mt-0.5 py-0.5">{{slotData.language.cart.shoppingCart.proceed}}</span>
+                        <span class="ml-auto flex-shrink-0 -mt-0.5 py-0.5">
+                            <span class="border-ls border-white pr-5 py-0.5"></span>
+                            {{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else>  0.00 </template>
+                        </span>
+                    </button>
+                </template>
+
+            </template>
+
+
+
+            <div v-if="drawerMode && slotData.selectedProducts && Object.keys(slotData.selectedProducts).length > 0" class="clear-cart-wrapper flex justify-end gap-5 mt-1 mb-2">
+                <clear-cart-snippet  />
+                <a class="cart-clear-view cart-view-wrapper flex items-center gap-1 text-xs font-semibold transition ease-in-out text-body hover:text-heading" href="/shopping-cart"> <b-icon class="w-4 h-4" icon="cart3"></b-icon>{{slotData.language.cart.shoppingCart.viewCart}}</a>   
+            </div>
+
+            <span v-if="showButton && !submitOrder && slotData.orderSubmitError" class="block text-sm text-red-500 order-error">
+                {{ slotData.orderSubmitError }}
+            </span>
+
+            <!-- cart-view-total-saving-price -->
+            
+            <template v-if="isShowTotalSavingViewCart">
+                <div v-if="slotData.totalSavePrice" class="cart-clear-view pt-2 pb-6 text-sm font-semibold text-center total-discount-price text-heading md:text-base text-success">
+                    <span class="title"> {{slotData.language.cart.discountText}} </span>
+                    <span class="value"> {{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(slotData.totalSavePrice) }} </template></span>
+                </div>
+            </template>
+        </div>
+
+    
+
+    
+       <!--  <div class="summary-detail-box-wrapper" v-if="showDiscountBox && (slotData.totalSavePrice || slotData.discountCode)">
+            <div v-if="slotData.totalSavePrice" class="total-discount-wrapper">
+                <span class="text"> 
+                    {{slotData.language.cart.discountText}} {{slotData.orderCurrency}} {{ slotData.helpers.PriceFormat(slotData.totalSavePrice) }} 
+                </span>
+            </div>
+
+            <div v-if="slotData.discountCode" class="applied-discount-code-wrapper">
+                {{slotData.language.cart.discountCode.appliedDiscountText}}: 
+                <span class="discount-code">{{slotData.discountCode}}</span>
+
+                <div class="applied-discount-code-error" v-if="!slotData.submitLoading && !slotData.applyDiscountCode">
+                    {{slotData.language.cart.discountCode.orderNotApplyText}}
+                </div>
+            </div>
+
+        </div> -->
+    </div>
+
+    <template v-if="drawerMode && showCartInstruction && slotData.settings.cart_instruction">
+        <div class="mt-1 text-sm text-center text-heading">
+            {{slotData.settings.cart_instruction}}
+        </div>
+    </template>
+
+
+
+    <template v-if="drawerMode &&  showTotalSave">
+        <div v-if="slotData.totalSavePrice" class="pb-2 mt-1 text-sm font-semibold text-center total-discount-price text-heading md:text-base text-success">
+            <span class="title"> {{slotData.language.cart.discountText}} </span>
+            <span class="value"> {{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(slotData.totalSavePrice) }} </template></span>
+        </div>
+    </template>
+
+    <template v-else-if="showTotalSave">
+        <div v-if="slotData.totalSavePrice" class="pt-2 pb-6 text-sm font-semibold text-center total-discount-price text-heading md:text-base text-success">
+            <span class="title"> {{slotData.language.cart.discountText}} </span>
+            <span class="value"> {{slotData.orderCurrency}} <template v-if="slotData.currencyChanged">   --.--  </template> <template v-else> {{ slotData.helpers.PriceFormat(slotData.totalSavePrice) }} </template> </span>
+        </div>
+    </template>
+
+
+
+</div>

@@ -1,0 +1,132 @@
+<div class="product-variant-wrapper mb-6" >
+    <div class="price-modules">
+
+                  <template v-if="(productData.item.attributes.MSRP && productData.item.attributes.MSRP.value) || productData.item.applied_offer" class="offer-percentage-wrapper  bg-slate-900 text-white rounded-md text-xs px-2 py-1 mb-6">
+                  
+                      <template v-if="Number(productData.item.attributes.MSRP && productData.item.attributes.MSRP.value) > Number(productData.item.display_price)">
+                          <span class="text-primary">
+                            {{productData.language.tier_price.msrp}} 
+                          </span>
+                          <span class="line-through text-primary mr-2">
+                            {{slotData.display_currency}} {{productData.item.attributes.MSRP.value}} 
+                          </span>
+                          <span class="offer-percentage flash-percentage bg-black text-white font-semibold rounded-md text-xs px-2 py-1">
+                              {{slotData.helpers.PriceFormat(slotData.helpers.GetPercentage(productData.item.display_price, productData.item.attributes.MSRP.value), 0)}}% {{slotData.language.detailView.offText}}
+                          </span>
+                      </template>
+                      <template v-else>
+                          <template v-if="productData.item.applied_offer">
+                              <template v-if="slotData.helpers.PriceFormat(productData.item.applied_offer.offer_percentage, 0) != 0">
+                                  <span class="offer-percentage bg-black text-white  rounded-md font-semibold text-xs px-2 py-1">
+                                      {{slotData.helpers.PriceFormat(productData.item.applied_offer.offer_percentage, 0)}}% {{slotData.language.detailView.offText}}
+                                  </span>
+                              </template>
+                          </template>
+                      </template>
+                  </template>
+
+              <div v-if="slotData.priceModule" class="price-module row mt-6">
+                <div class="col-md-12">
+               
+                    <div class="price-module-values flex flex-wrap" >
+                      
+                                <Slick 
+                                    key="slotData.sliderKey"
+                                    :accessibility=true 
+                                    :focusOnSelect=true  
+                                    :infinite=false 
+                                    :slidesToShow="4"
+                                    :rows="1"
+                                    :slidesToScroll="1"
+                                    :arrows=true 
+                                    :dots=false
+                                    :autoplay=false 
+                                    :speed="500"
+                                    :initialSlide="slotData.initialSlide"
+                                    :autoplaySpeed="3000"
+                                    :centerMode=false
+                                    :variableWidth=false
+                                    :mobileFirst=true
+                                    :responsive='[
+                                      
+                                      {
+                                        breakpoint: 768, // Adjust this value based on your mobile breakpoint
+                                        settings: {
+                                          slidesToShow: 3,
+                                          slidesToScroll: 1,
+                                        },
+                                      },
+                                      {
+                                        breakpoint: 468, // Adjust this value based on your mobile breakpoint
+                                        settings: {
+                                          slidesToShow: 2,
+                                          slidesToScroll: 1,
+                                        },
+                                      },
+                                      {
+                                        breakpoint: 350, // Adjust this value based on your mobile breakpoint
+                                        settings: {
+                                          slidesToShow: 1,
+                                          slidesToScroll: 1,
+                                        },
+                                      }]' 
+                                    class="slide-show w-full"
+                                    id="slick-slider"
+                                  
+                                    >
+                                  
+                                    <div class="price-module-value group px-2 md:px-4 relative ml-4"  v-for="(priceModule, index) in slotData.priceModule" :key="index" :class="{ 'border-2 border-primary rounded-md': quantityEqualsIndex(index) }">    
+                            
+                    
+                                      <div  class="flex flex-col">
+                                        <span class="mr-10">{{ getRange(index) }} {{productData.language.tier_price.pieces}}</span>
+                                            
+                                            <template v-if="productData && productData.item.applied_offer">
+                                                
+                                                <span class="mr-10 line-through text-stone-800 font-semibold" >{{slotData.display_currency}} {{ getPrice(index) }} </span>
+                                                <span class="mr-10 font-bold text-xl text-primary" >{{slotData.display_currency}} {{getOfferPrice(productData.item.applied_offer,index)}} </span>
+                                            </template>
+                                            <template v-else>
+                                                <span class="mr-10 font-bold text-xl text-primary" >{{slotData.display_currency}} {{ getPrice(index) }} </span>
+                                            </template>
+                                      </div>
+            
+                                    </div>
+                                    <div class="price-module-value group px-2 md:px-4 relative ml-4" :class="{ 'border-2 border-primary rounded-md': quantityEqualsLastIndex(slotData) }">
+                                        <div class="flex flex-col">
+                                
+                                          <span class="mr-10">{{ getlastElement(slotData) }} {{productData.language.tier_price.pieces}}</span>
+                                    
+                                          <template v-if="productData && productData.item.applied_offer">
+                                              
+                                              <span class="mr-10 line-through text-stone-800 font-semibold" >{{slotData.display_currency}} {{ getlastElementPrice(slotData) }}  </span>
+                                              <span class="mr-10 font-bold text-xl text-primary" >{{slotData.display_currency}} {{getlastElementOfferPrice(productData.item.applied_offer,slotData)}}</span>
+                                          </template>
+                                          <template v-else>
+                                              <span class="mr-10 font-bold text-xl text-primary" >{{slotData.display_currency}} {{ getlastElementPrice(slotData) }}  </span>
+                                          </template>
+                                        
+                                        </div>
+                                    </div>
+                    
+                                      <template #prevArrow="arrowOption" class="mt-4">
+                                        <div class="w-7 h-7 lg:w-8 lg:h-8 text-sm md:text-base lg:text-lg text-black flex  items-center justify-center rounded-full bg-white absolute transition duration-250 hover:bg-gray-900 hover:text-white focus:outline-none transform shadow-md -translate-x-1/2 left-0 z-10">
+                                          <b-icon class="w-4 h-4" icon="chevron-left"></b-icon>
+                                        </div>
+                                      </template>
+                                      <template #nextArrow="arrowOption">
+                                        <div class="w-7 h-7 lg:w-8 lg:h-8 text-sm md:text-base lg:text-lg text-black flex items-center justify-center rounded-full bg-white absolute transition duration-250 hover:bg-gray-900 hover:text-white focus:outline-none transform shadow-md translate-x-1/2 right-0 z-10">
+                                          <b-icon class="w-4 h-4" icon="chevron-right"></b-icon>
+                                        </div>
+                                      </template>
+
+                                </Slick>
+                     
+                    </div>
+                  
+                </div>
+                
+            </div>
+            
+    </div>
+</div>

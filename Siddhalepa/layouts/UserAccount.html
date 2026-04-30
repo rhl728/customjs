@@ -1,0 +1,132 @@
+<div class="bg-gray-50"  v-if="slotData.settingLoaded">
+    <header-block-section  />
+
+    <div class="relative flex flex-wrap mt-[90px]">
+      <div class="main-loader absolute top-0 left-0 w-full" v-if="mainLoader">
+        <progress-bar-snippet  />
+      </div>
+
+    </div>
+
+    <div class="content-wrapper mx-auto max-w-[1920px] px-4 md:px-8 2xl:px-16  mb-8 lg:mb-16 min-h-[calc(100vh-500px)]">
+
+        <div class="breadcrumb pt-8 mb-8">
+            <div class="breadcrumb-inner flex items-center">
+                <ul class="flex items-center w-full overflow-hidden text-gray-500 list-none my-0">
+                    <li class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 "><a href="/" class="text-body hover:text-primary">Home</a></li>
+                    <li class="text-base mt-0.5">/</li>
+                    <li class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 text-primary">Manage Account</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-wrapper">
+            <div class="main-title-wrapper mb-6">
+                <h1 class="text-lg md:text-xl xl:text-2xl font-bold text-heading mb-6 xl:mb-8 mt-0">Manage Account</h1>
+            </div>
+        </div>
+
+
+        <div class="inner-content-wrapper grid gap-6 mt-4 grid-cols-1 max-w-[1200px] mx-auto"
+            :class="{
+            'md:grid-cols-4': slotData.settings.is_loyalty_integrate == '1',
+            'md:grid-cols-3': slotData.settings.is_loyalty_integrate != '1'
+        }">
+            <div class="bg-white shadow rounded-md p-3 lg:p-6">
+                <div class="item-wrapper">
+                    <a href="/profile">   
+                        <div class="flex items-center">                         
+                            <div class="image-wrapper">
+                                <b-icon icon="person-circle" class="w-12 h-12 lg:w-16 lg:h-16"></b-icon>
+                            </div>
+                            <div class="pl-4">
+                                <h3 class="title text-heading text-sm md:text-base xl:text-lg font-semibold mt-0 mb-0.5" >My Profile</h3>
+                                <span class="text-gray-500 text-body text-base mb-0.5">Manage my user profile</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- <div class="bg-white shadow rounded-md p-3 lg:p-6">
+                <div class="item-wrapper">
+                    <a href="/loyalty-summary">
+                        <div class="flex items-center">
+                            <div class="image-wrapper">
+                                <b-icon icon="star-fill"  class="w-12 h-12 lg:w-16 lg:h-16"></b-icon>
+                            </div>
+                            <div class="pl-4">
+                                <h3 class="title text-heading text-sm md:text-base xl:text-lg font-semibold mb-0.5" >Loyalty Summary</h3>
+                                <span class="text-gray-500 text-body text-base mb-0.5"></span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div> -->
+            <div class="bg-white shadow rounded-md p-3 lg:p-6">
+                <div class="item-wrapper">
+                    <a href="/order-history">
+                        <div class="flex items-center">            
+                            <div class="image-wrapper">
+                                <b-icon icon="cart4"  class="w-12 h-12 lg:w-16 lg:h-16"></b-icon>
+                            </div>
+                            <div class="pl-4">
+                                <h3 class="title text-heading text-sm md:text-base xl:text-lg font-semibold mt-0 mb-0.5" >Order History</h3>
+                                <span class="text-gray-500 text-body text-base mb-0.5">View my order history</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="bg-white shadow rounded-md p-3 lg:p-6 cursor-pointer">
+                <div class="item-wrapper">
+                    <a v-on:click="showAddressBook('', '')">
+                        <div class="flex items-center">            
+                            <div class="image-wrapper">
+                                <b-icon icon="geo-alt"  class="w-12 h-12 lg:w-16 lg:h-16"></b-icon>
+                            </div>
+                            <div class="pl-4">
+                                <h3 class="title text-heading text-sm md:text-base xl:text-lg font-semibold mt-0 mb-0.5" >Address Book</h3>
+                                <span class="text-gray-500 text-body text-base mb-0.5">Manage my addresses</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- Loyalty point card -->
+            <div class="bg-white shadow rounded-md p-3 lg:p-6" v-if="slotData.settings.is_loyalty_integrate == '1'">
+                <div class="item-wrapper">
+                    <a href="/loyalty-summary">
+                        <div class="flex items-center">            
+                            <div class="image-wrapper">
+                                <b-icon icon="award"  class="w-12 h-12 lg:w-16 lg:h-16"></b-icon>
+                            </div>
+                            <div class="pl-4">
+                                <h3 class="title text-heading text-sm md:text-base xl:text-lg font-semibold mt-0 mb-0.5" >Loyalty Summary</h3>
+                                <span class="text-gray-500 text-body text-base mb-0.5">View my loyalty summary</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- <div v-else class="bg-white shadow rounded-md p-3 lg:p-6 pointer-events-none" >
+                <div class="item-wrapper">
+                    <a href="">
+                        <div class="flex items-center">            
+                            <div class="image-wrapper">
+                                <b-icon icon="award"  class="w-12 h-12 lg:w-16 lg:h-16 text-gray-400"></b-icon>
+                            </div>
+                            <div class="pl-4">
+                                <h3 class="title text-sm md:text-base xl:text-lg font-semibold mt-0 mb-0.5 text-gray-400" >Loyalty Summary</h3>
+                                <span class="text-gray-400 mb-0.5">You have no Loyalty Points yet</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div> -->
+
+        </div>
+
+    </div>
+    <address-book-popup-section :type="'view'"   :is_active="slotData.isAddressBookActive"  @closeModal="closeAddressBook"   />
+    <footer-block-section  />
+</div>

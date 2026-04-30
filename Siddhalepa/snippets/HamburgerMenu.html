@@ -1,0 +1,24 @@
+<div class="lg:hidden">
+<button aria-label="Menu" v-on:click="open" class="menuBtn flex flex-col items-center justify-center flex-shrink-0 outline-none focus:outline-none z-10">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="14" viewBox="0 0 25.567 18"><g transform="translate(-776 -462)"><rect id="Rectangle_941" data-name="Rectangle 941" width="12.749" height="2.499" rx="1.25" transform="translate(776 462)" fill="currentColor"></rect><rect id="Rectangle_942" data-name="Rectangle 942" width="25.567" height="2.499" rx="1.25" transform="translate(776 469.75)" fill="currentColor"></rect><rect id="Rectangle_943" data-name="Rectangle 943" width="17.972" height="2.499" rx="1.25" transform="translate(776 477.501)" fill="currentColor"></rect></g></svg>
+</button>
+<div class="bg-white h-full fixed top-0 left-0 w-[320px] shadow-md transition duration-200 ease-in-out z-10" :class="[ slotData.active ? 'opacity-100 block -translate-x-1  fixed visible': 'hidden  opacity-0 invisible relative']">
+    <div class="flex">
+        <button
+        v-on:click="open"
+        type="button"
+        class="outline-none w-14 h-14 flex items-center justify-center focus:outline-none ml-auto"
+    >
+        <b-icon icon="x" class="w-8 h-8"></b-icon>
+    </button>
+    </div>
+
+    <div class="flex drawer-menu w-full fixed left-0">
+        <category-base-list-template  :show_onload="true" />
+    </template>
+
+    </div>
+
+</div>
+
+</div>

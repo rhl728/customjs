@@ -1,0 +1,60 @@
+<div class="otp-verification-form w-[300px] mx-auto">
+    <form class="flex flex-col justify-center" novalidate>
+        <div class="flex flex-col space-y-4">
+            <div class="block">
+                <span class="block text-gray-600 font-medium text-base mb-8 text-center leading-5">
+                    {{slotData.language.loginPopup.verifyEmailText}} ({{slotData.email}})
+                    <template v-if="slotData.contact">
+                        {{slotData.language.loginPopup.verifyContactText}} ({{slotData.contact}})
+                    </template>
+                </span>
+
+                <span class="block text-gray-600 font-medium text-base mb-3 text-center leading-5">
+                    {{slotData.language.loginPopup.enterOtpText}}
+                </span>
+
+                <!-- OTP input fields -->
+                <div class="otp-wrp mt-4 grid-cols-6 gap-2 grid">
+                    <template v-for="(val, key) in slotData.otpArray">
+                        <input :id="'otp-' + key" pattern="[0-9]*" type="number" min="0" inputmode="numeric"
+                            v-model="slotData.otpArray[key]"
+                            class="otp-input w-[100%] h-[56px] border border-primary p-0 rounded-lg text-lg bg-transparent outline-none text-center"
+                            @input="onChangeOtp"
+                            @paste="onPaste"
+                            @keydown="onkeydown" required />
+                    </template>
+                </div>
+
+                <!-- error message -->
+                <p v-if="slotData.error" class="my-2 text-xs text-red-500 text-center">
+                    {{slotData.error}}
+                </p>
+
+                <div class="block text-center mt-6 mb-4">
+                    <template v-if="slotData.submitLoading">
+                        <!-- processing loader -->
+                        <span class="button-label flex justify-center">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            {{slotData.language.processing}}
+                        </span>
+                    </template>
+                    <template v-else>
+                        <!-- resend button -->
+                        <span class="text-sm">{{slotData.language.loginPopup.notReceiveOtpText}}</span>
+                        <span v-on:click="onClickResend" class="text-primary pl-1 font-semibold" :class="[(slotData.resendMinutes + slotData.resendSeconds) > 0 ? 'opacity-50 pointer-events-none' : 'cursor-pointer']">
+                            {{slotData.language.loginPopup.resendOtpText}}
+                            <template v-if="(slotData.resendMinutes + slotData.resendSeconds) > 0">
+                                : <template v-if="slotData.resendMinutes > 0">{{slotData.resendMinutes}}m </template>
+                                <template v-if="slotData.resendSeconds > 0">{{slotData.resendSeconds}}s </template>
+                            </template>
+                        </span>
+                    </template>
+                </div>
+                
+            </div>
+        </div>
+    </form>
+</div>

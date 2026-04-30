@@ -1,0 +1,109 @@
+<div v-if="slotData.settings.is_sample_eligible === 1" 
+     class="relative p-4 rounded-md md:p-8 2xl:px-16">
+
+  <template v-if="slotData.showTitle">
+    <h3 class="mb-4 text-lg font-bold title text-primary md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 md:mb-5 lg:mb-6 2xl:mb-7 3xl:mb-8">
+      {{ title }}
+    </h3>
+  </template>
+
+  <div v-if="Array.isArray(slotData.sampleProducts)" class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 product-row md:mt-6 col-span-full 3xl:col-span-3 md:gap-5 xl:gap-7 row-span-full">
+    <sample-product-item-section
+      v-for="(sample, sKey) in slotData?.sampleProducts.slice(0, 6)"
+      :key="`sample-${sKey}`"
+      :data="sample"
+      :showProductName="true"
+      :showProductDescription="true"
+      :showProductPrice="true"
+      :showProductImage="true"
+      :showProductAttribute="false"
+      :showProductTags="false"
+      :showOfferTags="false"
+      :showFlashOffers="false"
+      :showUpcommingOffer="false"
+      :showAddToCart="true"
+      :slideShow="slotData.slideShow"
+    />
+  </div>
+</div>
+
+<div  v-else-if="slotData.products"  class="relative p-4 rounded-md md:p-8 2xl:px-16" v-bind:class="[slotData.slideShow ? ' border border-gray-300 ' : ' ' ]" >
+    <template v-if="slotData.showTitle">
+        <h3 class="mb-4 text-lg font-bold title text-primary md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 md:mb-5 lg:mb-6 2xl:mb-7 3xl:mb-8">{{title}}</h3>
+    </template>
+   
+    <template v-if="slotData.slideShow">
+        <vue-slick-carousel  
+            :accessibility="slotData.accessibilityStatus" 
+            :focusOnSelect="slotData.focusOnSelect"  
+            :touchThreshold="slotData.touchThreshold"
+            :infinite="slotData.infiniteStatus" 
+            :slidesToShow="slotData.slidesToShow" 
+            :rows="slotData.row"
+            :slidesToScroll="1"
+            :arrows="slotData.slideArrows" 
+            :dots="slotData.slideDots"  
+            :autoplay="slotData.slideAutoplay" 
+            :speed="slotData.slideShowSpeed" 
+            :autoplaySpeed="slotData.autoplaySpeed"
+            :responsive="slotData.sliderResponsive" 
+            class="slide-show"
+            >
+            <div  v-for="product in slotData.products" >			
+                <custom-product-item-section 
+                    
+                    v-bind:data="product"
+                    v-bind:showProductName="slotData.showProductName"
+                    v-bind:showProductDescription="slotData.showProductDescription"
+                    v-bind:showProductPrice="slotData.showProductPrice"
+                    v-bind:showProductImage="slotData.showProductImage"
+                    v-bind:showProductAttribute="slotData.showProductAttribute"
+                    v-bind:showProductTags="slotData.showProductTags"
+                    v-bind:showOfferTags="slotData.showOfferTags"
+                    v-bind:showFlashOffers="slotData.showFlashOffers"
+                    v-bind:showUpcommingOffer="slotData.showUpcommingOffer"
+                    v-bind:showAddToCart="slotData.showAddToCart"
+                    v-bind:slideShow="slotData.slideShow"
+                    />
+            </div>
+
+
+                <template #prevArrow="arrowOption">
+                <div class="absolute left-0 z-10 flex items-center justify-center text-sm text-black transition transform -translate-x-1/2 bg-white rounded-full shadow-md w-7 h-7 lg:w-8 lg:h-8 md:text-base lg:text-lg duration-250 hover:bg-gray-900 hover:text-white focus:outline-none">
+                    <b-icon class="w-4 h-4" icon="chevron-left"></b-icon>
+                </div>
+                </template>
+                <template #nextArrow="arrowOption">
+                <div class="absolute right-0 z-10 flex items-center justify-center text-sm text-black transition transform translate-x-1/2 bg-white rounded-full shadow-md w-7 h-7 lg:w-8 lg:h-8 md:text-base lg:text-lg duration-250 hover:bg-gray-900 hover:text-white focus:outline-none">
+                    <b-icon class="w-4 h-4" icon="chevron-right"></b-icon>
+                </div>
+            </template>
+        </vue-slick-carousel>
+    </template>
+
+    <template v-else>
+
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 product-row md:mt-6 col-span-full 3xl:col-span-3 md:gap-5 xl:gap-7 row-span-full">
+
+                <template v-for="(product, key) in slotData.products">
+
+                <custom-product-item-section        
+                    v-bind:data="product"
+                    v-bind:showProductName="slotData.showProductName"
+                    v-bind:showProductDescription="slotData.showProductDescription"
+                    v-bind:showProductPrice="slotData.showProductPrice"
+                    v-bind:showProductImage="slotData.showProductImage"
+                    v-bind:showProductAttribute="slotData.showProductAttribute"
+                    v-bind:showProductTags="slotData.showProductTags"
+                    v-bind:showOfferTags="slotData.showOfferTags"
+                    v-bind:showFlashOffers="slotData.showFlashOffers"
+                    v-bind:showUpcommingOffer="slotData.showUpcommingOffer"
+                    v-bind:showAddToCart="slotData.showAddToCart"
+                    v-bind:slideShow="slotData.slideShow"
+                    />
+                </template>
+
+        </div>
+
+    </template>
+</div>

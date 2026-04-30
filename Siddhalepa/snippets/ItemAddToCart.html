@@ -1,0 +1,31 @@
+<div class="add-to-cart-wrapper" :class="{'pointer-events-none opacity-50' : disabled}">
+    <template v-if="slotData.settings.digital_menu_only != 1">
+        <template v-if="data.product_type == 'configurable' || data.type == 'configurable'">
+            <add-to-cart-button-snippet v-bind:product="data"  :detailMode="detailMode" :loading="loading" :disabled="disabled" bulk_edit="true"  update_on_focus_out="true"   />
+        </template>
+        <template v-else>
+            <template v-if="slotData.settings.order_manage_stock == 1">
+                <template v-if="data.available_now == 1">
+                    <template v-if="data.quantity > 0">
+                        <add-to-cart-button-snippet v-bind:product="data" :detailMode="detailMode" :loading="loading" :disabled="disabled" bulk_edit="true"  update_on_focus_out="true"  />
+                    </template>
+                    <template v-else>
+                        <template v-if="data.attributes">
+                            <template v-for="attribute in data.attributes">
+                                <template v-if="attribute.code == 'BACKORDER' && attribute.value == 1">
+                                    <add-to-cart-button-snippet v-bind:product="data"  :detailMode="detailMode" :loading="loading" :disabled="disabled"  bulk_edit="true"  update_on_focus_out="true"  />
+                                </template>
+                            </template>
+                        </template>
+                    </template>
+                </template>
+                <template v-else>
+                    <add-to-cart-button-snippet v-bind:product="data" :detailMode="detailMode" :loading="loading" :disabled="disabled" bulk_edit="true"  update_on_focus_out="true" />
+                </template>
+            </template>
+            <template v-else>
+                <add-to-cart-button-snippet v-bind:product="data" :detailMode="detailMode" :loading="loading" :disabled="disabled" bulk_edit="true"  update_on_focus_out="true"  />
+            </template>
+        </template>
+    </template>
+</div>

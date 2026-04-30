@@ -1,0 +1,92 @@
+<div v-if="slotData.settingLoaded">
+  <header-block-section />
+  <div
+    class="content-wrapper mx-auto max-w-[1920px] px-4 md:px-8 2xl:px-16 mt-20"
+  >
+    <div class="breadcrumb pt-8 mb-8">
+      <div class="breadcrumb-inner flex items-center flex-col">
+        <ul
+          class="flex items-center w-full overflow-hidden text-gray-500 list-none my-0"
+        >
+          <li
+            class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0"
+          >
+            <a href="/" class="text-body hover:text-primary">Home</a>
+          </li>
+          <li class="text-base mt-0.5">/</li>
+          <li
+            class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 text-primary"
+          >
+            <template v-if="slotData.showSocialLoginForm">
+              {{slotData.language.socialLoginForm.breadcrumb}}
+            </template>
+            <template v-else> {{slotData.language.loginPopup.title}} </template>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="relative">
+      <div
+        :class="[!isLoading && 'shadow-md']"
+        class="inner-content-wrapper overflow-hidden bg-white mx-auto rounded-lg w-full sm:w-96 md:w-[450px] border border-gray-300 py-5 px-5 sm:px-8 mb-8 lg:mb-16 my-4"
+      >
+        <div class="form-wrapper col-md-4 col-xs-12">
+          <template v-if="slotData.showSocialLoginForm">
+            <social-login-form-section
+              :user_id="slotData.userId"
+            ></social-login-form-section>
+            <div class="hidden">
+              <login-form-template
+                :social_login="true"
+                @getParam="getUrlParameters"
+              />
+            </div>
+          </template>
+          <template v-else>
+            <div
+              class="flex items-center justify-center main-title-wrapper text-center"
+            >
+              <h1
+                class="text-lg md:text-xl xl:text-2xl font-bold text-heading mb-6 xl:mb-8 mt-2"
+              >
+                <template v-if="slotData.showOtpVerification">
+                  {{slotData.language.loginPopup.verifyAccountText}}
+                </template>
+                <template v-else>
+                  {{slotData.language.loginPopup.title}}
+                </template>
+              </h1>
+            </div>
+            <login-form-template
+              :social_login="true"
+              @getParam="getUrlParameters"
+            />
+          </template>
+        </div>
+      </div>
+      <div
+        v-if="isLoading && !slotData.showSocialLoginForm "
+        class="absolute w-full h-full inset-0 bg-white flex justify-center items-center"
+      >
+        <div class="flex items-center space-x-1">
+          <span class="text-gray-700 text-2xl">Processing </span>
+          
+            <span
+              class="w-2 h-2 bg-gray-700 rounded-full animate-pulse"
+              style="animation-delay: 0s"
+            ></span>
+            <span
+              class="w-2 h-2 bg-gray-700 rounded-full animate-pulse"
+              style="animation-delay: 0.2s"
+            ></span>
+            <span
+              class="w-2 h-2 bg-gray-700 rounded-full animate-pulse"
+              style="animation-delay: 0.4s"
+            ></span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer-block-section />
+</div>

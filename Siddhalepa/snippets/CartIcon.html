@@ -1,0 +1,4 @@
+<div v-if="!slotData.settings.digital_menu_only" v-on:click="gotoShoppingCart()" class="cursor-pointer cart-icon-link items-center justify-center flex-shrink-0 h-auto relative focus:outline-none transform  inline-flex ml-3 md:ml-8">
+    <b-icon class="w-6 h-6" icon="cart3"></b-icon>
+    <span class="cart-item-count cart-counter-badge flex items-center justify-center bg-primary text-white absolute -top-2.5 xl:-top-3 -right-2.5 xl:-right-3 rounded-full font-bold min-h-20 min-w-20 text-xs" v-if="slotData.selectedItemCount != 0">{{slotData.selectedItemCount}}</span>
+</div>

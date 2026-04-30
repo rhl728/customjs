@@ -1,0 +1,63 @@
+<div v-if="slotData.settingLoaded" :class="slotData.selectedProducts && Object.keys(slotData.selectedProducts).length ? 'bg-gray-50' : ''">
+
+    <header-block-section  />
+
+    <div class="content-wrapper mx-auto max-w-[1200px] px-4 md:px-8 2xl:px-16 mt-[90px] pb-8 lg:pb-16">
+ 
+        <div class="cart-link pt-8 mb-6 ">
+            <a class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 text-gray-500 hover:text-heading flex items-center" href="/checkout">   <b-icon class="w-4 h-4 mr-1" icon="chevron-left" ></b-icon> {{ slotData.language.orderConfirmation.backText }} </a>
+        </div>
+
+       <!--  <div class="breadcrumb pt-8 mb-8">
+            <div class="breadcrumb-inner flex items-center">
+                <ul class="flex items-center w-full overflow-hidden text-gray-500 list-none my-0">
+                    <li class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 hover:text-heading"><a href="/">Home</a></li>
+                    <li class="text-base mt-0.5">/</li>
+                    <li class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 hover:text-heading">{{slotData.language.orderConfirmation.title}}</li>
+                </ul>
+            </div>
+        </div> -->
+
+        <div class="main-title-wrapper md:flex items-start">
+            <h1 class="text-lg md:text-xl xl:text-2xl font-bold text-heading mb-6 xl:mb-8 mt-0"> {{ slotData.language.orderConfirmation.title }} </h1>
+
+           <!--  <a href="/checkout" class="hidden md:block text-sm leading-4 bg-primary text-white px-4 py-2.5 inline-block rounded-md hover:text-white hover:bg-gray-600 ml-auto cursor-pointer">{{ slotData.language.orderConfirmation.updateCart }}</a> -->
+        </div>
+
+
+
+        <div class="inner-content-wrapper flex-wrap lg:flex-nowrap flex  xl:mb-4 cart-inner-wrapper items-start" v-if="slotData.selectedProducts && Object.keys(slotData.selectedProducts).length">
+            <div class="detail-wrapper  w-full lg:pr-6">
+                <summary-details-template  />
+            </div>
+
+            <div class="product-info-wrapper w-full lg:w-[450px] lg:min-w-[450px] xl:pl-6 ml-auto mt-6 lg:mt-0">
+
+                <div class="product-info-inner-wrapper section-wrapper bg-white shadow">
+                  <!--   <div class="section-header  flex md:hidden items-start mt-6 mb-4">
+                        <h2 class="title text-lg md:text-xl xl:text-xl font-bold text-heading"> {{ slotData.language.orderConfirmation.sections.product }} </h2>
+                    </div>   -->
+                    <!-- <summary-product-list-section  /> -->
+                  <!--   <cart-mini-product-list-section  type="list" /> -->
+                    <mini-cart-section 
+                        show_cart_icon="false"
+                        show_cart_header="false"
+                        show_products="false"
+                        show_cart_instruction="false"
+                        :button_text="slotData.language.orderConfirmation.submit"
+                        submit_order="true"
+                        minimum_order_text="false"
+                        show_total_save="true"
+                        
+                         />
+                </div>
+
+            </div>
+        </div>    
+
+        <div class="inner-content-wrapper" v-else>
+            <cart-empty-block-template  />
+        </div>
+    </div>
+    <footer-block-section  />
+</div>

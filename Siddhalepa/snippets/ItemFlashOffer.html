@@ -1,0 +1,37 @@
+<div>
+    <template v-if="data.available_now_applied_offer">	  
+        <template v-if="data.available_now != 0">	   
+            <template v-if="data.quantity > 0">	 
+                <template v-if="data.available_now_price != data.display_price">
+                    <div :class="{'flash-percentage-wrapper': 
+                        slotData.helpers.InArray('flash_offer_percentage', slotData.settings.menu_display_sections) && 
+                        slotData.helpers.PriceFormat(data.available_now_applied_offer.offer_percentage, 0) != 0}"
+                        >  
+                        <div class="flash-offer-wrapper" 
+                         :class="{'has-flash-percentage': 
+                         slotData.helpers.InArray('flash_offer_percentage', slotData.settings.menu_display_sections) && 
+                         data.available_now_applied_offer &&
+                         slotData.helpers.PriceFormat(data.available_now_applied_offer.offer_percentage, 0) != 0
+                         }">
+                         <div class="flash-price-wrapper">
+                                <b-icon class="w-6 h-6" icon="lightning-fill" :title="slotData.language.flashOffer.label"></b-icon>
+                                <span class="price-label">{{slotData.language.flashOffer.label}}: </span> 
+                                <span class="flash-price">
+                                    {{ slotData.display_currency }} {{slotData.helpers.PriceFormat(data.available_now_price)}}
+                                </span>
+                            </div>
+
+                            <template v-if="data.available_now_applied_offer">
+                                <template v-if="slotData.helpers.PriceFormat(data.available_now_applied_offer.offer_percentage, 0) != 0">
+                                    <span class="flash-percentage">
+                                        {{slotData.helpers.PriceFormat(data.available_now_applied_offer.offer_percentage, 0)}}%
+                                    </span>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </template>
+    </template>
+</div>

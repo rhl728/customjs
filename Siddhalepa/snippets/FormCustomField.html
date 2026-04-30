@@ -1,0 +1,235 @@
+<div class="custom-field form-group" :class="[custom_fields_cls, field.code]">
+  <label
+    :for="field.id"
+    class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer"
+    :class="{'required': field.is_required}"
+  >
+    <b-icon
+      class="w-6 h-6 field-icon"
+      :icon="slotData.icon"
+      v-if="show_icons"
+    ></b-icon>
+    {{field.label}}
+    <template v-if="field.is_required">*</template>
+  </label>
+
+  <!-- select field -->
+  <div
+    class="select-dropdown form-control h-12"
+    v-if="field.input_model == 'select'"
+  >
+    <multiselect
+      :id="field.id"
+      :name="field.id"
+      :options="field.attribute_value"
+      track-by="id"
+      v-model="slotData.fieldValue"
+      class="placeholder-slate-400"
+      label="label"
+      :allow-empty="true"
+      select-label=""
+      deselect-label=""
+      selected-label=""
+      :placeholder="field.label"
+      @select="onSelectChange"
+    >
+      <template slot="noResult">No records found.</template>
+    </multiselect>
+  </div>
+
+  <!-- checkbox field -->
+  <div
+    class="select-dropdown checkbox-dropdown form-control h-12"
+    v-else-if="field.input_model == 'check'"
+  >
+    <multiselect
+      :id="field.id"
+      :name="field.id"
+      :options="field.attribute_value"
+      track-by="id"
+      v-model="slotData.fieldValue"
+      label="label"
+      :multiple="true"
+      :allow-empty="true"
+      :close-on-select="false"
+      select-label=""
+      deselect-label=""
+      selected-label=""
+      :placeholder="field.label"
+      @select="onSelectChange"
+    >
+      <template slot="noResult">No records found.</template>
+    </multiselect>
+  </div>
+
+  <!-- toggle field -->
+  <div class="toggle" v-else-if="field.input_model == 'toggle'">
+    <div class="flex">
+      <span class="px-1">No</span>
+      <div class="form-check form-switch">
+        <input
+          :name="field.id"
+          :id="field.id"
+          v-model="field.value"
+          class="form-check-input appearance-none w-9 -ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-black bg-gray-300 focus:outline-none cursor-pointer shadow-sm"
+          type="checkbox"
+          role="switch"
+          :checked="{ 'checked': field.default_value == 'Yes' }"
+        />
+      </div>
+      <span class="px-1">Yes</span>
+    </div>
+  </div>
+
+  <!-- date field -->
+  <div
+    class="date-field w-full"
+    v-else-if="field.input_model == 'date' || (field.input_validation && field.input_validation.type == 'date')"
+  >
+    <date-picker
+      :id="field.id"
+      class="w-full"
+      :input-attr="{'name':field.id, 'required': field.is_required ? true : false, 'class': 'mx-input py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12'}"
+      v-model="field.value"
+      valueType="format"
+      v-on:change="onChangeDate"
+      :disabled-date="disabledDates"
+    >
+    </date-picker>
+  </div>
+
+  <!-- time field -->
+  <div
+    class="time-field w-full"
+    v-else-if="field.input_model == 'time' || (field.input_validation && field.input_validation.type == 'time')"
+  >
+    <date-picker
+      :id="field.id"
+      class="w-full"
+      :input-attr="{'name':field.id, 'class':'mx-input py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12'}"
+      v-model="field.value"
+      format="hh:mm a"
+      value-type="format"
+      type="time"
+      placeholder="hh:mm a"
+      v-on:change="onChangeTime"
+      :time-picker-options="{
+            start:  field.input_validation && field.input_validation.min_value ? field.input_validation.min_value : '00:00',
+            step: '00:30',
+            end: field.input_validation && field.input_validation.max_value ? field.input_validation.max_value : '23:30'
+            }"
+    >
+    </date-picker>
+  </div>
+
+  <!-- text field -->
+  <template v-else-if="field.input_model == 'text'">
+    <template v-if="field.input_validation.type">
+      <!-- for text, email and url types -->
+      <template
+        v-if="['text', 'email', 'url'].includes(field.input_validation.type)"
+      >
+        <input
+          :type="field.input_validation.type"
+          :id="field.id"
+          :name="field.id"
+          class="form-control py-2 px-4 md:px-5 w-full appearance-none border text-input text-xs lg:text-sm font-body rounded-md min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-12 placeholder-slate-400"
+          v-model="field.value"
+          :placeholder="field.label"
+          :minlength="field.input_validation.min_length ? field.input_validation.min_length : 0"
+          :maxlength="field.input_validation.max_length ? field.input_validation.max_length : 240"
+          @input="checkValidate"
+        />
+        <!-- </b-form-input> -->
+      </template>
+      <template v-else-if="field.input_validation.type == 'decimal'">
+        <input
+          type="number"
+          :id="field.id"
+          :name="field.id"
+          class="form-control py-2 px-4 md:px-5 w-full appearance-none border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-12"
+          v-model="field.value"
+          :min="field.input_validation.min_value ? field.input_validation.min_value : null"
+          :max="field.input_validation.max_value ? field.input_validation.max_value : null"
+          step="0.001"
+          :maxlength="field.input_validation.max_length ? field.input_validation.max_length : 240"
+        />
+        <!--  </b-form-input> -->
+      </template>
+
+      <template v-else-if="field.input_validation.type == 'integer'">
+        <input
+          type="number"
+          :id="field.id"
+          :name="field.id"
+          class="form-control py-2 px-4 md:px-5 w-full appearance-none border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-12"
+          v-model="field.value"
+          :min="field.input_validation.min_value ? field.input_validation.min_value : null"
+          :max="field.input_validation.max_value ? field.input_validation.max_value : null"
+          :maxlength="field.input_validation.max_length ? field.input_validation.max_length : 240"
+        />
+      </template>
+    </template>
+
+    <template v-else>
+      <!--   <b-form-input type="text" :id="field.id" :name='field.id' class="form-control" 
+                          v-model="field.value" 
+                          :minlength="field.input_validation.min_length ? field.input_validation.min_length : 0" 
+                          :maxlength="field.input_validation.max_length ? field.input_validation.max_length : 240" 
+                         >
+            </b-form-input> -->
+      <!--  v-model="field.value" -->
+      <input
+        :id="field.id"
+        class="py-2 px-4 md:px-5 w-full appearance-none border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-12 placeholder-slate-400"
+        type="text"
+        :data-code="field.code"
+        v-model="field.value"
+        :placeholder="field.label"
+        :minlength="field.input_validation.min_length ? field.input_validation.min_length : 0"
+        :maxlength="field.input_validation.max_length ? field.input_validation.max_length : 240"
+        @input="checkValidate"
+        @focusout="handleFocusout"
+      />
+    </template>
+  </template>
+
+  <!-- textarea field -->
+  <template v-else-if="field.input_model == 'textarea'">
+    <textarea
+      :id="field.id"
+      :name="field.id"
+      v-model="field.value"
+      class="textarea-field px-4 py-3 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 bg-white border border-gray-300 focus:shadow focus:outline-none focus:border-heading placeholder-body"
+      rows="3"
+      :minlength="field.input_validation.min_length ? field.input_validation.min_length : 0"
+      :maxlength="field.input_validation.max_length ? field.input_validation.max_length : 240"
+      :min="field.input_validation && field.input_validation.min_value ? field.input_validation.min_value : null"
+      :max="field.input_validation && field.input_validation.max_value ? field.input_validation.max_value : null"
+      @input="checkValidate"
+    ></textarea>
+    <!-- </b-form-textarea> -->
+  </template>
+
+  <!-- field error message -->
+  <!--   {{field}}
+   ---  {{field.error}} --
+   ------------------------------
+
+   {{vvv}} -->
+  <span
+    class="error my-2 text-xs text-red-500"
+    v-if="slotData.error || field.error"
+  >
+    {{slotData.language.cart.enterValid}} {{field.label}}
+  </span>
+
+  <!-- field description -->
+  <span
+    :id="field.id"
+    class="description text-xs text-body hidden"
+    v-if="field.description"
+  >
+    {{field.description}}
+  </span>
+</div>

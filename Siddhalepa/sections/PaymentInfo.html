@@ -1,0 +1,106 @@
+ <section class="form  w-full mx-auto flex flex-col justify-center">
+
+
+    <div class="flex flex-col p-4 max-h-[60vh] overflow-auto">
+
+        <!-- custom fields -->
+        <div v-if="slotData.customFields">
+            <template v-for="field in slotData.customFields">
+                <div cols="12" lg="6" class="field w-full lg:w-1/2" :class="field.code">
+                    <form-custom-field-snippet v-bind:field="field" >
+                        <template #slot_snippets_form_custom_field="{ slotData }">
+                            <v-runtime-template :template="slotData.template.snippets.FormCustomField"></v-runtime-template>
+                        </template>
+                    </form-custom-field-snippet>
+                </div>
+            </template>
+        </div>
+        <!-- payment methods -->
+        
+        <div v-if="!slotData.payment_methods" class="text-sm text-gray-500 flex justify-center items-center">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            {{slotData.language.editDeliveryDetails.paymentInfo.loading}}
+        </div>
+
+
+        <div id="paymentMethod" class="payment-method-wrapper mb-4" v-if="slotData.payment_methods">
+            <label class="payment-method my-4 shadow rounded-md p-4 block bg-gray-50 cursor-pointer hover:bg-gray-100" v-for="(method, index) in slotData.payment_methods" :class="{ 'bg-gray-100' : slotData.formData.paymentMethod == method}">
+                <div class="flex items-center mr-3 w-full">
+
+                    <input v-model="slotData.formData.paymentMethod" type="radio" class="form-radio form-check-input appearance-none rounded-full h-4 w-4 border border-gray-500 bg-white checked:bg-primary checked:border-heading focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" name="paymentMethod" :value="method" :title="slotData.language.editDeliveryDetails.paymentInfo.selectTitle">
+
+                    <div class="mx-2">
+                        <span class="text-sm text-heading font-semibold"> {{ method.name }} </span>
+                        <div v-html="method.pre_order_instructions" class="text-sm text-body "></div>
+                    </div>
+
+                    <template v-if="method.online_pay == '1'">
+                        <b-icon class="ml-auto min-w-[36px] h-10 text-heading" icon="credit-card" ></b-icon>
+                    </template>
+                    <template v-else>
+                        <b-icon class="ml-auto min-w-[36px] h-10 text-heading" icon="cash" ></b-icon>
+                    </template>
+                </div>
+            </label>
+
+            <p v-if="slotData.formData.paymentMethodInvalid" class="error my-2 text-xs text-red-500">
+                {{slotData.language.cart.enterValid + ' ' + slotData.language.editDeliveryDetails.paymentInfo.formLabels.paymentMethod}} 
+            </p>
+        </div>
+
+        <!-- loyalty points 
+        <div class="loyalty-points-wrapper border p-6 rounded-md" v-if="slotData.settings.is_loyalty_integrate == '1'">
+            <span class="loyalty-title block mb-2 text-gray-700 font-semibold">
+                {{slotData.language.editDeliveryDetails.paymentInfo.loyalty.title}}
+            </span>
+
+            <template v-if="slotData.showLoyaltyPoints">
+                <div class="loyalty-points-section text-center">
+                    <div class="balance-wrapper  block text-sm mb-4 text-gray-700 font-semibold">
+                        <span class="balance-label">{{slotData.language.editDeliveryDetails.paymentInfo.loyalty.balance_label}}:</span>
+                        <span class="balance-text-wrapper relative">
+                            <span class="balance-text py-1.5 px-3 bg-primary text-white rounded-md"> {{ slotData.loyaltyTotalBalance }} </span>
+                            <span class="loader-wrapper">
+                                <span class="loader"></span>
+                            </span>
+                        </span>
+                    </div>
+
+                    <div 
+                        class="redeem-wrapper">
+                        <input 
+                        class="py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body min-h-12 transition duration-200 ease-in-out border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12 max-w-xs"
+                        type="number" 
+                        v-model="slotData.formData.loyaltyPoints" 
+                                      min="0" 
+                                      step="1"
+                                      v-on:change="onChangeLoyaltyPoints"
+                                      :state="validateLoyaltyPoints()"
+                                      :disabled="slotData.loyaltyPointsDisabled" />
+                    </div>
+
+                    <span class="point-equality block text-sm mt-2">
+                        1 {{slotData.language.editDeliveryDetails.paymentInfo.loyalty.point}} = {{slotData.settings.default_currency}} 1.00
+                    </span>
+
+                    <span class="error-msg  block text-xs text-red-500 mt-0.5" v-if="slotData.loyaltyPointsError"> 
+                        {{ slotData.loyaltyPointsError }}
+                    </span>
+                </div>
+            </template>
+
+            <template v-else>
+                <div class="not-logged-in text-sm text-gray-500">{{slotData.language.editDeliveryDetails.paymentInfo.loyalty.login}}</div>
+            </template>
+
+        </div>-->
+
+    </div>
+
+    <div class="flex border-t p-2 px-4">
+        <button  @click="savePaymentData" type="button" class="md:text-base md:leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold  text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-primary text-white px-5 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white hover:bg-gray-600 hover:shadow-md ml-auto">Save</button>
+    </div>
+</section>

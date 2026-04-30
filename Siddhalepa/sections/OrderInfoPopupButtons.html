@@ -1,0 +1,50 @@
+<div class="order-info-buttons">
+    <div class="user-info-button order-info-edit-button">
+        <span class="button-title"> 
+            <span class="name">{{slotData.language.editDeliveryDetails.tabs.user.text}}</span>
+            <span class="value">{{slotData.orderPopupButtonText.userInfo}}</span>
+        </span>
+        <b-button class="header-button" v-b-modal.userInfoPopup> Edit </b-button>
+        <user-info-popup-section >
+            <template #slot_sections_user_info_popup="{ slotData }">
+                <v-runtime-template :template="slotData.template.sections.UserInfoPopup"></v-runtime-template>
+            </template>
+        </user-info-popup-section>
+    </div>
+    <div class="delivery-info-button order-info-edit-button">
+        <span class="button-title"> 
+            <span class="name">{{slotData.language.editDeliveryDetails.tabs.delivery.text}}</span>
+            <span class="value">{{slotData.orderPopupButtonText.deliveryInfo}}</span>
+        </span>
+        <b-button class="header-button" v-b-modal.deliveryInfoPopup> Edit </b-button>
+        <delivery-info-popup-section >
+            <template #slot_sections_delivery_info_popup="{ slotData }">
+                <v-runtime-template :template="slotData.template.sections.DeliveryInfoPopup)"></v-runtime-template>
+            </template>            
+        </delivery-info-popup-section>
+    </div>
+    <div class="payment-info-button order-info-edit-button">
+        <span class="button-title"> 
+            <span class="name">{{slotData.language.editDeliveryDetails.tabs.payment.text}}</span>
+            <span class="value">{{slotData.orderPopupButtonText.paymentInfo}}</span>
+        </span>
+        <b-button class="header-button" v-b-modal.paymentInfoPopup> Edit </b-button>
+        <payment-info-popup-section >
+            <template #slot_sections_payment_info_popup="{ slotData }">
+                <v-runtime-template :template="slotData.template.sections.PaymentInfoPopup"></v-runtime-template>
+            </template>            
+        </payment-info-popup-section>
+    </div>
+    <div class="order-instruction-button order-info-edit-button">
+        <span class="button-title"> 
+            <span class="name">{{slotData.language.orderConfirmation.fields.orderInstruction}}</span>
+            <span class="value">{{slotData.orderPopupButtonText.instruction}}</span>
+        </span>
+        <b-button class="header-button" v-b-modal.orderCommentPopup> Edit </b-button>
+        <order-comment-popup-section >
+            <template #slot_sections_order_comment_popup="{ slotData }">
+                <v-runtime-template :template="slotData.template.sections.OrderCommentPopup"></v-runtime-template>
+            </template>            
+        </order-comment-popup-section>
+    </div>
+</div>

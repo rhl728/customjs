@@ -1,0 +1,10 @@
+<div class="item-tag inline-block pr-1.5 xl:pr-2.5 transition last:pr-0 mr-2 md:mr-3 " :data-tag="tag.name.replace(/-\d+$/, '')">
+    <template v-if="tag.icon">
+        <img :src="tag.icon" class="tag-icon w-4 h-4 inline-block rounded-sm overflow-hidden" :title="tag.name" alt="" loading="lazy" decoding="async"/>
+    </template>
+    <template v-else>
+        <b-icon class="tag-icon w-4 h-4 inline-block " icon="tag"  :title="tag.name"></b-icon>
+    </template>
+    <span class="inline-block pl-1">{{ tag.name.replace(/-\d+$/, '') }}</span>
+    <!-- <span class="inline-block pl-1">{{ tag.name }}</span>-->
+</div>

@@ -1,0 +1,152 @@
+<div
+  class="mb-4 bg-[#F9F9F9] p-4 border-l-4 border-primary rounded-lg review-block"
+>
+  <div class="flex flex-row justify-between">
+    <div class="flex flex-row space-x-2">
+      <div
+        class="item-image md:relative flex rounded-md md:overflow-hidden bg-gray-200 flex-shrink-0 w-[100px] h-[100px]"
+      >
+        <template
+          v-if="type === 'reviewed' ? review?.order_product?.product_image : review?.product_image"
+        >
+          <img
+            :src="type === 'reviewed' ? review?.order_product?.product_image : review?.product_image"
+            class="thumb border rounded-md border-gray-300 flex-shrink-0 w-full h-full object-contain object-center bg-gray-100"
+            :alt="type === 'reviewed' ? review?.order_product?.product_name : review?.product_name"
+            :title="type === 'reviewed' ? review?.order_product?.product_name : review?.product_name"
+            loading="lazy"
+            decoding="async"
+          />
+        </template>
+        <template v-else>
+          <img
+            class="thumb border object-center object-contain w-full h-full bg-gray-100"
+            src="$$__client_media_url__$$/$$__client_media_path__$$/no-image.png"
+            :alt="type === 'reviewed' ? review?.order_product?.product_name : review?.product_name"
+            :title="type === 'reviewed' ? review?.order_product?.product_name : review?.product_name"
+            loading="lazy"
+            decoding="async"
+          />
+        </template>
+      </div>
+      <div class="flex flex-col space-y-1 text-sm text-[#5A5A5A] font-normal">
+        <span class="text-[#212121] text-base font-semibold"
+          >{{type === 'reviewed' ? review?.order_product?.product_name :
+          review?.product_name}}</span
+        >
+        <span
+          >Price : {{type === 'reviewed' ? slotData.settings.default_currency + ' ' + review?.order_product?.original_price :
+          slotData.settings.default_currency + ' ' + review?.original_price}}</span
+        >
+        <span
+          >Quantity : {{type === 'reviewed' ? review?.order_product?.quantity :
+          review?.quantity}}</span
+        >
+        <span
+          >Ordered On : {{slotData.helpers.DateFormat(type === 'reviewed' ? review?.order_product?.created_at : review?.created_at, 'MMM D, YYYY hh:mmA')}}</span
+        >
+      </div>
+    </div>
+    <div v-if="type === 'toBeReviewed'" class="flex items-center mr-4">
+      <button
+        class="flex flex-row space-x-2 text-sm font-semibold text-primary px-4 py-3 rounded whitespace-nowrap bg-[#E8F2FF] h-fit"  v-on:click="showReviewPopup(review)"
+      >
+        <b-icon class="w-4 h-4" icon="pencil"></b-icon>
+        <span>{{slotData.language.orderHistory.addReview}}</span>
+      </button>
+    </div>
+  </div>
+  <div
+    v-if="type === 'reviewed'"
+    class="border-t-[1px] border-[#CCCCCC] mt-4 flex flex-col space-y-4"
+  >
+    <div class="flex flex-col md:flex-row max-md:space-y-2 mt-3 w-full">
+      <div class="flex flex-col space-y-2 w-full md:w-3/5">
+        <star-rating
+          :star-size="20"
+          :rating="Number(review?.rate)"
+          :increment="0.1"
+          :show-rating="false"
+          :padding="2"
+          active-color="#F07E19"
+          inactive-color="#D9D9D9"
+          :read-only="true"
+        />
+        <span class="text-base font-normal text-[#212121] whitespace-normal break-all"
+          >{{review?.comment}}</span
+        >
+      </div>
+      <div class="flex flex-wrap space-x-2 w-full md:w-2/5 md:justify-end justify-start items-start">
+        <div v-for="(file, index) in review?.images" :key="file.id">
+          <!-- Image -->
+          <img
+            v-if="file.type === 'image'"
+            :src="file.path"
+            alt="review image"
+            class="w-[84px] h-[84px] object-cover border-[0.5px] border-[#CCCCCC] rounded cursor-pointer mb-1"
+             @click="openLightbox(index)"
+          />
+
+          <!-- Video -->
+          <div
+            v-else-if="file.type === 'video'"
+            class="relative w-[84px] h-[84px] border-[0.5px] border-[#CCCCCC] rounded  mb-1"
+          >
+            <video
+              :src="file.path"
+              class="w-[84px] h-[84px] object-cover rounded cursor-pointer"
+              @click="openLightbox(index)"
+            ></video>
+            <span class="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                class="w-7 h-7"
+                fill="white"
+                stroke="#CCCCCC"
+                stroke-width="0.5"
+              >
+                <path d="M11.596 8.697l-6.363 3.692A.5.5 0 0 1 4.5 12V4a.5.5 0 0 1 .733-.442l6.363 3.692a.5.5 0 0 1 0 .868z" />
+              </svg>
+            </span>    
+          </div>
+        </div>
+      </div>
+      <fs-lightbox
+        :toggler="slotData.lightboxToggler"
+        :sources="lightboxSources"
+        :slide="selectedIndex + 1"
+      />
+    </div>
+
+    <div class="flex flex-row justify-between">
+      <div class="flex flex-row space-x-2">
+        <button v-if="review.status === '0'" class="flex flex-row space-x-2 items-center mx-2 text-primary font-semibold" v-on:click="showReviewPopup(review)">
+          <b-icon class="w-4 h-4" icon="pencil-square"></b-icon>
+          <span>Edit</span>
+        </button>
+        <button class="flex flex-row space-x-2 items-center mx-2 text-[#D40C0C] font-semibold" v-on:click="showDeleteReviewPopup(review)">
+          <b-icon class="w-4 h-4" icon="trash"></b-icon>
+          <span>Delete</span>
+        </button>
+      </div>
+      <span class="ml-auto text-right">Reviewed On : {{slotData.helpers.DateFormat(review?.created_at, 'MMM D, YYYY hh:mmA')}}</span>
+    </div>
+  </div>
+  <review-popup-section
+    :is_active="slotData.isReviewPopupOpen"
+    :product="slotData.product"
+    :closeReviewPopup="closeReviewPopup"
+    :type="type"
+    @review-submitted="handleReviewSubmitted"
+    @message="handleMessage"
+    @updateSuccess="handleSuccessUpdate"
+  />
+  <delete-review-popup-section
+    :is_active="slotData.isDeleteReviewPopupOpen"
+    :product="slotData.product"
+    :closeReviewPopup="closeDeleteReviewPopup"
+    @review-deleted="handleReviewDeleted"
+    @message="handleMessage"
+  />
+</div>

@@ -1,0 +1,91 @@
+<div v-if="slotData.settingLoaded">
+  <header-block-section />
+  <div
+    class="content-wrapper mx-auto max-w-[1920px] px-4 md:px-8 2xl:px-16 xl:px-32 2xl:px-44 3xl:px-56 py-16 lg:py-20"
+  >
+    <div
+      class="max-w-7xl mx-auto px-4 py-8 "
+    >
+      <div class="loader-wrapper my-7 mx-auto">
+        <div class="loader-order-status"></div>
+      </div>
+
+      <!-- Status Message -->
+      <div class="border rounded-md bg-gray-50 p-6 mb-6 w-full">
+        <div class="flex items-center gap-3">
+          <div
+            class="flex items-center justify-center w-10 h-10 rounded-full"
+            :class="slotData.status === 'approved' ? 'bg-green-100' : 'bg-yellow-100'"
+          >
+            <!-- Spinner Icon -->
+
+            <svg
+              width="64"
+              height="64"
+              viewBox="0 0 64 64"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="64" height="64" rx="32" fill="#E5E5E5" />
+              <path
+                d="M32 16C23.1613 16 16 23.1613 16 32C16 40.8387 23.1613 48 32 48C40.8387 48 48 40.8387 48 32C48 23.1613 40.8387 16 32 16ZM35.6839 38.5871L29.9935 34.4516C29.7935 34.3032 29.6774 34.071 29.6774 33.8258V22.9677C29.6774 22.5419 30.0258 22.1935 30.4516 22.1935H33.5484C33.9742 22.1935 34.3226 22.5419 34.3226 22.9677V31.8516L38.4194 34.8323C38.7677 35.0839 38.8387 35.5677 38.5871 35.9161L36.7677 38.4194C36.5161 38.7613 36.0323 38.8387 35.6839 38.5871Z"
+                fill="#E6B11F"
+              />
+            </svg>
+          </div>
+
+          <p class="text-gray-700 text-base">
+            <span v-if="slotData.status === 'pending'">
+              {{slotData.language.orderStatus.awaitingMessage}}
+            </span>
+            <span v-else>
+              {{slotData.language.orderStatus.approvedMessage}}
+            </span>
+          </p>
+        </div>
+
+        <!-- Progress Bar -->
+      </div>
+
+      <!-- Order Details -->
+     
+
+        <div
+        class="border rounded-md bg-gray-50 grid md:grid-cols-4 sm:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-200"
+      >
+        <div class="p-4 text-center">
+          <p class="text-xs text-gray-500 mb-1"> {{slotData.language.orderStatus.orderNumber}}</p>
+          <p class="text-lg font-semibold text-gray-800">
+            #{{slotData.orderInfo.order_id}}
+          </p>
+        </div>
+        <div class="p-4 text-center">
+          <p class="text-xs text-gray-500 mb-1"> {{slotData.language.orderStatus.date}}</p>
+          <p class="text-lg font-semibold text-gray-800">{{slotData.date}}</p>
+        </div>
+        <div class="p-4 text-center">
+          <p class="text-xs text-gray-500 mb-1"> {{slotData.language.orderStatus.email}}</p>
+          <p class="text-lg font-semibold text-gray-800">
+            {{slotData.userEmail}}
+          </p>
+        </div>
+        <div class="p-4 text-center">
+          <p class="text-xs text-gray-500 mb-1">{{slotData.language.orderStatus.paymentMethod}}</p>
+          <p class="text-lg font-semibold text-gray-800">
+            {{slotData.paymentInfo}}
+          </p>
+        </div>
+      </div>
+      </div>
+      <!-- Button -->
+      <div class="mt-6 flex w-full  justify-center">
+        <button
+          @click="contBtn"
+          class="bg-white text-primary font-semibold px-6 py-3 rounded-md hover:bg-gray-200 w-full sm:w-fit border border-primary"
+        >
+          {{slotData.language.orderStatus.contShipping}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

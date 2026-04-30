@@ -1,0 +1,58 @@
+border-gray-300 md:pr-32 lg:pr-12 2xl:pr-32 3xl:pr-48 py-8 pt-8 pb-8 mt-6">
+    <div class="flex items-center relative">
+        <template v-if="slotData.bulkEdit">
+            <div class="detail-count-btn-wrapper mr-4   group flex items-center justify-between rounded-clg overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300">
+                
+                <button  :class="{'opacity-50 pointer-events-none' : loading}"  class="flex items-center justify-center flex-shrink-0 h-full transition ease-in-out duration-300 focus:outline-none w-10 md:w-12 text-black border-r border-gray-300 hover:text-white hover:bg-primary" v-on:click="updateCount('reduce')" :disabled="disabled">
+                    <b-icon class="add-to-cart-icon" icon="dash-circle" ></b-icon>
+                </button>
+                
+                
+                <input class="font-semibold flex items-center justify-center h-full appearance-none transition-colors duration-250 ease-in-out cursor-auto flex-shrink-0 text-base text-black w-12  md:w-20 xl:w-24 text-center focus-visible:outline-none" aria-label="count-button-wrapper1" type="number" min="1" step="1" v-model="slotData.bulkCount" v-on:keyup.enter="addItem(product, 'add')"/>
+
+
+                <button  :class="{'opacity-50 pointer-events-none' : loading}" class="flex items-center justify-center h-full flex-shrink-0 transition ease-in-out duration-300 focus:outline-none w-10 md:w-12 text-black border-l border-gray-300 hover:text-white hover:bg-primary"  v-on:click="updateCount('add')" :disabled="disabled">
+                    <b-icon class="add-to-cart-icon" icon="plus-circle"></b-icon>
+                </button>
+
+            </div>
+        </template>
+        <template v-else>
+            <!-- <template v-if="slotData.selectedProducts && slotData.selectedProducts[productId]"> -->
+                <div class="detail-count-btn-wrapper mr-4   group flex items-center justify-between rounded-clg overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300">
+                        <button  :class="{'opacity-50 pointer-events-none' : loading}"  class="flex items-center justify-center flex-shrink-0 h-full transition ease-in-out duration-300 focus:outline-none w-10 md:w-12 text-black border-r border-gray-300 hover:text-white hover:bg-primary" v-on:click="updateCount('reduce')" :disabled="disabled">
+                            <b-icon class="add-to-cart-icon" icon="dash-circle" ></b-icon>
+                        </button>
+                        
+                        <input class="font-semibold flex items-center justify-center h-full appearance-none transition-colors duration-250 ease-in-out cursor-auto flex-shrink-0 text-base text-black w-12  md:w-20 xl:w-24 text-center focus-visible:outline-none" aria-label="count-button-wrapper"type="number" min="1" step="1" v-model="count" readonly/>
+
+                        <button  :class="{'opacity-50 pointer-events-none' : loading}" class="flex items-center justify-center h-full flex-shrink-0 transition ease-in-out duration-300 focus:outline-none w-10 md:w-12 text-black border-l border-gray-300 hover:text-white hover:bg-primary"  v-on:click="updateCount('add')" :disabled="disabled">
+                            <b-icon class="add-to-cart-icon" icon="plus-circle"></b-icon>
+                        </button>
+                </div>
+            <!-- </template> -->
+        </template>
+
+        <button  :class="{'opacity-50 pointer-events-none' : loading}"  v-on:click="addItem(product, 'add')" class="add-to-cart text-[13px] md:text-sm leading-4 flex items-center cursor-pointer transition ease-in-out overflow-hidden flex-shrink-0  duration-300 font-semibold font-body text-center border-0 border-transparent rounded-clg placeholder-white focus-visible:outline-none focus:outline-none h-11 md:h-12 pl-5 bg-primary text-white transform-none justify-center normal-case hover:shadow-cart h-full w-[50%] md:w-6/12 xl:w-auto xl:pl-16" :disabled="disabled">
+            <template v-if="product.type == 'configurable'">
+                <span class="pr-5 xl:pr-16 py-2">{{slotData.selectOptionsText}}</span>
+            </template>
+            <template v-else>
+                <span class="pr-5 xl:pr-16 py-2">{{slotData.text}}</span>
+            </template>
+        </button>
+        <Favorite-icon-snippet
+          :favorite="product.favorite"
+          :isDetailsPage="isDetailsPage"
+          :productId="product.id"
+        />
+    </div>
+
+    
+    <template v-if="slotData.productQty">
+        <div class="cart-counter-bag text-green-700 block text-2xl mt-5 flex items-center justify-center flex-shrink-0 h-auto relative focus:outline-none transform  inline-flex">
+            <b-icon class="added-count-icon" icon="bag-check-fill"></b-icon>
+            <span class="ml-2 text-base pt-2">{{slotData.productQty}} {{slotData.language.cart.shoppingCart.add}}</span>
+        </div>
+    </template>
+</div>

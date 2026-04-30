@@ -1,0 +1,11 @@
+<div class="filter-wrapper show ml-4" v-if="showButton">
+  <button v-on:click="showModal" class="filter-button flex items-center">
+    <span class="pr-0.5"> {{slotData.language.filterText}} </span>
+    <b-icon class="w-5 h-5" icon="filter"></b-icon>
+  </button>
+  <filter-popup-snippet
+    :is_active="isActive"
+    @toggleModal="showModal"
+    :category_id="category_ids"
+  />
+</div>
