@@ -1,9 +1,12 @@
-<div role="main">
+<div role="main" id="home-page">
   <template v-if="slotData.settingLoaded">
     <div class="main-loader" v-if="mainLoader">
       <progress-bar-snippet />
     </div>
-    <header-block-section :all_location_data="true" />
+    
+    <div class="header-container">
+        <header-block-section :all_location_data="true" />
+    </div>
 
     <div class="flex flex-wrap mt-20 mb-4 xl:mb-6">
       <div class="w-full bg-white">
@@ -21,7 +24,7 @@
           :use_cart_banners="true"
           :slide_show_dots="false"
           banner_height="h-[0px] pt-[40%]"
-          slide_show_speed="3000"
+          slide_show_speed="5000"
         />
       </div>
     </div>
@@ -35,42 +38,48 @@
     </template>
     <trail-popup-snippet :is_active="slotData.isActive"></trail-popup-snippet>
 
-    <!-- <div  v-if="slotData.page_header || slotData.page_description"
-    class="px-4 md:px-8 2xl:px-16 text-center mb-14 md:mb-16 mt-10"
-    >
-      <h1 class="break-all text-primary capitalize title text-xl md:text-2xl lg:text-3xl 2xl:text-4xl font-bold mb-3 mt-0"> {{slotData.page_header}}</h1>
-      <div class="break-all mt-0 font-normal text-gray-600" v-html="slotData.page_description"></div>
-    </div> -->
+    <section class="main main-margin-top main-margin-bottom">
+        <h1>Welcome to Siddhalepa</h1>
+        <p>Live Healthy with Ayurveda</p>
+    </section>
 
     <category-block-custom-block
+      categories="['09c1c7d98d178688ca95ff1fe7389ab9','ea9e81c3e89b211b6a0096583f302f78','68fb17d30f229b71b81e07d9e43d2a4f','d22acb9839731963f520403080830902','5637dd2b87d3f6b85e67a85af2eed529','a95f04bdca21c0b52c49f56ec23f4b3f']"
       :start="0"
-      :limit="12"
-      title="Top Categories"
+      :limit="40"
+      title=""
       columns="6"
+      sort_property="sort_order"
       show_main_block="false"
       main_block_title="Top Categories"
       slide_show="true"
       main_block_width="25%"
-      slide_show_dots="flase"
+      slide_show_dots="false"
       slide_show_arrows="true"
       slide_show_autoplay="true"
       slide_show_speed="300"
       auto_play_speed="5000"
       show_main_block_button="true"
       main_block_button_text="All Categories"
-      main_block_height="230px"
+      main_block_height="500px"
       :all_location_data="true"
       :slider_responsive='[ 
             {
                 "breakpoint": 1024,
                 "settings": {
-                   "slidesToShow": 5,
+                   "slidesToShow": 4,
+                }
+            },
+                        {
+                "breakpoint": 768,
+                "settings": {
+                   "slidesToShow": 4,
                 }
             },
             {
                 "breakpoint": 480,
                 "settings": {
-                  "slidesToShow": 3,
+                  "slidesToShow": 1,
                 }
             }
         ]'
@@ -122,138 +131,173 @@
         
     </div> -->
 
-    <offer-product-custom-block
-      :limit="9"
-      :start="0"
-      columns="3"
-      title="Deals"
-      show_title="true"
-      slide_show="false"
-      show_product_name="true"
-      show_product_description="true"
-      show_product_price="true"
-      show_product_attribute="false"
-      show_product_tags="false"
-      show_add_to_cart="true"
-      show_upcomming_offer="false"
-      slide_show_speed="300"
-      auto_play_speed="5000"
-      slides_to_scroll="1"
-      slide_show_arrows="true"
-      :all_location_data="true"
-      :sampleProducts= "sampleProducts"
-      :skeletonCount="skeletonCount"
-    />
+    <div class ="banner-wrapper">
+    
+        <section class="main feature-section main-margin-top main-margin-bottom">
+          <div class="feature-container">
+            <!-- Left Column -->
+            <div class="feature-left">
+              <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/home/0af52d9fb065a17588329793b11d84c6_1763368692.jpg" alt="Feature Image"  fetchpriority="high"  />
+              <div class="feature-text">
+                <h2>Check our Ayur Pharmaceuticals Products</h2>
+                <p>Guggulu, Churna, Kalka, Rasayana</p>
+              </div>
+            </div>
+        
+            <!-- Right Column -->
+            <div class="feature-right">
+              <div class="feature-content">
+                <h4>Is your liver silently drowning in fat?</h4>
+                <p>Siddhalepa LivPro, powered by the time-tested goodness of Heen Bovitiya and Aloe Vera</p>
+                <a href="/ayur-capsule-liv-pro" class="btn btn-color-primary btn-style-round">Shop Now</a>
+                <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/home/d9f4dbd25353426b7d02ba4a2a57dfb4_1763369244.png" alt="Vertical Image" class="feature-vertical-img"  fetchpriority="high"  />
+              </div>
+            </div>
+          </div>
+        </section>
+    
 
-    <div
-      class="w-full px-4 mx-auto mb-8 md:px-8 2xl:px-16 custom-banner-block custom-banner-block-1"
-    >
-      <banner-block-custom-block
-        :slides="[
-            {'url':'$$__client_media_url__$$/$$__client_media_path__$$/2.webp', 'button_url':'#'},
-            {'url':'$$__client_media_url__$$/$$__client_media_path__$$/3.webp', 'button_url':'#'},
-            {'url':'$$__client_media_url__$$/$$__client_media_path__$$/4.webp' , 'button_url':'#'},
-            {'url':'$$__client_media_url__$$/$$__client_media_path__$$/5.webp' , 'button_url':'#'},
-            {'url':'$$__client_media_url__$$/$$__client_media_path__$$/6.webp'},
-            {'url':'$$__client_media_url__$$/$$__client_media_path__$$/7.webp'},
-            ]"
-        slide_show="true"
-        slide_show_dots="true"
-        rounded_corners="true"
-        columns="3"
-        title=""
-        description=""
-        :show_button="false"
-        :slide_link="true"
-        button_text="Vist Shop"
-        button_url="#"
-        banner_height="h-0 pb-[29%]"
-        slide_show_speed="100"
-        :slider_responsive='[ 
-                {
-                    "breakpoint": 1024,
-                    "settings": {
-                        "centerPadding":"60px"
-                    }
-                },
-                {
-                    "breakpoint": 480,
-                    "settings": {
-                        "centerPadding":"30px"
-                    }
-                }
-            ]'
-      />
     </div>
 
-    <specific-product-custom-block
-      :limit="9"
-      :start="0"
-      attributes='[{"code":"NEW_ARRIVALS","value":"1", "condition":"eq"}, {"code":"NEW_ARRIVALS_END_DATE","value":"$$__current_datetime__$$", "condition":"gteq"}]'
-      columns="3"
-      title="New Arrivals"
-      show_title="true"
-      c
-      :categories="['8236bcf3051127d75afcae45202d1354']"
-      slide_show="false"
-      show_product_name="true"
-      show_product_description="true"
-      show_product_price="true"
-      show_product_attribute="false"
-      show_product_tags="false"
-      show_upcomming_offer="false"
-      show_add_to_cart="true"
-      slide_show_speed="300"
-      auto_play_speed="5000"
-      slides_to_scroll="1"
-      slide_show_arrows="true"
-      :all_location_data="true"
-      :sampleProducts= "sampleProducts"
-      :skeletonCount="skeletonCount"
-    />
+    <section class="main main-margin-top">
+        <h2>Featured Products</h2>
+        <!--<p>Love Healthy with Ayurveda</p>-->
+    </section>
 
-    <div
-      class="w-full p-4 md:px-8 md:py-4 2xl:px-16 custom-banner-block custom-banner-block-2"
-    >
-      <banner-block-custom-block
-        :slides="[
-            {'url':'$$__client_media_url__$$/$$__client_media_path__$$/2.webp'}
-            ]"
-        slide_show="false"
-        rounded_corners="true"
-        columns="1"
-        title=""
-        description=""
-        :show_button="false"
-        button_text="Vist Shop"
-        button_url="#"
-        banner_height="h-0 pb-[29%]"
-        slide_show_speed="3000"
-      />
-    </div>
 
-    <best-selling-product-custom-block
+
+    <products-block-custom-block
       :limit="6"
       :start="0"
-      columns="3"
-      title="Best Selling"
-      show_title="true"
-      slide_show="false"
+      :featured="true"
+      :all_location_data="true"
+      title="Featured Items"
+      show_title="false"
+      slide_show="true"
+      slide_show_dots="false"
+      rounded_corners="true"
+      columns="4"
+      description="false"
+      :show_add_to_cart="true"
+      :show_product_attribute="false"
+      :show_product_tags="false"
+      :slide_link="true"
+      slide_show_speed="1500"
+      main_block_height="300px"
+      slide_show_arrows="true"
+      :slider_responsive='[ 
+            {
+                "breakpoint": 1024,
+                "settings": {
+                   "slidesToShow": 4,
+                }
+            },
+                        {
+                "breakpoint": 768,
+                "settings": {
+                   "slidesToShow": 4,
+                }
+            },
+            {
+                "breakpoint": 480,
+                "settings": {
+                  "slidesToShow": 1,
+                }
+            }
+        ]'
+    />
+
+     <section class="feature-alt-container main-margin-top main-margin-bottom">
+      <!-- Left Column -->
+      <div class="feature-alt-left">
+        <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/b61f71db4277b7b4b8c1f82534fe0585_1762505472.png" alt="Feature Left Image" class="feature-alt-left-img"  loading="lazy" decoding="async" />
+        <div class="feature-alt-content">
+          <h2><span>Supirivicky </span> is a non-fluoride and 100% vegetarian toothpaste which gives you total dental care.</h2>
+          <a href="/personal-care/oral-care" class="btn btn-color-primary btn-style-round btn-top-margin">Shop Now</a>
+        </div>
+      </div>
+    
+      <!-- Right Column -->
+      <div class="feature-alt-right">
+        <img src="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/home/617fcb152da32fcd89c24732dc6fe041_1763370002.png" alt="Feature Right Image" class="feature-alt-right-img"  loading="lazy" decoding="async" />
+      </div>
+    </section>
+    
+    <section class="main main-margin-top">
+        <h2>New Arrivals</h2>
+        <!--<p>Love Healthy with Ayurveda</p>-->
+    </section>
+    
+    <specific-product-custom-block
+      :limit="12"
+      :start="0"
+      attributes='[{"code":"NEW_ARRIVALS","value":"1", "condition":"eq"}, {"code":"NEW_ARRIVALS_END_DATE","value":"$$__current_datetime__$$", "condition":"gteq"}]'
+      columns="4"
+      title="New Arrivals"
+      show_title="false"
+      :categories="['8236bcf3051127d75afcae45202d1354']"
+      slide_show="true"
       show_product_name="true"
       show_product_description="true"
       show_product_price="true"
       show_product_attribute="false"
-      show_upcomming_offer="false"
       show_product_tags="false"
+      show_upcomming_offer="false"
       show_add_to_cart="true"
-      slide_show_speed="300"
+      slide_show_speed="1500"
       auto_play_speed="5000"
+      main_block_height="500px"
       slides_to_scroll="1"
       slide_show_arrows="true"
       :all_location_data="true"
-      :sampleProducts= "sampleProducts"
-      :skeletonCount="skeletonCount"
+      :slider_responsive='[ 
+            {
+                "breakpoint": 1024,
+                "settings": {
+                   "slidesToShow": 4,
+                }
+            },
+                        {
+                "breakpoint": 768,
+                "settings": {
+                   "slidesToShow": 3,
+                }
+            },
+            {
+                "breakpoint": 480,
+                "settings": {
+                  "slidesToShow": 1,
+                }
+            }
+        ]'
     />
+    
+    <section class="main main-margin-top media-hub">
+        <h2>Media Hub</h2>
+       <!-- <p>It's content strategy gone awry right from the start.</p> --->
+    </section>
+    
+    <section class = "card-row main">
+          <div class="card card1">
+              <a href = "https://www.siddhalepa.com/blog" target="_blank">
+                  <img src ="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/39ae429138ac8ece73c41a17d2e5727c_1762838429.jpg" alt ="card1"  loading="lazy" decoding="async">
+                  <h3>Blog</h3>
+              </a>
+              
+          </div>
+          <div class="card">
+              <a href = "https://www.siddhalepa.com/news-and-events" target="_blank">
+                  <img src ="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/26f87891f47a6c274f918e85abe91f43_1762838502.jpg" alt ="card1"  loading="lazy" decoding="async">
+                  <h3>News and Events</h3>
+              </a>
+          </div>
+          <div class="card">
+              <a href = "https://www.siddhalepa.com/media-room" target="_blank">
+                  <img src ="https://dna3n15iwxmh8.cloudfront.net/75b37763aee196a79752194da1079599/siddhalepa-img/placeholder/a8a2e7f9e11b464e3ec1cbed5a66e588_1762838502.jpg" alt ="card1"  loading="lazy" decoding="async">
+                  <h3>Media Room</h3>
+              </a>
+          </div>
+    </section>
 
     <footer-block-section />
   </template>
