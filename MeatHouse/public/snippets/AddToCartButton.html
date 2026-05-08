@@ -1,0 +1,30 @@
+<div class="add-to-cart bg-gray-100 rounded-clg h-8 md:h-9 overflow-hidden group mt-1 min-w-[90px]  md:min-w-[115px] max-w-[180px]">
+    <template v-if="slotData.selectedProducts && slotData.selectedProducts[productId]">
+        <div class="detail-count-btn-wrapper group flex items-center justify-between rounded-clg overflow-hidden flex-shrink-0 h-8 md:h-9 shadow-navigation" :class="slotData.bulkEdit? 'bg-gray-200' : 'bg-primary text-white'">
+            <button class="add-to-cart-minize-icon flex items-center justify-center flex-shrink-0 h-full transition ease-in-out duration-300 min-w-[33%] focus:outline-none w-8 md:w-9 hover:text-white bg-transparent focus:outline-none" v-on:click="updateItem(product, 'reduce')">
+                <b-icon class="add-to-cart-icon w-5 h-5" icon="dash" ></b-icon>
+            </button>
+            
+            <input type="number" min="1" step="1" v-model="slotData.productQty" :class="slotData.bulkEdit?'group-hover:border-primary focus-visible:outline-primary focus:outline outline-1 outline-primary bg-gray-100' : 'focus:outline-none bg-transparent'" class="number-space font-semibold flex items-center text-center h-full transition duration-250 ease-in-out cursor-auto flex-shrink-0 text-xs md:text-sm  min-w-[35%] w-8 md:w-10" :readonly="!slotData.bulkEdit" v-on:keyup.enter="onBulkQtyUpdate" v-on:focusout="onFocusOutQty"/> 
+
+            <button class="add-to-cart-plus-icon flex items-center justify-center h-full flex-shrink-0 transition ease-in-out duration-300 min-w-[33%] focus:outline-none w-8 md:w-9 hover:text-white bg-transparent focus:outline-none" v-on:click="updateItem(product, 'add')">
+                <b-icon class="add-to-cart-icon w-5 h-5" icon="plus" ></b-icon>
+            </button>
+        </div>
+    </template>
+    <template v-else>
+        <!--  <div class="add-to-cart-button"> -->
+            <button v-on:click="updateItem(product, 'add')" class="add-to-cart-button w-full h-full flex items-center font-semibold uppercase ">
+                <template v-if="product.product_type == 'configurable'">
+                    <span class="button-label grow text-xs md:text-sm group-hover:text-white px-4">{{slotData.selectOptionsText}}</span>
+                </template>
+                <template v-else>
+                    <span class="button-label grow text-xs md:text-sm group-hover:text-white px-4">{{slotData.text}}</span>
+                    <span class="button-pre-icon inline-block h-full ml-auto w-9 text-lg flex items-center justify-center group-hover:text-white">
+                        <b-icon class="w-6 h-6 md:w-7 md:h-7" icon="plus"></b-icon>
+                    </span>
+                </template>
+            </button>
+       <!--  </div> -->
+    </template>
+</div>

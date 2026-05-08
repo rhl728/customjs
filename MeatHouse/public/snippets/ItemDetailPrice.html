@@ -1,0 +1,175 @@
+<div class="price-wrapper-inner">
+  <template v-if="data.unit_price">
+    <div class="price-details mb-8" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+
+      <template v-if="data.parent_id && data.attributes && !data.attributes.MSRP">
+        <template v-for="attr in data.attributes">
+          <template v-if="attr.code == 'MSRP' && attr.value && Number(attr.value) > Number(data.display_price)">
+            <span class="price text-primary text-base md:text-xl">
+              <div class="msrp-wrapper lg:text-lg  text-gray-400">
+                <span class="value line-through">{{slotData.settings.default_currency}}
+                  {{slotData.helpers.PriceFormat(attr.value)}}</span>
+              </div>
+            </span>
+          </template>
+        </template>
+      </template>
+
+      <div class=" flex  items-center ">
+
+        <template
+          v-if="slotData.helpers.InArray('offer_price', slotData.settings.menu_display_sections) || !slotData.menuDisplaySettings">
+          <template v-if="Number(data.unit_price) != Number(data.display_price)">
+            <span
+              class="discount-price text-primary font-bold text-base md:text-xl lg:text-2xl 2xl:text-4xl pr-2 md:pr-0 lg:pr-2 2xl:pr-0">
+              <!--  <span class="label">{{slotData.language.item.nowText}}:</span> -->
+              <template v-if="data.product_type == 'configurable' || data.type == 'configurable'">
+                <span class="as-low-as">{{slotData.language.item.asLowAsText}}</span>
+              </template>
+              <span class="currency">{{slotData.orderCurrency}}</span>
+              <span class="amount">{{slotData.helpers.PriceFormat(data.display_price)}}</span>
+            </span>
+          </template>
+        </template>
+        <template v-if="!data.attributes.MSRP || data.attributes.MSRP && Number(data.attributes.MSRP.value) > Number(data.display_price)">
+          <span 
+            class="price text-primary font-bold text-base md:text-xl lg:text-2xl 2xl:text-4xl pr-2 md:pr-0 lg:pr-2 2xl:pr-0"
+            :class="{'has-flash-offer': 
+                    data.available_now != 0 && 
+                    data.quantity > 0 && 
+                    Number(data.available_now_price) != Number(data.display_price),
+                    'has-discount': 
+                    Number(data.unit_price) != Number(data.display_price) 
+                    }">
+            <span :class="{'has-offer line-through text-gray-400 text-sm md:text-base lg:text-lg xl:text-xl pl-2 font-normal': 
+            Number(data.unit_price) != Number(data.display_price) && 
+                      slotData.helpers.InArray('offer_price', slotData.settings.menu_display_sections)
+                      }">
+              <template v-if="data.product_type == 'configurable' || data.type == 'configurable'">
+                <span class="as-low-as">{{slotData.language.item.asLowAsText}}</span>
+              </template>
+              <span class="currency">{{slotData.orderCurrency}}</span>
+              <span class="amount">
+                {{slotData.helpers.PriceFormat(data.unit_price)}}
+              </span>
+            </span>
+          </span>
+        </template>
+       
+        <template v-else-if="!data.attributes.MSRP.value">
+         
+          <span 
+          class="price text-primary font-bold text-base md:text-xl lg:text-2xl 2xl:text-4xl pr-2 md:pr-0 lg:pr-2 2xl:pr-0"
+          :class="{'has-flash-offer': 
+                  data.available_now != 0 && 
+                  data.quantity > 0 && 
+                  Number(data.available_now_price) != Number(data.display_price),
+                  'has-discount': 
+                  Number(data.unit_price) != Number(data.display_price) 
+                  }">
+          <span :class="{'has-offer line-through text-gray-400 text-sm md:text-base lg:text-lg xl:text-xl pl-2 font-normal': 
+          Number(data.unit_price) != Number(data.display_price) && 
+                    slotData.helpers.InArray('offer_price', slotData.settings.menu_display_sections)
+                    }">
+            <template v-if="data.product_type == 'configurable' || data.type == 'configurable'">
+              <span class="as-low-as">{{slotData.language.item.asLowAsText}}</span>
+            </template>
+            <span class="currency">{{slotData.orderCurrency}}</span>
+            <span class="amount">
+              {{slotData.helpers.PriceFormat(data.unit_price)}}
+            </span>
+          </span>
+        </span>
+        </template>
+
+
+        <template v-if="data.attributes.MSRP && data.attributes.MSRP.value">
+
+          <template v-if="Number(data.attributes.MSRP.value) > Number(data.display_price)">
+
+            <span
+              class="price text-primary text-base md:text-xl lg:text-2xl 2xl:text-4xl pr-2 md:pr-0 lg:pr-2 2xl:pr-0">
+
+              <div
+                class="msrp-wrapper has-offer line-through text-gray-400 text-sm md:text-base lg:text-lg xl:text-xl pl-2 font-normal">
+                <!--  <span class="label">{{data.attributes.MSRP.label}}:</span> -->
+                <span class="value">{{slotData.orderCurrency}}
+                  {{slotData.helpers.PriceFormat(data.attributes.MSRP.value)}}</span>
+              </div>
+
+
+            </span>
+
+          </template>
+        </template>
+
+
+      </div>
+
+      <template v-if="data.parent_id && data.attributes && !data.attributes.MSRP">
+        <template v-for="attr in data.attributes">
+          <template v-if="attr.code == 'MSRP' && attr.value && Number(attr.value) > Number(data.display_price)">
+            <div class="you-save-wrapper lg:text-base text-sm text-red-600">
+              <span>{{slotData.language.item.discountText}}:</span>
+              <span class="currency">{{slotData.settings.default_currency}}</span>
+              <span>{{slotData.helpers.PriceFormat(attr.value - data.display_price)}}</span>
+            </div>
+          </template>
+        </template>
+      </template>
+
+      <template v-if="data.attributes.MSRP && data.attributes.MSRP.value">
+        <template v-if="Number(data.attributes.MSRP.value) > Number(data.display_price)">
+          <template
+            v-if="slotData.helpers.InArray('msrp', slotData.settings.menu_display_sections) || !slotData.menuDisplaySettings">
+            <div class="you-save-wrapper text-sm text-red-600 text-sm md:text-base lg:text-lg  mt-2">
+              <span>{{slotData.language.item.discountText}}:</span>
+              <span class="currency">{{slotData.orderCurrency}}</span>
+              <span>{{slotData.helpers.PriceFormat(data.attributes.MSRP.value -
+                data.display_price)}}</span>
+            </div>
+          </template>
+          <template v-else>
+            <template
+              v-if="slotData.helpers.InArray('offer_price', slotData.settings.menu_display_sections) || !slotData.menuDisplaySettings">
+              <template v-if="Number(data.unit_price) != Number(data.display_price)">
+                <div class="you-save-wrapper text-sm text-red-600 text-sm md:text-base lg:text-lg  mt-2">
+                  <span>{{slotData.language.item.discountText}}:</span>
+                  <span class="currency">{{slotData.orderCurrency}}</span>
+                  <span>{{slotData.helpers.PriceFormat(data.unit_price -
+                    data.display_price)}}</span>
+                </div>
+              </template>
+            </template>
+          </template>
+        </template>
+        <template v-else>
+          <template
+            v-if="slotData.helpers.InArray('offer_price', slotData.settings.menu_display_sections) || !slotData.menuDisplaySettings">
+            <template v-if="Number(data.unit_price) != Number(data.display_price)">
+              <div class="you-save-wrapper text-sm text-red-600 text-sm md:text-base lg:text-lg  mt-2">
+                <span>{{slotData.language.item.discountText}}:</span>
+                <span class="currency">{{slotData.orderCurrency}}</span>
+                <span>{{slotData.helpers.PriceFormat(data.unit_price -
+                  data.display_price)}}</span>
+              </div>
+            </template>
+          </template>
+        </template>
+      </template>
+      <template v-else>
+        <template
+          v-if="slotData.helpers.InArray('offer_price', slotData.settings.menu_display_sections) || !slotData.menuDisplaySettings">
+          <template v-if="Number(data.unit_price) != Number(data.display_price)">
+            <div class="you-save-wrapper text-sm text-red-600 text-sm md:text-base lg:text-lg  mt-2">
+              <span>{{slotData.language.item.discountText}}:</span>
+              <span class="currency">{{slotData.orderCurrency}}</span>
+              <span>{{slotData.helpers.PriceFormat(data.unit_price -
+                data.display_price)}}</span>
+            </div>
+          </template>
+        </template>
+      </template>
+    </div>
+  </template>
+</div>

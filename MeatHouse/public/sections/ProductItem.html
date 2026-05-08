@@ -1,0 +1,309 @@
+<div class="relative flex flex-col h-full card" :data-id="data.id">
+  <!-- offer percentage -->
+  <template v-if="slotData.settings.menu_display_sections">
+    <template
+      v-if="slotData.helpers.InArray('offer_percentage', slotData.settings.menu_display_sections) && slotData.helpers.InArray('image', slotData.settings.menu_display_sections)"
+    >
+      <item-offer-percentage-snippet  :data="data" />
+    </template>
+  </template>
+  <template v-else>
+    <item-offer-percentage-snippet  :data="data" />
+  </template>
+
+  <!-- image -->
+  <template
+    v-if="slotData.helpers.InArray('image', slotData.settings.menu_display_sections)"
+  >
+    <template v-if="data.images.length && data.images.find(img=>img.type==='image')">
+      <template v-for="image in data.images">
+        <template v-if="(image.primary_image && image.primary_image == 1 && image.type==='image') || data.images.length == 1 ">
+          <a v-bind:href="'/'+data.seo_url " class="relative">
+
+            <img 
+            class="w-full h-40 bg-gray-100 object-center object-contain thumb md:h-52 lg:h-52 xl:h-60 "
+    
+            :src="`https://www.meathouse.lk${image.small.substring(image.small.indexOf('/productImages'))}`"
+            :alt="data.name"
+            :title="data.name" 
+            loading="lazy" decoding="async"
+            >
+            
+            <Favorite-icon-snippet 
+              :favorite="data.favorite"
+              :productId="data.id"
+              @updateFavorite="onUpdateFavorite"
+            />
+
+          </a>
+        </template>
+      </template>
+    </template>
+    <template v-else>
+      <a v-bind:href="'/'+data.seo_url " class="relative">
+   
+        <img 
+            class="w-full h-40 bg-gray-100 object-center object-contain  md:h-52 lg:h-52 xl:h-60 "
+            src="$$__client_media_url__$$/$$__client_media_path__$$/no-image.png" 
+            :alt="data.name"
+            :title="data.name" 
+            >
+
+          <Favorite-icon-snippet 
+            :favorite="data.favorite"
+            :productId="data.id"
+            @updateFavorite="onUpdateFavorite"
+          />
+
+      </a>
+    </template>
+  </template>
+
+  <div class="flex flex-col p-4 info grow">
+    <!-- name -->
+    <template v-if="slotData.settings.menu_display_sections">
+      <template
+        v-if="slotData.helpers.InArray('name', slotData.settings.menu_display_sections)"
+      >
+        <a
+          v-bind:href="'/'+data.seo_url "
+          class="name-product-link"
+          v-if="data.name"
+        >
+          <div class="head">
+            <h3
+              class="mt-0 mb-1 text-sm font-semibold text-center text-heading md:text-base line-clamp-3"
+            >
+              <span itemprop="name"> {{data.name}} </span>
+              <template v-if="data.featured">
+                <span class=" bg-primary p-1.5 rounded-md text-white text-sm " :class="[ slotData.helpers.InArray('image', slotData.settings.menu_display_sections) ? 'absolute top-2 left-2  flex' : 'inline-block align-middle']" >
+                <b-icon
+                  icon="star-fill"
+                  class="featured-icon"
+                  :title="slotData.language.detailView.featuredItemTitle"
+                ></b-icon>
+              </span>
+              </template>
+            </h3>
+          </div>
+        </a>
+      </template>
+    </template>
+    <template v-else>
+      <a v-bind:href="'/'+data.seo_url " class="name-product-link" v-if="data.name">
+        <div class="head">
+          <h3
+            class="mt-0 mb-1 text-sm font-semibold text-center text-heading md:text-base"
+          >
+            <span itemprop="name"> {{data.name}} </span>
+            <template v-if="data.featured">
+              <span class="p-2 text-sm text-white rounded-md bg-primary" :class="[ slotData.helpers.InArray('image', slotData.settings.menu_display_sections) ? 'absolute top-1 left-2 flex' : 'inline-block  align-middle']">
+                <b-icon
+                  icon="star-fill"
+                  class="featured-icon"
+                  :title="slotData.language.detailView.featuredItemTitle"
+                ></b-icon>
+              </span>
+            </template>
+          </h3>
+        </div>
+      </a>
+    </template>
+
+    <template v-if="data?.rate_summaries?.length > 0 && slotData.settings.enable_reviews === '1' && Number(data.rate_summaries[0].average) > 0" class="flex justify-center items-center">
+      <div class="flex justify-center items-center space-x-1 mb-2">
+        <star-rating
+          :star-size="18"
+          :rating="Number(data.rate_summaries[0].average)"
+          :increment="0.1"
+          :show-rating="false"
+          :padding="2"
+          active-color="#F07E19"
+          inactive-color="#D9D9D9"
+          :read-only="true"
+        />
+        <span class="text-xs text-[#5A5A5A] font-normal pt-1">({{data.review_count}})</span>
+      </div>
+    </template>
+
+
+    <!-- SKU Code -->
+    <template v-if="slotData.settings.menu_display_sections">
+      <template v-if="slotData.helpers.InArray('sku', slotData.settings.menu_display_sections)">
+        <div class="mb-1 text-sm font-semibold text-gray-400 truncate head text-heading text-center">
+          <span itemprop="code"> {{data.code}} </span>
+        </div>
+      </template>
+    </template>
+    <template v-else>
+      <div class="mb-1 text-sm font-semibold text-gray-400 truncate head text-heading text-center">
+        <span itemprop="code"> {{data.code}} </span>
+      </div>
+    </template>
+
+
+    <!-- short description -->
+    <template v-if="slotData.settings.menu_display_sections">
+      <template
+        v-if="slotData.helpers.InArray('short_description', slotData.settings.menu_display_sections)"
+      >
+        <div
+          v-if="data.short_description"
+          class="description text-body text-xs lg:text-sm leading-normal xl:leading-relaxed line-clamp-2 mb-1.5 text-center"
+        >
+          {{data.short_description.slice(0, 130)}}
+        </div>
+      </template>
+    </template>
+    <template v-else>
+      <div
+        v-if="data.short_description"
+        class="description text-body text-xs lg:text-sm leading-normal xl:leading-relaxed line-clamp-2 mb-1.5 text-center"
+      >
+        {{data.short_description.slice(0, 130)}}
+      </div>
+    </template>
+
+    <!-- description -->
+    <template v-if="slotData.settings.menu_display_sections">
+      <template
+        v-if="slotData.helpers.InArray('description', slotData.settings.menu_display_sections)"
+      >
+        <div
+          v-if="data.description"
+          class="description text-body text-xs lg:text-sm leading-normal xl:leading-relaxed line-clamp-2 mb-1.5 text-center"
+        >
+          {{slotData.helpers.HtmlToString(data.description).slice(0, 130)}}
+        </div>
+      </template>
+    </template>
+    <template v-else>
+      <div
+        v-if="data.description"
+        class="description text-body text-xs lg:text-sm leading-normal xl:leading-relaxed line-clamp-2 mb-1.5 text-center"
+      >
+        {{slotData.helpers.HtmlToString(data.description).slice(0, 130)}}
+      </div>
+    </template>
+    
+
+    <!-- attributes -->
+    <template v-if="slotData.settings.menu_display_sections">
+      <template
+        v-if="slotData.helpers.InArray('attribute', slotData.settings.menu_display_sections)"
+      >
+      <div class="text-center">
+      <item-attributes-snippet :data="data" :show_attribute_images="slotData.showAttributeImages" />
+      </div>
+      </template>
+    </template>
+
+    <!-- item price -->
+    <template v-if="slotData.settings.menu_display_sections">
+      <template
+        v-if="slotData.helpers.InArray('price', slotData.settings.menu_display_sections)"
+      >
+      <div class="text-center">
+        <item-quantity-availability-snippet  :data="data" />
+      </div>
+        <div class="text-center product-grid">
+        <item-price-snippet  :data="data" />
+      </div>
+      </template>
+    </template>
+    <template v-else>
+      <div class="text-center">
+      <item-quantity-availability-snippet  :data="data" />
+    </div>
+    <div class="text-center">
+      <item-price-snippet  :data="data" ></item-price-snippet>
+    </div>
+    </template>
+
+    <!-- Include MintPay pricing block -->
+    <template>
+      <div class="text-center"  v-if="slotData.settings.payment_methods && slotData.helpers.IsMintPayEnabled(slotData.settings.payment_methods)">
+        <mint-pay-price-block-snippet :data="data" pageView="list"/>
+      </div>
+    </template>
+
+      <!-- Include KokoPay pricing block -->
+      <template>
+        <div class="text-center" v-if="slotData.settings.payment_methods && slotData.helpers.IsKokoPayEnabled(slotData.settings.payment_methods)">
+          <koko-pay-price-block-snippet :data="data" pageView="list"/>
+        </div>
+      </template>
+
+
+    <template v-if="slotData.settings.menu_display_sections && !slotData.helpers.InArray('image', slotData.settings.menu_display_sections)">
+      <template
+        v-if="slotData.helpers.InArray('offer_percentage', slotData.settings.menu_display_sections)"
+      >
+      <div class="relative">
+        <item-offer-percentage-snippet  :data="data" :styles="'relative  md:py-2 mb-1 bg-slate-900 text-white rounded-md text-xs px-2 py-1'" />
+      </div>
+      </template>
+    </template>
+
+    <!-- flash offer -->
+    <template
+      v-if="slotData.settings.default_menu_type != 'without_available_now'"
+    >
+      <template v-if="slotData.settings.menu_display_sections">
+        <template
+          v-if="slotData.helpers.InArray('flash_offer', slotData.settings.menu_display_sections)"
+        >
+          <item-flash-offer-snippet  :data="data" />
+        </template>
+      </template>
+      <template v-else>
+        <item-flash-offer-snippet  :data="data" />
+      </template>
+    </template>
+
+    <!-- upcoming offer -->
+    <template v-if="slotData.settings.menu_display_sections">
+      <template
+        v-if="slotData.helpers.InArray('upcoming_offer', slotData.settings.menu_display_sections)"
+      >
+      <div class="text-center">
+        <item-upcoming-offer-snippet  :data="data" />
+      </div>
+      </template>
+    </template>
+    <template v-else>
+      <item-upcoming-offer-snippet  :data="data" />
+    </template>
+
+    <!-- item tags -->
+    <template v-if="data.tags">
+      <template
+        v-if="slotData.settings.menu_display_sections && slotData.helpers.InArray('tag', slotData.settings.menu_display_sections)"
+      >
+        <div class="flex justify-center mt-1 mb-2 tag-wrapper">
+          <template v-for="tag in data.tags">
+            <div class="mx-1 tag" :title="tag.name">
+              <template v-if="tag.icon">
+                <span
+                  class="tag-icon w-[16px] h-[16px] block bg-contain"
+                  :style="{'background-image': 'url(' + tag.icon + ')'}"
+                  :title="tag.name"
+                ></span>
+              </template>
+              <template v-else>
+                <b-icon class="w-5 h-5 text-gray-700" icon="tag-fill" :title="tag.name"></b-icon>
+              </template>
+            </div>
+          </template>
+        </div>
+      </template>
+    </template>
+    
+    <!-- add to cart button -->
+    <template v-if="slotData.disableCheckout != true">
+      <div class="flex justify-center mt-auto action-buttons">
+        <item-add-to-cart-snippet  :data="data" />
+      </div>
+    </template>
+  </div>
+</div>

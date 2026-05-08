@@ -1,0 +1,669 @@
+<div
+  class="product-view-wrapper mx-auto max-w-[1920px] px-4 md:px-8 2xl:px-16 mt-[90px] lg:min-h-screen relative"
+>
+  <template v-if="slotData.productLoaded">
+    <template v-if="!slotData.error">
+      <template v-if="slotData && slotData.breadcrumb">
+        <div class="breadcrumb pt-8">
+          <div
+            class="breadcrumb-inner flex items-center overflow-wrap-anywhere"
+          >
+            <ul
+              class="flex items-center w-full overflow-hidden text-gray-500 list-none my-0 flex-wrap"
+            >
+              <template v-for="(breadcrumb, index) in slotData.breadcrumb">
+                <template v-if="index == 0">
+                  <li
+                    class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0"
+                  >
+                    <a :href="breadcrumb.url" class="hover:text-heading"
+                      >{{slotData.language.detailView.breadcrumb.homeText}}</a
+                    >
+                  </li>
+                </template>
+                <template v-else>
+                  <li
+                    class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0"
+                  >
+                    <template v-if="index != slotData.breadcrumb.length - 1">
+                      <a :href="breadcrumb.url" class="hover:text-heading"
+                        >{{breadcrumb.label}}</a
+                      >
+                    </template>
+                    <template v-else
+                      ><span>{{breadcrumb.label}}</span></template
+                    >
+                  </li>
+                </template>
+
+                <template v-if="index != slotData.breadcrumb.length - 1">
+                  <li class="text-base mt-0.5">/</li>
+                </template>
+              </template>
+            </ul>
+          </div>
+        </div>
+      </template>
+
+      <div
+        class="product-wrapper block lg:grid grid-cols-9 gap-x-10 xl:gap-x-14 pt-7 pb-10 lg:pb-14 2xl:pb-20 items-start break-words"
+      >
+        <div class="image-wrapper col-span-4">
+          <!-- Check if a video is selected -->
+          <div v-if="slotData.selectedVideo" class="image-inner-wrapper w-full">
+            <!-- Display selected video in custom box -->
+            <div
+              v-if="slotData.videoLightboxVisible"
+              class="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-[20]"
+            >
+              <div class="relative w-full max-w-7xl">
+                <!-- Close button -->
+                <div class="flex justify-end">
+                  <button
+                    @click="handleVideoLightboxHide"
+                    class="text-white bg-primary p-2 rounded-full mr-2 sm:mr-5"
+                  >
+                    <svg
+                      class="w-3 h-3 sm:w-6 sm:h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="w-full grid grid-cols-[50px_1fr_50px] sm:grid-cols-[100px_1fr_100px] items-center justify-items-center">
+                  <!-- Previous button -->
+                  <button
+                    @click="showPrevVideo"
+                    :disabled="slotData.selectedVideoIndex == 0"
+                    :class="['transform -translate-y-1/2 text-white bg-primary p-2 rounded-full', slotData.selectedVideoIndex == 0 ? 'opacity-0 cursor-auto': '']"
+                  >
+                    <svg
+                      class="w-3 h-3 sm:w-6 sm:h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 19l-7-7 7-7"
+                      ></path>
+                    </svg>
+                  </button>
+
+                  <div
+                    v-if="slotData.selectedVideo.isvValid"
+                    class="w-full h-auto max-h-[90vh]"
+                  >
+                    <video
+                      :src="slotData.selectedVideo.video_path"
+                      ref="customVideo"
+                      autoplay
+                      controls
+                      muted
+                      controlsList="nodownload nofullscreen noremoteplayback novolume"
+                      class="w-full h-auto object-contain object-center max-h-[90vh]"
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+
+                  <div v-else class="min-h-[100px] sm:min-h-[300px] md:[500px] flex items-center">
+                    <span
+                      class=" text-white text-sm sm:text-base "
+                    >
+                      {{slotData.language.video_Details.videoErr}}
+                    </span>
+                  </div>
+
+                  <!-- Next button -->
+                  <button
+                    v-if="slotData.selectedVideoIndex < slotData.videoList.length - 1"
+                    @click="showNextVideo"
+                    class="transform -translate-y-1/2 text-white bg-primary p-2 rounded-full"
+                  >
+                    <!-- Next SVG icon -->
+                    <svg
+                      class="w-3 h-3 sm:w-6 sm:h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="image-inner-wrapper w-full" v-if="slotData.hasImages">
+            <div
+              :class="{'single-image': Object.keys(slotData.images.thumbs).length == 1}"
+            >
+              <ProductZoomer
+                :base-images="slotData.images"
+                :base-zoomer-options="slotData.zoomerOptions"
+                :key="slotData.zoomerKey"
+                :alt="slotData.item.name"
+              />
+            </div>
+          </div>
+          <div
+            v-else
+            class="image-inner-wrapper w-full bg-gray-100 flex justify-center items-center h-60 md:h-80 xl:h-96"
+          >
+            <!-- <div class="thumb bg-contain bg-center bg-no-repeat w-[200px] h-[200px]"
+                        v-bind:style="{'background-image': 'url($$__client_media_url__$$/$$__client_media_path__$$/no-image.png)'}"></div> -->
+
+            <img
+              src="$$__client_media_url__$$/$$__client_media_path__$$/no-image.png"
+              :alt="slotData.item.name"
+              class="thumb object-contain object-center w-[200px] h-[200px]"
+              loading="lazy" decoding="async"
+            />
+          </div>
+          <div v-if="slotData.hasVideos" class="mt-5 mb-3">
+            <span
+              class="text-primary inline align-middle font-semibold text-heading text-lg-900"
+            >
+              {{slotData.language.video_Details.videoTitle}}
+            </span>
+          </div>
+          <div
+            v-if="slotData.videoList && slotData.videoList.length > 0"
+            class="product-videos w-full h-auto flex flex-wrap content-center gap-2 mt-2"
+          >
+            <div
+              v-for="(video, index) in slotData.videoList"
+              :key="index"
+              :class="['video-container relative min-w-[54px] w-[54px] sm:w-[69px] md:w-[80px] min-h-[30px] h-[40px] sm:h-[50px] md:h-[64px] ',slotData.selectedVideoIndex==index?'border-2 border-primary transform scale-110':'']"
+            >
+              <a
+                @click.prevent="selectVideo(video, index)"
+                class="h-full w-full block cursor-pointer relative"
+              >
+                <img
+                  :src="video.thumb_path"
+                  :alt="video.name"
+                  class="w-full h-full object-cover object-center"
+                />
+
+                <!-- Play button SVG -->
+                <svg
+                  class="play-button absolute inset-0 w-4 h-4 md:w-8 md:h-8 m-auto text-white"
+                  width="100"
+                  height="100"
+                  viewBox="0 0 100 100"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                >
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="48"
+                    stroke="white"
+                    stroke-width="2"
+                    fill="none"
+                  />
+                  <polygon points="40,30 70,50 40,70" fill="white" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="product-details col-span-5 pt-8 lg:pt-0 relative"
+          :data-class="{'col-md-12 col-sm-12 full-detail-wrapper': !slotData.hasImages}"
+        >
+          <div class="main-title-wrapper" :class="slotData.productReviews && slotData.settings.enable_reviews === '1' ? 'mb-1' : 'mb-3.5'">
+            <h1
+              class="title text-primary inline align-middle text-lg md:text-xl lg:text-2xl 2xl:text-3xl font-bold"
+            >
+              {{slotData.item.name}}
+            </h1>
+
+            <span
+              v-if="slotData.item.featured"
+              class="align-middle inline-block bg-primary p-1.5 rounded-md text-white text-sm ml-2"
+            >
+              <b-icon
+                icon="star-fill"
+                class="featured-icon"
+                :title="slotData.language.detailView.featuredItemTitle"
+              ></b-icon>
+            </span>
+          </div>
+
+          <div v-if="slotData.productReviews && slotData.settings.enable_reviews === '1' && Number(slotData.average_rate) > 0" class="flex flex-row space-x-1 items-center mb-6">
+            <star-rating
+              :star-size="28"
+              :rating="Number(slotData.average_rate)"
+              :increment="0.1"
+              :show-rating="false"
+              :padding="2"
+              active-color="#F07E19"
+              inactive-color="#D9D9D9"
+              :read-only="true"
+            />
+            <span class="text-[#5A5A5A] text-sm font-normal">({{slotData.productReviews?.length}} {{slotData.language.review.reviews}})</span>
+          </div>
+
+          <div class="product-details-wrapper row">
+            <!-- flash offer -->
+            <template
+              v-if="slotData.settings.default_menu_type != 'without_available_now'"
+            >
+              <item-flash-offer-snippet :data="slotData.item" />
+            </template>
+
+            <!-- product short description -->
+            <template v-if="slotData.item.short_description != null">
+              <div
+                class="item-description text-gray-500 text-sm lg:text-base leading-6 lg:leading-8 pb-6 whitespace-pre-wrap"
+                v-html="slotData.item.short_description"
+              ></div>
+            </template>
+
+            <!-- SKU Code -->
+            <template v-if="slotData.item.code != null">
+              <div class="pb-2">
+                <span
+                  class="label capitalize font-semibold text-heading inline-block pr-2 text-slate-900 md:min-w-[50px] break-all"
+                  >SKU:</span
+                >
+                <span class="break-all"> {{slotData.item.code}} </span>
+              </div>
+            </template>
+
+            <div
+              v-if="isObjLength(slotData.item.attributes) > 0"
+              class="item-attributes text-gray-500"
+            >
+              <item-attributes-snippet
+                :data="slotData.item"
+                :detailMode="true"
+                :show_attribute_images="slotData.showAttributeImages"
+                :show_super_attributes="slotData.showSuperAttributes"
+              />
+            </div>
+            <div
+              v-if="slotData.item.tags.length"
+              class="item-tags text-gray-500 py-6"
+            >
+              <template v-for="tag in slotData.item.tags">
+                <product-tag-snippet :tag="tag" />
+              </template>
+            </div>
+          </div>
+
+          <template v-if="selectedVariantIds.length > 0">
+            <div
+              class="selected-attr row"
+              v-for="attr in slotData.item.super_attributes"
+            >
+              <div
+                class="col-md-12"
+                v-if="selectedVariantIds[attr.attribute_id]"
+              >
+                {{attr.label}} :
+                <template v-for="value in attr.values">
+                  <div
+                    v-if="selectedVariantIds[attr.attribute_id] == value.id"
+                    :class="{'active': selectedVariantIds[attr.attribute_id] == value.id}"
+                  >
+                    {{value.label}}
+                  </div>
+                </template>
+              </div>
+            </div>
+          </template>
+
+          <div
+            class="product-variant-wrapper py-3"
+            v-if="slotData.item.super_attributes"
+          >
+            <!--  <div class="prod-variant-title mb-2.5 text-base md:text-lg text-heading font-semibold ">
+                            {{slotData.language.itemDetailPopup.selectOptions}}
+                        </div> -->
+            <div class="super-attributes">
+              <div
+                class="super-attribute row"
+                v-for="attr in slotData.item.super_attributes"
+              >
+                <div class="col-md-12">
+                  <div
+                    class="attr-name text-base md:text-lg text-heading font-semibold mb-2.5 capitalize"
+                  >
+                    {{attr.label}}
+                  </div>
+                  <div
+                    class="attr-values flex flex-wrap -mr-3"
+                    :class="{'opacity-50 pointer-events-none' : loading}"
+                  >
+                    <template v-for="(value, index) in attr.values">
+                      <div
+                        :class="{'border-primary': selectedVariantIds[attr.attribute_id] == value.id, 'border-black': slotData.currentVariant == value.id, 'pointer-events-none': slotData.disableAttributes.includes(attr.code + '_' + value.label), 'md:mr-2': slotData.showVariantImages && value.image, 'hidden ease-in-out duration-300': index >= slotData.maxVariantCount && !slotData.moreVariants.includes(attr.attribute_id)}"
+                        class="attr-value cursor-pointer rounded border border-gray-100 min-w-11 h-9 md:h-11 mb-2 md:mb-3 mr-2 md:mr-3 flex justify-center items-center text-heading text-xs md:text-sm uppercase font-semibold transition duration-200 ease-in-out hover:border-primary"
+                      >
+                        <button
+                          class="btn btn-light block md:px-3 p-1 w-full h-full"
+                          :class="{'active': selectedVariantIds[attr.attribute_id] == value.id, 'text-gray-400': slotData.disableAttributes.includes(attr.code + '_' + value.label), 'p-[4px] md:px-[4px]': slotData.showVariantImages && value.image, 'min-w-[40px]': !(slotData.showVariantImages && value.image)}"
+                          @click="getVariant(value, slotData.item.super_attributes)"
+                        >
+                          <template
+                            v-if="slotData.showVariantImages && value.image"
+                          >
+                            <!-- <span :class="'w-[32px] h-[32px] rounded block'" :title="value.label" :style="{'background-image': 'url(' + value.image + ')', 'background-size': 'contain'}">
+                                                        </span> -->
+
+                            <img
+                              class="w-[32px] h-[32px] rounded block object-contain object-center"
+                              :src="value.image"
+                              :alt="value.label"
+                              :title="value.label"
+                              loading="lazy" decoding="async"
+                            />
+                          </template>
+                          <template v-else> {{value.label}} </template>
+                        </button>
+                      </div>
+                    </template>
+
+                    <template
+                      v-if="attr.values.length >= slotData.maxVariantCount"
+                    >
+                      <span
+                        v-if="!slotData.moreVariants.includes(attr.attribute_id)"
+                        class="show-more font-semibold cursor-pointer flex items-center text-sm ml-2 h-10"
+                        v-on:click="showMoreVariants(attr.attribute_id)"
+                      >
+                        {{slotData.language.detailView.variant.viewMoreText}}
+                        <b-icon
+                          class="ml-1 text-black"
+                          icon="chevron-down"
+                        ></b-icon>
+                      </span>
+                      <span
+                        v-else
+                        class="show-more font-semibold cursor-pointer flex items-center text-sm ml-2 h-10"
+                        v-on:click="showMoreVariants(attr.attribute_id)"
+                      >
+                        {{slotData.language.detailView.variant.viewLessText}}
+                        <b-icon
+                          class="ml-1 text-black"
+                          icon="chevron-up"
+                        ></b-icon>
+                      </span>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <item-quantity-availability-snippet
+            :data="slotData.item"
+            :detailMode="true"
+          />
+
+          <template v-if="slotData.productLoaded">
+            <!-- offer percentage -->
+            <item-offer-percentage-snippet
+              :data="slotData.item"
+              :styles="'relative  mb-1 text-3xl text-primary'"
+            />
+
+            <template v-if="slotData.item.pricemodule == true">
+              <quantity-base-price-module-section
+                :productData="slotData"
+                :detailMode="true"
+              />
+            </template>
+            <template v-else>
+              <!-- price details -->
+              <item-price-snippet :data="slotData.item" :detailMode="true" />
+            </template>
+            <!-- Include MintPay pricing block -->
+            <template>
+              <div
+                v-if="slotData.settings.payment_methods && slotData.helpers.IsMintPayEnabled(slotData.settings.payment_methods)"
+              >
+                <mint-pay-price-block-snippet :data="slotData.item" />
+              </div>
+            </template>
+
+            <!-- Include KokoPay pricing block -->
+            <template>
+              <div
+                v-if="slotData.settings.payment_methods && slotData.helpers.IsKokoPayEnabled(slotData.settings.payment_methods)"
+              >
+                <koko-pay-price-block-snippet :data="slotData.item" />
+              </div>
+            </template>
+          </template>
+
+          <template v-if="slotData.productLoaded">
+            <template v-if="slotData.item.pricemodule == false">
+              <!-- upcoming offer -->
+              <item-upcoming-offer-snippet :data="slotData.item" />
+            </template>
+            <!-- add to cart button -->
+            <template
+              v-if="!slotData.error && slotData.disableCheckout != true"
+            >
+              <item-add-to-cart-snippet
+                :data="slotData.item"
+                :detailMode="true"
+                :loading="loading"
+                :disabled="slotData.item.type == 'configurable' ? true : false"
+              />
+            </template>
+
+            <p v-if="slotData.error" class="error my-2 text-sm text-red-500">
+              {{slotData.error}}
+            </p>
+          </template>
+        </div>
+      </div>
+
+      <!-- product description -->
+      <div
+        class="description-wrapper row"
+        v-if="slotData.item.description != null"
+      >
+        <div
+          class="description-title font-semibold text-heading text-lg-900 mb-5"
+        >
+          {{ slotData.language.detailView.descriptionTitle }}
+        </div>
+        <div
+          class="item-description text-gray-500 text-sm lg:text-base leading-6 lg:leading-8 pb-6"
+          v-html="slotData.item.description"
+        ></div>
+      </div>
+
+      <div
+        class="related-products-wrapper row"
+        v-if="slotData.item.related_product && slotData.item.related_product.length > 0"
+      >
+        <related-products-section
+          :disableCheckout="slotData.disableCheckout"
+          :data="slotData.item.related_product"
+        />
+      </div>
+      
+      <div v-if="slotData.productReviews && slotData.settings.enable_reviews === '1'" class="flex flex-col space-y-10">
+        <div class="flex flex-row space-x-4 items-center">
+          <span class="text-2xl font-bold text-black">{{slotData.productReviews?.length}} {{slotData.language.review.customerReview}}</span>
+          <span class="bg-[#212121] h-6 w-[1px]"></span>
+          <div class="flex flex-row space-x-2">
+            <span>
+              <span class="text-2xl font-bold text-black">{{ slotData.average_rate }}</span>
+              <span class="text-base font-normal text-[#5A5A5A]"> /5</span>
+            </span>
+            <star-rating
+              :star-size="28"
+              :rating="Number(slotData.average_rate)"
+              :increment="0.1"
+              :show-rating="false"
+              :padding="2"
+              active-color="#F07E19"
+              inactive-color="#D9D9D9"
+              :read-only="true"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col space-y-6">
+          <product-review-block
+              v-for="(review, index) in slotData.productReviews"
+              :key="review.id || index"
+              :review="review"
+          />
+          <div v-if="slotData.totalItems > slotData.limit" class="flex justify-end mt-2">
+            <div class="flex flex-row space-x-3 items-center">
+                <paginate
+                v-model="slotData.currentPage"
+                :page-count="slotData.totalPages"
+                :page-range="3"
+                :margin-pages="1"
+                :click-handler="onPageChange"
+                :prev-text="'<'"
+                :next-text="'>'"
+                :container-class="'pagination'"
+                :page-class="'page-item'"
+                :page-link-class="'page-link'"
+                :prev-link-class="'page-link'"
+                :next-link-class="'page-link'"
+                :break-view-class="'break-view'"
+                :break-view-text="'...'"
+                :active-class="'active-page'"
+                ></paginate>
+                <span class="text-[#5A5A5A] text-xs font-semibold">Showing {{slotData.currentItemCount}} results of {{slotData.totalItems}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <div>
+        <page-not-found-layout :client_id="slotData.client_id" />
+      </div>
+    </template>
+  </template>
+
+  <template v-else>
+    <progress-bar-snippet />
+
+    <div class="breadcrumb pt-8">
+      <div class="breadcrumb-inner flex items-center">
+        <ul
+          class="flex items-center w-full overflow-hidden text-gray-500 list-none my-0"
+        >
+          <li
+            class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 hover:text-heading"
+          >
+            <a href="/">{{slotData.language.detailView.breadcrumb.homeText}}</a>
+          </li>
+          <li class="text-base mt-0.5">/</li>
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="product-wrapper block lg:grid grid-cols-9 gap-x-10 xl:gap-x-14 pt-7 pb-10 lg:pb-14 2xl:pb-20 items-start"
+    >
+      <div class="image-wrapper col-span-4">
+        <div class="image-inner-wrapper w-full">
+          <div
+            class="single-image bg-gray-200 min-h-[450px] loading-animation"
+          ></div>
+        </div>
+      </div>
+
+      <div class="product-details col-span-5 pt-8 lg:pt-0 relative">
+        <div class="main-title-wrapper mb-3.5 min-h-full">
+          <h1
+            class="title w-full rounded-lg bg-gray-300 min-h-[25px] loading-animation"
+          ></h1>
+          <p
+            class="title inline-block rounded-lg w-[50%] mt-2 bg-gray-300 min-h-[25px] loading-animation"
+          ></p>
+
+          <span
+            class="inline-block bg-gray-100 p-1.5 rounded-md text-white text-sm ml-2"
+          >
+            <b-icon icon="star-fill" class="featured-icon"></b-icon>
+          </span>
+        </div>
+
+        <div class="product-details-wrapper row">
+          <div
+            class="item-description w-[10%] bg-gray-100 rounded-md leading-6 lg:leading-8 pb-6"
+          ></div>
+          <div
+            class="item-description w-[30%] bg-gray-100 mt-2 rounded-md leading-6 lg:leading-8 pb-6"
+          ></div>
+          <div
+            class="item-description w-[40%] bg-gray-100 rounded-md mt-2 leading-6 lg:leading-8 pb-6"
+          ></div>
+          <div
+            class="item-description w-[30%] bg-gray-100 mt-2 rounded-md leading-6 lg:leading-8 pb-6"
+          ></div>
+          <div
+            class="item-description w-[25%] bg-gray-100 mt-2 rounded-md leading-6 lg:leading-8 pb-6"
+          ></div>
+        </div>
+
+        <div class="variant-wrapper mt-7">
+          <span
+            class="inline-block bg-gray-200 w-[50px] h-[50px] mr-1 loading-animation"
+          ></span>
+          <span class="inline-block bg-gray-100 w-[50px] h-[50px] mr-1"></span>
+          <span
+            class="inline-block bg-gray-200 w-[50px] h-[50px] loading-animation"
+          ></span>
+        </div>
+
+        <div
+          class="w-[120px] bg-gray-300 h-[40px] mt-7 leading-6 lg:leading-8 pb-6"
+        ></div>
+
+        <div class="add-to-cart-wrapper mt-7">
+          <span
+            class="inline-block bg-gray-200 w-[150px] h-[40px] mr-1 loading-animation"
+          ></span>
+          <span
+            class="inline-block rounded-lg bg-gray-300 w-[200px] h-[40px]"
+          ></span>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- <div v-if="loading" class="flex items-center justify-center space-x-2 fixed w-full h-full top-0 left-0 bg-white opacity-80">
+       <svg role="status" class="inline w-16 h-16 text-gray-600 animate-spin  fill-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+        </svg>
+    </div> -->
+</div>

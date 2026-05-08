@@ -1,0 +1,1092 @@
+<div class="bg-gray-50" v-if="slotData.settingLoaded">
+    <header-block-section />
+    <div class="relative flex flex-wrap  lg:flex-nowrap mt-[90px]  bg-white">
+        <div class="main-loader absolute top-0 left-0 w-full" v-if="mainLoader">
+            <progress-bar-snippet />
+        </div>
+        <div class="cat-list-wrp w-full lg:w-[320px] h-full lg:fixed lg:top-[90px] lg:left-0 lg:overflow-auto">
+            <!-- <h2 class="category-list-title font-semibold truncate mt-6 m-4 text-sm sm:text-base md:text-sm lg:text-base xl:text-lg">{{slotData.language.heading}}</h2> -->
+            <template v-if="slotData.settingLoaded">
+                <span class="hidden lg:block">
+                    <category-base-list-template :items_to_show="20" v-bind:category_id="category_id"
+                        v-bind:category_name="slotData.data?.name" />
+                </span>
+            </template>
+
+            <!--<attribute-filter :tag_title=slotData.language.TagFilter :category_id=category_id :select_filter=[]-->
+            <!--    :url_path=slotData.data?.url_key />-->
+            
+            
+             <attribute-filter 
+      v-if="category_id !== '5a2aa17da49d1757e467290fcef68bfd' &&
+            category_id !== '9089973051a0dbb62fe2138d044044f1' &&
+            category_id !== '7069ecaa79338cb5cea11ec0393eebeb' &&
+            category_id !== '723ba2dae415204c367436ccdca7331b' &&
+            category_id !== 'fb8953f66328bdf0946028fab96d4d32'"
+      :tag_title="slotData.language.TagFilter" 
+      :category_id="category_id" 
+      :select_filter="[]" 
+      :url_path="slotData.data?.url_key" 
+    />
+            
+            
+        </div>
+        <trail-popup-snippet :is_active="slotData.isActive"></trail-popup-snippet>
+        <div class="w-full bg-gray-50  lg:ml-[320px] lg:w-[calc(100%-320px)]">
+            <template v-if="slotData.banners && slotData.banners.length">
+                <div class="w-full relative overflow-hidden">
+                    <template v-if="slotData.banners.length > 1">
+                        <div class="bg-white absolute max-w-[100%]">
+                            <banner-block-custom-block :slides="slotData.banners" :slide_show="true"
+                                :rounded_corners="false" columns="1" title="" description="" :show_button="false"
+                                :slide_link="true" :slide_dots="true" :center_mode="false"
+                                banner_height="sm:min-h-[160px] md:h-[320px]  xl:h-[384px]" slide_show_speed="3000" />
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="bg-cover bg-no-repeat bg-center h-[100%]"
+                            v-bind:style="{ backgroundImage: 'url(' + slotData.banners[0].url + ')' }">
+                            <img class="w-full h-auto hidden" :src="slotData.banners[0].url" width="20" height="20"
+                                :alt="slotData.data?.name" />
+                        </div>
+                    </template>
+                    <div
+                        class="inner-content text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                        <div class="banner-title text-white text-lg md:text-xl lg:text-3xl 2xl:text-4xl xl:leading-10 font-bold"
+                            v-if="slotData.data?.name">
+                            {{slotData.data.name}}
+                        </div>
+                    </div>
+                    <span class="absolute w-full h-full top-0 left-0 opacity-30 bg-black z-0"></span>
+                </div>
+            </template>
+
+            <!--  <template v-else>
+            <div v-if="slotData.image" class="w-full h-40 md:h-60 lg:h-80 xl:h-96 bg-cover bg-no-repeat bg-center relative" v-bind:style="{ backgroundImage: 'url(' + slotData.image + ')' }">
+                <img class="w-full h-auto hidden" :src="slotData.image" width="20" height="20" :alt="category.name"  />
+                <div class="inner-content text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                    <div class="banner-title text-white text-lg md:text-xl lg:text-3xl 2xl:text-4xl xl:leading-10 font-bold" v-if="category.name">
+                        {{slotData.data.name}}
+                    </div>
+                </div>
+                <span class="absolute w-full h-full top-0 left-0 opacity-30 bg-primary z-0"></span>
+            </div>
+        </template> -->
+
+            <div class="category-product-wrapper p-4 md:p-8">
+
+                <template v-if="slotData.data && slotData.data.breadcrumb">
+                    <div class="breadcrumb mb-3 md:mb-6">
+                        <div class="breadcrumb-inner flex items-center overflow-wrap-anywhere">
+                            <ul
+                                class="flex items-center w-full overflow-hidden text-gray-500 list-none my-0 flex flex-wrap">
+                                <template v-for="(breadcrumb, index) in slotData.data.breadcrumb">
+                                    <template v-if="index == 0">
+                                        <li class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0">
+                                            <a :href="breadcrumb.url"
+                                                class="hover:text-heading">{{slotData.language.category.breadcrumb.homeText}}</a>
+                                        </li>
+                                    </template>
+                                    <template v-else>
+                                        <li
+                                            class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 ">
+                                            <template v-if="index != slotData.data.breadcrumb.length - 1">
+                                                <a :href="breadcrumb.url"
+                                                    class="hover:text-heading">{{breadcrumb.label}}</a>
+                                            </template>
+                                            <template v-else><span>{{breadcrumb.label}}</span></template>
+                                        </li>
+                                    </template>
+
+                                    <template v-if="index != slotData.data.breadcrumb.length - 1">
+                                        <li class="text-base mt-0.5">/</li>
+                                    </template>
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+                </template>
+
+                <template v-if="slotData.settingLoaded && slotData.dataLoaded">
+
+                    <!--sausages       -->
+
+                    <template v-if="category_id === '5a2aa17da49d1757e467290fcef68bfd'">
+
+
+                        <!--<h3>Keells Krest</h3>-->
+                        <div>
+
+                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Keells Krest"
+                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"
+                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"
+                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"
+                                :categories="['af04062fd60db8e0afcdb2acafe6edec']" :slider_responsive='[ 
+              {
+                  "breakpoint": 1024,
+                  "settings": {
+                      "centerPadding":"60px"
+                  }
+              },
+              {
+                  "breakpoint": 480,
+                  "settings": {
+                      "centerPadding":"30px"
+                  }
+              }
+          ]' />
+
+                            <!--<button class="view-more-button" type="button">-->
+                            <!--<div id="load-more-btn" class="view-more-button">-->
+                            <!--   <svg version="1.1" id="icons_1_" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128; height: 16px; width: 16px;" xml:space="preserve">-->
+                            <!--      <style>.st0{display:none}.st1{display:inline}.st2{fill:#930000}</style>-->
+                            <!--       <g id="row1_1_">-->
+                            <!--      <g id="_x31__3_">-->
+                            <!--         <path class="st2" d="M64 0C28.7 0 0 28.7 0 64s28.7 64 64 64 64-28.7 64-64S99.3 0 64 0zm0 121.6C32.2 121.6 6.4 95.8 6.4 64S32.2 6.4 64 6.4s57.6 25.8 57.6 57.6-25.8 57.6-57.6 57.6zM49.2 38.4 73.6 64 49.2 89.6h13.5L86.4 64 62.7 38.4H49.2z" id="_x32__2_"/>-->
+                            <!--                    </g>-->
+                            <!--                          </g>-->
+                            <!--                     </svg>-->
+
+                                
+                            <!--     <a href="/chicken-sausages">View More</a>-->
+                            <!--</div>-->
+                               
+                            <!--</button>-->
+
+ <a id="load-more-btn" class="view-more-button" href="/sausages/keells-krest">View More</a>
+
+
+
+                        </div>
+
+
+
+
+                        <!--Elephant House-->
+
+    <div>
+
+                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Elephant House"
+                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"
+                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"
+                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"
+                                :categories="['513ac4770568ecac79899b520f47a8dd']" :slider_responsive='[ 
+              {
+                  "breakpoint": 1024,
+                  "settings": {
+                      "centerPadding":"60px"
+                  }
+              },
+              {
+                  "breakpoint": 480,
+                  "settings": {
+                      "centerPadding":"30px"
+                  }
+              }
+          ]' />
+
+                            <!--<button class="view-more-button" type="button">-->
+                                <a id="load-more-btn" class="view-more-button" href="/sausages/elephant-house">View More</a>
+                            <!--</button>-->
+
+                        </div>
+
+
+                        <!--Beef Saugages-->
+
+
+
+    <!--<div>-->
+
+    <!--                        <products-block-custom-block :limit="10" :start="0" :featured="false" title="Beef Sausages"-->
+    <!--                            show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+    <!--                            columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+    <!--                            :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+    <!--                            :categories="['99af14494e665d7482aa1276757299a3']" :slider_responsive='[ -->
+    <!--          {-->
+    <!--              "breakpoint": 1024,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"60px"-->
+    <!--              }-->
+    <!--          },-->
+    <!--          {-->
+    <!--              "breakpoint": 480,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"30px"-->
+    <!--              }-->
+    <!--          }-->
+    <!--      ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+    <!--                            <a id="load-more-btn" class="view-more-button" href="/sausages/beef-sausages">View More</a>-->
+                            <!--</button>-->
+
+    <!--                    </div>-->
+
+
+
+
+
+
+
+                    </template>
+
+
+
+<!--Meatballs-->
+
+     <template v-else-if="category_id === '9089973051a0dbb62fe2138d044044f1'">
+
+
+                        <!--Keells Krest-->
+                        <div>
+
+                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Keells Krest"
+                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"
+                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"
+                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"
+                                :categories="['239b1626a136c68df223d620a46c10a7']" :slider_responsive='[ 
+              {
+                  "breakpoint": 1024,
+                  "settings": {
+                      "centerPadding":"60px"
+                  }
+              },
+              {
+                  "breakpoint": 480,
+                  "settings": {
+                      "centerPadding":"30px"
+                  }
+              }
+          ]' />
+
+                            <!--<button class="view-more-button" type="button">-->
+                                <a id="load-more-btn" class="view-more-button" href="/meatballs/keells-krest">View More</a>
+                            <!--</button>-->
+
+                        </div>
+
+
+
+
+                        <!--Elephant House-->
+
+    <div>
+
+                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Elephant House"
+                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"
+                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"
+                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"
+                                :categories="['f5202028eeaae46db4dba4144f1b1000']" :slider_responsive='[ 
+              {
+                  "breakpoint": 1024,
+                  "settings": {
+                      "centerPadding":"60px"
+                  }
+              },
+              {
+                  "breakpoint": 480,
+                  "settings": {
+                      "centerPadding":"30px"
+                  }
+              }
+          ]' />
+
+                            <!--<button class="view-more-button" type="button">-->
+                                <a id="load-more-btn" class="view-more-button" href="/meatballs/elephant-house">View More</a>
+                            <!--</button>-->
+
+                        </div>
+
+
+                        <!--Slices-->
+
+
+
+    <!--<div>-->
+
+    <!--                        <products-block-custom-block :limit="10" :start="0" :featured="false" title="Slices"-->
+    <!--                            show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+    <!--                            columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+    <!--                            :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+    <!--                            :categories="['259a7c437c2f46f994d4dd8aeb8c6eb7']" :slider_responsive='[ -->
+    <!--          {-->
+    <!--              "breakpoint": 1024,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"60px"-->
+    <!--              }-->
+    <!--          },-->
+    <!--          {-->
+    <!--              "breakpoint": 480,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"30px"-->
+    <!--              }-->
+    <!--          }-->
+    <!--      ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+    <!--                            <a id="load-more-btn" class="view-more-button" href="/cold-meats/slices">View More</a>-->
+                            <!--</button>-->
+
+    <!--                    </div>-->
+
+
+
+
+
+
+
+                    </template>
+                    
+                    
+                    
+              <!--Crumbed Savouries-->
+                <template v-else-if="category_id === '7069ecaa79338cb5cea11ec0393eebeb'">
+
+
+                        <!--Formed Meat-->
+                        <div>
+
+                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Formed Meat"
+                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"
+                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"
+                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"
+                                :categories="['b32ebfc1d0186340d09cddc9fd85258f']" :slider_responsive='[ 
+              {
+                  "breakpoint": 1024,
+                  "settings": {
+                      "centerPadding":"60px"
+                  }
+              },
+              {
+                  "breakpoint": 480,
+                  "settings": {
+                      "centerPadding":"30px"
+                  }
+              }
+          ]' />
+
+                            <!--<button class="view-more-button" type="button">-->
+                                <a id="load-more-btn" class="view-more-button" href="/crumbed-savouries/formed-meat">View More</a>
+                            <!--</button>-->
+
+                        </div>
+
+
+
+
+                        <!--Chinese Rolls-->
+
+    <div>
+
+                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Chinese Rolls"
+                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"
+                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"
+                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"
+                                :categories="['f92b149c3ce14e90bcd7f699471b7c7a']" :slider_responsive='[ 
+              {
+                  "breakpoint": 1024,
+                  "settings": {
+                      "centerPadding":"60px"
+                  }
+              },
+              {
+                  "breakpoint": 480,
+                  "settings": {
+                      "centerPadding":"30px"
+                  }
+              }
+          ]' />
+
+                            <!--<button class="view-more-button" type="button">-->
+                                <a id="load-more-btn" class="view-more-button" href="/crumbed-savouries/chinese-rolls">View More</a>
+                            <!--</button>-->
+
+                        </div>
+
+
+                        <!--Beef / Mutton / Lambs-->
+
+
+
+    <!--<div>-->
+
+    <!--                        <products-block-custom-block :limit="10" :start="0" :featured="false" title="Beef / Mutton / Lamb"-->
+    <!--                            show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+    <!--                            columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+    <!--                            :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+    <!--                            :categories="['1ca9252441e7ac94c4191c20984763f9']" :slider_responsive='[ -->
+    <!--          {-->
+    <!--              "breakpoint": 1024,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"60px"-->
+    <!--              }-->
+    <!--          },-->
+    <!--          {-->
+    <!--              "breakpoint": 480,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"30px"-->
+    <!--              }-->
+    <!--          }-->
+    <!--      ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+    <!--                            <a id="load-more-btn" class="view-more-button" href="/raw-meat/beef-mutton-lamb">View More</a>-->
+                            <!--</button>-->
+
+    <!--                    </div>-->
+
+
+
+
+
+
+
+                    </template>    
+                    
+                   <!--Cold Meats-->
+                <template v-else-if="category_id === '723ba2dae415204c367436ccdca7331b'">
+
+
+                        <!--Bacon-->
+                        <div>
+
+                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Bacon"
+                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"
+                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"
+                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"
+                                :categories="['c0ab90476329b2e345fddd8368ccbd96']" :slider_responsive='[ 
+              {
+                  "breakpoint": 1024,
+                  "settings": {
+                      "centerPadding":"60px"
+                  }
+              },
+              {
+                  "breakpoint": 480,
+                  "settings": {
+                      "centerPadding":"30px"
+                  }
+              }
+          ]' />
+
+                            <!--<button class="view-more-button" type="button">-->
+                                <a id="load-more-btn" class="view-more-button" href="/cold-meats/bacon">View More</a>
+                            <!--</button>-->
+
+                        </div>
+
+
+
+
+                        <!--Ham-->
+
+    <div>
+
+                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Ham"
+                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"
+                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"
+                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"
+                                :categories="['637707e7c96fcb6f78087b8072c235cd']" :slider_responsive='[ 
+              {
+                  "breakpoint": 1024,
+                  "settings": {
+                      "centerPadding":"60px"
+                  }
+              },
+              {
+                  "breakpoint": 480,
+                  "settings": {
+                      "centerPadding":"30px"
+                  }
+              }
+          ]' />
+
+                            <!--<button class="view-more-button" type="button">-->
+                                <a id="load-more-btn" class="view-more-button" href="/cold-meats/ham">View More</a>
+                            <!--</button>-->
+
+                        </div>
+
+
+                        <!--Slices-->
+
+
+
+    <div>
+
+                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Slices"
+                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"
+                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"
+                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"
+                                :categories="['259a7c437c2f46f994d4dd8aeb8c6eb7']" :slider_responsive='[ 
+              {
+                  "breakpoint": 1024,
+                  "settings": {
+                      "centerPadding":"60px"
+                  }
+              },
+              {
+                  "breakpoint": 480,
+                  "settings": {
+                      "centerPadding":"30px"
+                  }
+              }
+          ]' />
+
+                            <!--<button class="view-more-button" type="button">-->
+                                <a id="load-more-btn" class="view-more-button" href="/cold-meats/slices">View More</a>
+                            <!--</button>-->
+
+                        </div>
+
+
+
+
+
+
+
+                    </template>     
+                  
+                  
+                  
+                       
+                   <!--Raw Meat-->
+                <template v-else-if="category_id === 'fb8953f66328bdf0946028fab96d4d32'">
+
+
+                        <!--Pork-->
+                        <div>
+
+                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Pork"
+                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"
+                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"
+                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"
+                                :categories="['ee3270276e0ca79d8cc84ed98d23d176']" :slider_responsive='[ 
+              {
+                  "breakpoint": 1024,
+                  "settings": {
+                      "centerPadding":"60px"
+                  }
+              },
+              {
+                  "breakpoint": 480,
+                  "settings": {
+                      "centerPadding":"30px"
+                  }
+              }
+          ]' />
+
+                            <!--<button class="view-more-button" type="button">-->
+                                <a id="load-more-btn" class="view-more-button" href="/raw-meat/pork">View More</a>
+                            <!--</button>-->
+
+                        </div>
+
+
+
+
+                        <!--Mutton-->
+
+    <div>
+
+                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Mutton"
+                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"
+                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"
+                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"
+                                :categories="['810554a850f74c0d863f81f2529eaea8']" :slider_responsive='[ 
+              {
+                  "breakpoint": 1024,
+                  "settings": {
+                      "centerPadding":"60px"
+                  }
+              },
+              {
+                  "breakpoint": 480,
+                  "settings": {
+                      "centerPadding":"30px"
+                  }
+              }
+          ]' />
+
+                            <!--<button class="view-more-button" type="button">-->
+                                <a id="load-more-btn" class="view-more-button" href="/raw-meat/mutton">View More</a>
+                            <!--</button>-->
+
+                        </div>
+
+
+                        <!--Slices-->
+
+
+
+    <!--<div>-->
+
+    <!--                        <products-block-custom-block :limit="10" :start="0" :featured="false" title="Slices"-->
+    <!--                            show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+    <!--                            columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+    <!--                            :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+    <!--                            :categories="['259a7c437c2f46f994d4dd8aeb8c6eb7']" :slider_responsive='[ -->
+    <!--          {-->
+    <!--              "breakpoint": 1024,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"60px"-->
+    <!--              }-->
+    <!--          },-->
+    <!--          {-->
+    <!--              "breakpoint": 480,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"30px"-->
+    <!--              }-->
+    <!--          }-->
+    <!--      ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+    <!--                            <a id="load-more-btn" class="view-more-button" href="/cold-meats/slices">View More</a>-->
+                            <!--</button>-->
+
+    <!--                    </div>-->
+
+
+
+
+
+
+
+                    </template>        
+                    
+                    <!--Keells Krest-->
+                    
+          <!--               <template v-else-if="category_id === '105355fc810365f45cd26658db9a894c'">-->
+
+
+                        <!--Pasta-->
+          <!--              <div>-->
+
+          <!--                  <products-block-custom-block :limit="10" :start="0" :featured="false" title="Pasta"-->
+          <!--                      show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+          <!--                      columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+          <!--                      :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+          <!--                      :categories="['2e098b1c33dc0736094886eb4babc38a']" :slider_responsive='[ -->
+          <!--    {-->
+          <!--        "breakpoint": 1024,-->
+          <!--        "settings": {-->
+          <!--            "centerPadding":"60px"-->
+          <!--        }-->
+          <!--    },-->
+          <!--    {-->
+          <!--        "breakpoint": 480,-->
+          <!--        "settings": {-->
+          <!--            "centerPadding":"30px"-->
+          <!--        }-->
+          <!--    }-->
+          <!--]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+          <!--                      <a id="load-more-btn" class="view-more-button" href="/keells-krest/pasta">View More</a>-->
+                            <!--</button>-->
+
+          <!--              </div>-->
+
+
+
+
+
+
+          <!--          </template>    -->
+                    
+                    
+                    
+                 <!--Elephant House   -->
+                    
+                    
+    <!--                     <template v-else-if="category_id === 'ea2db7aa58ddeac78025e37d2f7a9b0e'">-->
+
+
+                        <!--Sausage-->
+    <!--                    <div>-->
+
+    <!--                        <products-block-custom-block :limit="10" :start="0" :featured="false" title="Sausage"-->
+    <!--                            show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+    <!--                            columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+    <!--                            :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+    <!--                            :categories="['57b5f06d44f91cefdaf5f2919d77758c']" :slider_responsive='[ -->
+    <!--          {-->
+    <!--              "breakpoint": 1024,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"60px"-->
+    <!--              }-->
+    <!--          },-->
+    <!--          {-->
+    <!--              "breakpoint": 480,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"30px"-->
+    <!--              }-->
+    <!--          }-->
+    <!--      ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+    <!--                            <a id="load-more-btn" class="view-more-button" href="/elephant-house/sausage">View More</a>-->
+                            <!--</button>-->
+
+    <!--                    </div>-->
+
+
+                        <!--Raw-->
+
+    <!--<div>-->
+
+    <!--                        <products-block-custom-block :limit="10" :start="0" :featured="false" title="Raw"-->
+    <!--                            show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+    <!--                            columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+    <!--                            :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+    <!--                            :categories="['7040eb0b74251c3c5252655ae7d45f2f']" :slider_responsive='[ -->
+    <!--          {-->
+    <!--              "breakpoint": 1024,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"60px"-->
+    <!--              }-->
+    <!--          },-->
+    <!--          {-->
+    <!--              "breakpoint": 480,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"30px"-->
+    <!--              }-->
+    <!--          }-->
+    <!--      ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+    <!--                            <a id="load-more-btn" class="view-more-button" href="/elephant-house/raw">View More</a>-->
+                            <!--</button>-->
+
+    <!--                    </div>-->
+
+
+                        <!--Canned-->
+
+
+
+    <!--<div>-->
+
+    <!--                        <products-block-custom-block :limit="10" :start="0" :featured="false" title="Canned"-->
+    <!--                            show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+    <!--                            columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+    <!--                            :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+    <!--                            :categories="['47894c7a79cd493f6300a2f92ff7595d']" :slider_responsive='[ -->
+    <!--          {-->
+    <!--              "breakpoint": 1024,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"60px"-->
+    <!--              }-->
+    <!--          },-->
+    <!--          {-->
+    <!--              "breakpoint": 480,-->
+    <!--              "settings": {-->
+    <!--                  "centerPadding":"30px"-->
+    <!--              }-->
+    <!--          }-->
+    <!--      ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+    <!--                            <a id="load-more-btn" class="view-more-button" href="/elephant-house/canned">View More</a>-->
+                            <!--</button>-->
+
+    <!--                    </div>-->
+
+
+
+
+
+
+
+    <!--                </template>    -->
+                    
+  
+<!--Keells Krests-->
+
+<!--     <template v-else-if="category_id === '5dc361f921fc442b8019cfdd497483ab'">-->
+
+
+                        <!--Sausages-->
+<!--                        <div>-->
+
+<!--                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Sausages"-->
+<!--                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+<!--                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+<!--                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+<!--                                :categories="['19d27268e72cd41df006ce0309082b1e']" :slider_responsive='[ -->
+<!--              {-->
+<!--                  "breakpoint": 1024,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"60px"-->
+<!--                  }-->
+<!--              },-->
+<!--              {-->
+<!--                  "breakpoint": 480,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"30px"-->
+<!--                  }-->
+<!--              }-->
+<!--          ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+<!--                                <a id="load-more-btn" class="view-more-button" href="/keells-krests/sausages-kells-krest">View More</a>-->
+                            <!--</button>-->
+
+<!--                        </div>-->
+
+
+
+
+                        <!--Meat Balls-->
+
+<!--    <div>-->
+
+<!--                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Meat Balls"-->
+<!--                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+<!--                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+<!--                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+<!--                                :categories="['228703de4c0d520f53fdd577d86840e9']" :slider_responsive='[ -->
+<!--              {-->
+<!--                  "breakpoint": 1024,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"60px"-->
+<!--                  }-->
+<!--              },-->
+<!--              {-->
+<!--                  "breakpoint": 480,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"30px"-->
+<!--                  }-->
+<!--              }-->
+<!--          ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+<!--                                <a id="load-more-btn" class="view-more-button" href="/keells-krests/meat-balls">View More</a>-->
+                            <!--</button>-->
+
+<!--                        </div>-->
+
+
+                        <!--Chinese Rolls-->
+
+
+
+<!--    <div>-->
+
+<!--                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Chinese Rolls"-->
+<!--                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+<!--                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+<!--                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+<!--                                :categories="['f92b149c3ce14e90bcd7f699471b7c7a']" :slider_responsive='[ -->
+<!--              {-->
+<!--                  "breakpoint": 1024,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"60px"-->
+<!--                  }-->
+<!--              },-->
+<!--              {-->
+<!--                  "breakpoint": 480,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"30px"-->
+<!--                  }-->
+<!--              }-->
+<!--          ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+<!--                                <a id="load-more-btn" class="view-more-button" href="/keells-krests/chinese-rolls">View More</a>-->
+                            <!--</button>-->
+
+<!--                        </div>-->
+
+
+
+                        <!--Finger-->
+
+
+
+<!--    <div>-->
+
+<!--                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Finger"-->
+<!--                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+<!--                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+<!--                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+<!--                                :categories="['1c4f088277a9731ef55f1beab99be8d3']" :slider_responsive='[ -->
+<!--              {-->
+<!--                  "breakpoint": 1024,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"60px"-->
+<!--                  }-->
+<!--              },-->
+<!--              {-->
+<!--                  "breakpoint": 480,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"30px"-->
+<!--                  }-->
+<!--              }-->
+<!--          ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+<!--                                <a id="load-more-btn" class="view-more-button" href="/keells-krests/finger">View More</a>-->
+                            <!--</button>-->
+
+<!--                        </div>-->
+
+
+    <!--Nugget-->
+
+
+
+<!--    <div>-->
+
+<!--                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Nugget"-->
+<!--                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+<!--                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+<!--                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+<!--                                :categories="['c66a73ebdb0e20fb79398a85d7f143f4']" :slider_responsive='[ -->
+<!--              {-->
+<!--                  "breakpoint": 1024,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"60px"-->
+<!--                  }-->
+<!--              },-->
+<!--              {-->
+<!--                  "breakpoint": 480,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"30px"-->
+<!--                  }-->
+<!--              }-->
+<!--          ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+<!--                                <a id="load-more-btn" class="view-more-button" href="/keells-krests/nugget">View More</a>-->
+                            <!--</button>-->
+
+<!--                        </div>-->
+
+ <!--Kieves-->
+
+
+
+<!--    <div>-->
+
+<!--                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Kieves"-->
+<!--                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+<!--                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+<!--                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+<!--                                :categories="['fd976bd8b9cefddde13b9de360f34ea4']" :slider_responsive='[ -->
+<!--              {-->
+<!--                  "breakpoint": 1024,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"60px"-->
+<!--                  }-->
+<!--              },-->
+<!--              {-->
+<!--                  "breakpoint": 480,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"30px"-->
+<!--                  }-->
+<!--              }-->
+<!--          ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+<!--                                <a id="load-more-btn" class="view-more-button" href="/keells-krests/kieves">View More</a>-->
+                            <!--</button>-->
+
+<!--                        </div>-->
+
+
+ <!--French Fries-->
+
+
+
+<!--    <div>-->
+
+<!--                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="French Fries"-->
+<!--                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+<!--                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+<!--                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+<!--                                :categories="['a5d2e8e2971ee111f5e5b99916000379']" :slider_responsive='[ -->
+<!--              {-->
+<!--                  "breakpoint": 1024,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"60px"-->
+<!--                  }-->
+<!--              },-->
+<!--              {-->
+<!--                  "breakpoint": 480,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"30px"-->
+<!--                  }-->
+<!--              }-->
+<!--          ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+<!--                                <a id="load-more-btn" class="view-more-button" href="/keells-krests/french-fries">View More</a>-->
+                            <!--</button>-->
+
+<!--                        </div>-->
+<!--Soya Meat-->
+
+
+
+<!--    <div>-->
+
+<!--                            <products-block-custom-block :limit="10" :start="0" :featured="false" title="Soya Meat"-->
+<!--                                show_title="true" slide_show="false" slide_show_dots="true" rounded_corners="true"-->
+<!--                                columns="5" description="" :show_add_to_cart="true" :show_product_attribute="false"-->
+<!--                                :show_product_tags="true" :slide_link="true" slide_show_speed="100"-->
+<!--                                :categories="['433417dbb4fec058f929c9bc39d3e040']" :slider_responsive='[ -->
+<!--              {-->
+<!--                  "breakpoint": 1024,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"60px"-->
+<!--                  }-->
+<!--              },-->
+<!--              {-->
+<!--                  "breakpoint": 480,-->
+<!--                  "settings": {-->
+<!--                      "centerPadding":"30px"-->
+<!--                  }-->
+<!--              }-->
+<!--          ]' />-->
+
+                            <!--<button class="view-more-button" type="button">-->
+<!--                                <a id="load-more-btn" class="view-more-button" href="/keells-krests/soya-meat-kk">View More</a>-->
+                            <!--</button>-->
+
+<!--                        </div>-->
+
+<!--                    </template>                  -->
+                    
+                    
+                    <template v-else>
+                        <product-list-template v-bind:category_id="[category_id]"
+                            v-bind:category_name="slotData.data?.name"
+                            v-bind:category_description="slotData.data?.description"
+                            v-bind:category_short_description="slotData.data?.short_description"
+                            v-bind:top_content_block="slotData.data?.top_content_block"
+                            v-bind:bottom_content_block="slotData.data?.bottom_content_block"
+                            v-bind:page_type="'category'" />
+                    </template>
+
+
+
+
+
+</template>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+    <footer-block-section />
+</div>
+<!-- <div v-else>
+    <page-loader-snippet  />
+</div> -->

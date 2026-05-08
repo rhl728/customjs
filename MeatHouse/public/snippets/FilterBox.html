@@ -1,0 +1,29 @@
+<ul class="mt-4 ml-[5%]">
+  <li class="block px-2" v-for="(value, key) in slotData.sub_filters">
+    <div
+      v-if="slotData.select_filter && slotData.select_filter.sa && slotData.select_filter.sa[slotData.filter_name] && slotData.helpers.ArraySearch(slotData.select_filter.sa[slotData.filter_name], key) "
+    >
+      <label class="md:w-2/3 flex mt-1 items-start text-gray-500 font-bold">
+        <input
+          class="mr-2 mt-1 leading-tight checked:accent-indigo-600 filter-check"
+          type="checkbox"
+          v-on:click="generateFilterParams(key,slotData.filter_name,$event)"
+          checked
+        />
+
+        <span class="text-sm"> {{key}} </span>
+      </label>
+    </div>
+    <div v-else>
+      <label class="md:w-2/3 flex mt-1 items-start text-gray-500 font-bold">
+        <input
+          class="mr-2 mt-1 leading-tight checked:accent-indigo-600 filter-check"
+          type="checkbox"
+          v-on:click="generateFilterParams(key,slotData.filter_name,$event)"
+        />
+
+        <span class="text-sm"> {{key}} </span>
+      </label>
+    </div>
+  </li>
+</ul>

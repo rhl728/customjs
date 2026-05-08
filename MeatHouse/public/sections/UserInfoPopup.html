@@ -1,0 +1,6 @@
+<div>
+    <b-modal id="userInfoPopup" :title="slotData.language.editDeliveryDetails.tabs.user.text" hide-footer no-close-on-backdrop>
+        <user-info-section  />
+        <b-button class="submit-button" v-on:click="saveUserInfo">Save</b-button>
+    </b-modal>
+</div>

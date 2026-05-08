@@ -1,0 +1,83 @@
+<div v-if="slotData.settingLoaded">
+  <header-block-section  />
+
+  <div
+    class="content-wrapper mx-auto max-w-[1920px] px-4 md:px-8 2xl:px-16 mt-[90px]"
+  >
+    <div class="breadcrumb pt-8 mb-8">
+      <div class="breadcrumb-inner flex items-center">
+        <ul class="flex items-center w-full overflow-hidden text-gray-500 list-none my-0">
+          <li
+            class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0"
+          >
+            <a href="/" class="text-body hover:text-primary">Home</a>
+          </li>
+          <li class="text-base mt-0.5">/</li>
+          <li
+            class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 text-primary"
+          >
+            {{slotData.language.contact.title}}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-wrapper">
+      <div class="main-title-wrapper mb-6">
+        <h1
+          class="text-lg md:text-xl xl:text-2xl font-bold text-heading mb-6 xl:mb-8 mt-0"
+        >
+          {{slotData.language.contact.title}}
+        </h1>
+      </div>
+    </div>
+
+    <div class="inner-content-wrapper">
+      <div class="mb-6 lg:border lg:rounded-md border-gray-300 lg:p-7 text-body">
+
+        <div class="flex pb-7">
+          <div class="flex flex-shrink-0 justify-center items-center p-1.5 border rounded-md border-gray-300 w-10 h-10">
+           <b-icon class="w-4 h-4" icon="geo-alt-fill" ></b-icon>
+          </div>
+          <div class="flex flex-col pl-3 2xl:pl-4">
+            <h5 class="text-sm font-bold text-heading">{{slotData.language.contact.address}}</h5>
+            <a class="text-sm mt-0" href="/"
+              >$$__ADDRESS_GOES_HERE__$$</a
+            >
+          </div>
+        </div>
+        <div class="flex pb-7">
+          <div class="flex flex-shrink-0 justify-center items-center p-1.5 border rounded-md border-gray-300 w-10 h-10" >
+            <b-icon class="w-4 h-4" icon="envelope-fill" ></b-icon>
+          </div>
+          <div class="flex flex-col pl-3 2xl:pl-4">
+            <h5 class="text-sm font-bold text-heading">{{slotData.language.contact.email}}</h5>
+            <a class="text-sm mt-0" href="mailto:$$__EMAIL_GOES_HERE__$$">$$__EMAIL_GOES_HERE__$$</a>
+          </div>
+        </div>
+        <div class="flex pb-7">
+          <div class="flex flex-shrink-0 justify-center items-center p-1.5 border rounded-md border-gray-300 w-10 h-10" >
+            <b-icon class="w-4 h-4" icon="telephone-fill" ></b-icon>
+          </div>
+          <div class="flex flex-col pl-3 2xl:pl-4">
+            <h5 class="text-sm font-bold text-heading">{{slotData.language.contact.phone}}</h5>
+            <a class="text-sm mt-0" href="tel:$$__PHONE_NUMBER_GOES_HERE__$$">$$__PHONE_NUMBER_GOES_HERE__$$</a>
+          </div>
+        </div>
+        <div class="flex pb-7">
+          <div class="flex flex-shrink-0 justify-center items-center p-1.5 border rounded-md border-gray-300 w-10 h-10" >
+            <b-icon class="w-4 h-4" icon="clock-fill" ></b-icon>
+          </div>
+          <div class="flex flex-col pl-3 2xl:pl-4">
+            <h5 class="text-sm font-bold text-heading">{{slotData.language.contact.openingHours}}</h5>
+            <a class="text-sm mt-0" href="tel:$$__PHONE_NUMBER_GOES_HERE__$$"
+              >$$__OPENING_HOURS_GOES_HERE__$$</a
+            >
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <footer-block-section  />
+</div>

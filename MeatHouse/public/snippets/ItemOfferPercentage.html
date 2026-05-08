@@ -1,0 +1,27 @@
+<div v-if="(data.attributes.MSRP && data.attributes.MSRP.value && Number(data.attributes.MSRP.value) > Number(data.display_price)) || data.applied_offer" class=" offer-percentage-wrapper  "  :class="[ styles ? styles : 'absolute top-1 left-1 lg:left-3 lg:top-3 bg-slate-900 text-white rounded-md text-xs px-2 py-1']" >
+    <template v-if="data.attributes.MSRP && data.attributes.MSRP.value">
+        <template v-if="Number(data.attributes.MSRP.value) > Number(data.display_price)">
+            <span class="offer-percentage flash-percentage">
+                {{slotData.helpers.PriceFormat(slotData.helpers.GetPercentage(data.display_price, data.attributes.MSRP.value), 0)}}% {{slotData.language.detailView.offText}}
+            </span>
+        </template>
+        <template v-else>
+            <template v-if="data.applied_offer">
+                <template v-if="slotData.helpers.PriceFormat(data.applied_offer.offer_percentage, 0) != 0">
+                    <span class="offer-percentage">
+                        {{slotData.helpers.PriceFormat(data.applied_offer.offer_percentage, 0)}}% {{slotData.language.detailView.offText}}
+                    </span>
+                </template>
+            </template>
+        </template>
+    </template>
+    <template v-else>
+        <template v-if="data.applied_offer">
+            <template v-if="slotData.helpers.PriceFormat(data.applied_offer.offer_percentage, 0) != 0">
+                <span class="offer-percentage flash-percentage">
+                    {{slotData.helpers.PriceFormat(data.applied_offer.offer_percentage, 0)}}% {{slotData.language.detailView.offText}}
+                </span>
+            </template>
+        </template>
+    </template>
+</div>

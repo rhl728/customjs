@@ -1,0 +1,232 @@
+<div>
+  <div
+    v-if="slotData.categoryData.length && !slotData.hideHeader>0"
+    class="flex md:ml-auto items-center w-full md:w-auto"
+  >
+    <div class="ml-0 md:ml-auto flex items-center">
+      <multiselect
+        id="sortBy"
+        :options="slotData.sortOptions"
+        track-by="value"
+        v-model="slotData.sortValue"
+        label="text"
+        class="sort-wrapper w-full"
+        select-label=""
+        deselect-label=""
+        selected-label=""
+        placeholder="Sorting Options"
+        @select="onChangeSortProperty"
+      >
+        <template slot="noResult">No records found.</template>
+      </multiselect>
+    </div>
+
+    <div class="change-product-view-wrapper ml-2 md:ml-4">
+      <list-grid-buttons-snippet />
+    </div>
+  </div>
+
+  <!-- No Result section -->
+
+  <div
+    v-if="slotData.categoryData.length===0 && slotData.isProducstLoad && !slotData.hideNoResult"
+    class="no-items text-center mb-12 mt-12"
+  >
+    <div
+      class="w-full max-w-md h-60 bg-not_found bg-center bg-no-repeat bg-contain mx-auto mb-6"
+    ></div>
+    <span
+      class="text-heading text-lg md:text-xl lg:text-2xl xl:leading-10 font-bold"
+      >{{slotData.language.noResults}}</span
+    >
+  </div>
+
+  <div
+    v-if="!slotData.isProducstLoad"
+    class="w-full h-80 flex items-center justify-center"
+  >
+    <svg
+      class="animate-spin"
+      height="32px"
+      width="32px"
+      fill="var(--theme-primary)"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+        opacity=".25"
+      ></path>
+      <path
+        d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z"
+      ></path>
+    </svg>
+    <span class="ml-3"> Loading...</span>
+  </div>
+
+  <div class="mt-3">
+    <div v-if="slotData.categoryData.some(cat => ['af04062fd60db8e0afcdb2acafe6edec', '239b1626a136c68df223d620a46c10a7'].includes(cat.id))" class="promo-category-wrap">
+        <h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Keells Krest Products</h2>
+        <offer-list-template
+            :categories="null"
+            page="offers"
+            :category_id="['af04062fd60db8e0afcdb2acafe6edec']"
+            :category_name="'Sausages'"
+            :fromCustomList="true"
+            :parentSortProperty="slotData.SortPropertyObj"
+            :limit="limit"
+            :columns="slotData.columns"
+            :hideLoadMore="slotData.hideLoadMore"
+            :parentDefaultSortOption="slotData.parentDefaultSortOption"
+        />
+        <offer-list-template
+            :categories="null"
+            page="offers"
+            :category_id="['239b1626a136c68df223d620a46c10a7']"
+            :category_name="'Meatballs'"
+            :fromCustomList="true"
+            :parentSortProperty="slotData.SortPropertyObj"
+            :limit="limit"
+            :columns="slotData.columns"
+            :hideLoadMore="slotData.hideLoadMore"
+            :parentDefaultSortOption="slotData.parentDefaultSortOption"
+        />
+    </div>
+    <div v-if="slotData.categoryData.some(cat => ['513ac4770568ecac79899b520f47a8dd', 'f5202028eeaae46db4dba4144f1b1000'].includes(cat.id))" class="promo-category-wrap">
+        <h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto ehp">Elephant House Products</h2>
+        <offer-list-template
+            :categories="null"
+            page="offers"
+            :category_id="['513ac4770568ecac79899b520f47a8dd']"
+            :category_name="'Sausages'"
+            :fromCustomList="true"
+            :parentSortProperty="slotData.SortPropertyObj"
+            :limit="limit"
+            :columns="slotData.columns"
+            :hideLoadMore="slotData.hideLoadMore"
+            :parentDefaultSortOption="slotData.parentDefaultSortOption"
+        />
+        <offer-list-template
+            :categories="null"
+            page="offers"
+            :category_id="['f5202028eeaae46db4dba4144f1b1000']"
+            :category_name="'Meatballs'"
+            :fromCustomList="true"
+            :parentSortProperty="slotData.SortPropertyObj"
+            :limit="limit"
+            :columns="slotData.columns"
+            :hideLoadMore="slotData.hideLoadMore"
+            :parentDefaultSortOption="slotData.parentDefaultSortOption"
+        />
+    </div>
+    <div v-if="slotData.categoryData.some(cat => ['b32ebfc1d0186340d09cddc9fd85258f', 'f92b149c3ce14e90bcd7f699471b7c7a'].includes(cat.id))" class="promo-category-wrap">
+        <h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Crumbed Savouries</h2>
+        <div
+          v-for="(category, index) in slotData.categoryData.filter(cat =>
+            ['b32ebfc1d0186340d09cddc9fd85258f', 'f92b149c3ce14e90bcd7f699471b7c7a'].includes(cat.id)
+          )"
+          :key="category.id"
+        >
+          <offer-list-template
+            :categories="null"
+            page="offers"
+            :category_id="[category.id]"
+            :category_name="category.name"
+            :fromCustomList="true"
+            :parentSortProperty="slotData.SortPropertyObj"
+            :limit="limit"
+            :columns="slotData.columns"
+            :hideLoadMore="slotData.hideLoadMore"
+            :parentDefaultSortOption="slotData.parentDefaultSortOption"
+          />
+        </div>
+    </div>
+    <div v-if="slotData.categoryData.some(cat => ['c0ab90476329b2e345fddd8368ccbd96', '637707e7c96fcb6f78087b8072c235cd', '259a7c437c2f46f994d4dd8aeb8c6eb7'].includes(cat.id))" class="promo-category-wrap">
+        <h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Ham, Slices & Bacon</h2>
+        <div
+          v-for="(category, index) in slotData.categoryData.filter(cat =>
+            ['c0ab90476329b2e345fddd8368ccbd96', '637707e7c96fcb6f78087b8072c235cd', '259a7c437c2f46f994d4dd8aeb8c6eb7'].includes(cat.id)
+          )"
+          :key="category.id"
+        >
+          <offer-list-template
+            :categories="null"
+            page="offers"
+            :category_id="[category.id]"
+            :category_name="category.name"
+            :fromCustomList="true"
+            :parentSortProperty="slotData.SortPropertyObj"
+            :limit="limit"
+            :columns="slotData.columns"
+            :hideLoadMore="slotData.hideLoadMore"
+            :parentDefaultSortOption="slotData.parentDefaultSortOption"
+          />
+        </div>
+    </div>
+    <div v-if="slotData.categoryData.some(cat => ['5f71497f0e1a4e48ad5f835d11de81d8', 'ee3270276e0ca79d8cc84ed98d23d176', '810554a850f74c0d863f81f2529eaea8'].includes(cat.id))" class="promo-category-wrap">
+        <h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Raw Meat</h2>
+        <div
+          v-for="(category, index) in slotData.categoryData.filter(cat =>
+            ['5f71497f0e1a4e48ad5f835d11de81d8', 'ee3270276e0ca79d8cc84ed98d23d176', '810554a850f74c0d863f81f2529eaea8'].includes(cat.id)
+          )"
+          :key="category.id"
+        >
+          <offer-list-template
+            :categories="null"
+            page="offers"
+            :category_id="[category.id]"
+            :category_name="category.name"
+            :fromCustomList="true"
+            :parentSortProperty="slotData.SortPropertyObj"
+            :limit="limit"
+            :columns="slotData.columns"
+            :hideLoadMore="slotData.hideLoadMore"
+            :parentDefaultSortOption="slotData.parentDefaultSortOption"
+          />
+        </div>
+    </div>
+    <div v-if="slotData.categoryData.some(cat => cat.id === 'e70e6092acff4aab6b44e0d9a82eca9a')" class="promo-category-wrap">
+        <h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Others</h2>
+        <div
+          v-for="(category, index) in slotData.categoryData.filter(cat =>
+            cat.id === 'e70e6092acff4aab6b44e0d9a82eca9a'
+          )"
+          :key="category.id"
+        >
+          <offer-list-template
+            :categories="null"
+            page="offers"
+            :category_id="[category.id]"
+            :fromCustomList="true"
+            :parentSortProperty="slotData.SortPropertyObj"
+            :limit="limit"
+            :columns="slotData.columns"
+            :hideLoadMore="slotData.hideLoadMore"
+            :parentDefaultSortOption="slotData.parentDefaultSortOption"
+          />
+        </div>
+    </div>
+    <div v-if="slotData.categoryData.some(cat => cat.id === '85796a83c94621d76da91d20fbd54c6b')" class="promo-category-wrap">
+        <h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">BBQ Feast</h2>
+        <div
+          v-for="(category, index) in slotData.categoryData.filter(cat =>
+            cat.id === '85796a83c94621d76da91d20fbd54c6b'
+          )"
+          :key="category.id"
+        >
+          <offer-list-template
+            :categories="null"
+            page="offers"
+            :category_id="[category.id]"
+            :category_name="category.name"
+            :fromCustomList="true"
+            :parentSortProperty="slotData.SortPropertyObj"
+            :limit="limit"
+            :columns="slotData.columns"
+            :hideLoadMore="slotData.hideLoadMore"
+            :parentDefaultSortOption="slotData.parentDefaultSortOption"
+          />
+        </div>
+    </div>
+  </div>
+</div>

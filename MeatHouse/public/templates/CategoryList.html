@@ -1,0 +1,81 @@
+<div  id="category-list-wrapper" class="bg-white w-full">
+
+    <span class="block px-6 md:px-8 py-3 font-semibold lg:hidden flex border-b border-gray-100 curser-pointer items-center"   
+    v-on:click="toggleMenu">
+        Categories
+        <b-icon v-if="isActive" class=" ml-auto text-black w-5 h-5 " icon="caret-up-fill"    />
+        <b-icon v-else class="ml-auto text-black w-5 h-5 " icon="caret-down-fill"    />
+    </span>
+
+    <div class="list-group lg:block" :class="[ isActive ? 'block': 'hidden']">
+        <ul>
+            <template v-if="slotData.showFeatured">
+                <li class="category mb-0.5 mt-0" :class="{ 'active bg-gray-100 ': slotData.activeTab === 'featured' }" data-category="featured" :data-name="slotData.language.category.featured">
+                    <!-- <a v-bind:href="slotData.'/featured'"  class="block px-8 py-3 font-semibold hover:opacity-80">
+                        {{slotData.language.category.featured}}
+                    </a> -->
+
+                    <template v-if="'$$__location_url__$$'">
+                        <a v-bind:href="'$$__location_url__$$/featured'"  class="block px-8 py-3 font-semibold hover:opacity-80">
+                            {{slotData.language.category.featured}}
+                        </a>
+                    </template>
+                    <template v-else>
+                        <a v-bind:href="'/featured'"  class="block px-8 py-3 font-semibold hover:opacity-80">
+                            {{slotData.language.category.featured}}
+                        </a>
+                    </template>
+
+
+                </li>
+            </template>
+
+            <li class="category mb-0.5 mt-0" :class="{ 'active bg-gray-100 ': slotData.activeTab === 'all' }"  data-category="all" :data-name="slotData.language.category.allCategories">
+                <!-- <a v-bind:href="'/all'" class="block px-8 py-3 font-semibold hover:opacity-80">
+                    {{slotData.language.category.allCategories}}
+                </a> -->
+
+                <template v-if="'$$__location_url__$$'">
+                    <a v-bind:href="'$$__location_url__$$/all'" class="block px-8 py-3 font-semibold hover:opacity-80">
+                        {{slotData.language.category.allCategories}}
+                    </a>
+                </template>
+                <template v-else>
+                    <a v-bind:href="'/all'" class="block px-8 py-3 font-semibold hover:opacity-80">
+                        {{slotData.language.category.allCategories}}
+                    </a>
+                </template>
+
+
+            </li>
+
+            <template v-for="category in slotData.categories.slice(0, 50)">
+                <li class="category mb-0.5 mt-0" :data-category="category.id" :data-name="category.name">
+
+                    <div class="flex items-center" :class="{'bg-gray-100': slotData.showChildren[category.id], 'active bg-gray-100 ': slotData.activeTab === category.id }">
+
+                            <a v-bind:href="'/' + category?.url_rewrite?.request_path" :class="{ 'active bg-gray-100 ': slotData.activeTab === category.id }" class="block w-full px-8 py-2 font-semibold hover:opacity-80">
+                            {{category.name}}
+                            </a>
+                            <template v-if="category.active_children && category.active_children.length > 0">
+                                <b-icon icon="chevron-right" 
+                                        class="child-arrow cursor-pointer ml-auto mr-6  w-5 h-5"
+                                        :class="{'active rotate-90': slotData.showChildren[category.id]}"
+                                        v-on:click="onClickShowChildren(category.id, !slotData.showChildren[category.id])"
+                                        >
+                                </b-icon>
+                            </template>
+                    </div>
+                    <template v-if="category.active_children && category.active_children.length > 0">
+                        <child-category-snippet v-if="slotData.showChildren[category.id]" :activeChildren="category.active_children"  />
+                    </template>
+                </li>
+            </template>
+
+            <template v-if="slotData.categories.length > 50">
+                <a class="block py-4 px-8  text-gray-500" href="/all-categories">Show Moree...</a>
+            </template>
+
+        </ul>
+    </div>
+</div>

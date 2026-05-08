@@ -1,0 +1,258 @@
+<div id="home-page-meathouse" class="home-page">
+  <template v-if="slotData.settingLoaded">
+    <div class="main-loader" v-if="mainLoader">
+      <progress-bar-snippet />
+    </div>
+    <header-block-section :all_location_data="true" />
+    <div class="video-div flex flex-wrap mb-4 xl:mb-6 mt-20">
+      <div class="w-full bg-white">
+        <banner-block-custom-block
+          :slides="[
+            {'url':'$$__client_media_url__$$/$$__client_media_path__$$/1.webp'}
+            ]"
+          slide_show="false"
+          :rounded_corners="false"
+          columns="1"
+          title=""
+          description=""
+          :show_button="false"
+          :slide_link="true"
+          :use_cart_banners="true"
+          :slide_show_dots="false"
+          banner_height="h-[0px] pt-[40%]"
+          slide_show_speed="5000"
+            auto_play_speed="8000"
+        />
+           <!--<video id="vid" autoplay="autoplay" muted="muted" loop="loop" width="100%"-->
+           <!--         height="500">-->
+           <!--         <source-->
+           <!--             src="https://d3fgegizptfhv.cloudfront.net/223751d5273128dc8f652c92c4e92316/b1007b0c4387a170bd22dd8cb9a6dd82_1702034870.mp4">-->
+           <!--         Your browser does not support the video tag.-->
+           <!--     </video>-->
+
+      </div>
+    </div>
+    <template
+      v-if="slotData.settings.locations.length
+    >= 2"
+    >
+      <location-banner-starter-custom-block
+        :settingLoaded="slotData.settingLoaded"
+      />
+    </template>
+    <trail-popup-snippet :is_active="slotData.isActive"></trail-popup-snippet>
+    <category-block-custom-block
+      :start="0"
+      :limit="45"
+      title="Main Categories"
+      sort_property="sort_order"
+      sort_direction="asc"
+      columns="6"
+      show_main_block="false"
+      main_block_title="Top Categories"
+      slide_show="true"
+      main_block_width="25%"
+      slide_show_dots="flase"
+      slide_show_arrows="true"
+      slide_show_autoplay="true"
+      slide_show_speed="300"
+      auto_play_speed="5000"
+      show_main_block_button="true"
+      main_block_button_text="All Categories"
+      main_block_height="230px"
+      :all_location_data="true"
+      :categories="['5a2aa17da49d1757e467290fcef68bfd', '9089973051a0dbb62fe2138d044044f1', '7069ecaa79338cb5cea11ec0393eebeb', 'dc6d8ec771a62b7a0be77fff6702d2cb','723ba2dae415204c367436ccdca7331b', 'fb8953f66328bdf0946028fab96d4d32', 'e70e6092acff4aab6b44e0d9a82eca9a']"
+      :slider_responsive='[ 
+            {
+                "breakpoint": 1024,
+                "settings": {
+                   "slidesToShow": 5,
+                }
+            },
+            {
+                "breakpoint": 480,
+                "settings": {
+                  "slidesToShow": 3,
+                }
+            }
+        ]'
+    />
+     <offer-product-custom-block
+      :limit="60"
+      :start="0"
+      columns="5"
+      title="Promo Deals"
+      show_title="true"
+      slide_show="true"
+      show_product_name="true"
+      show_product_description="true"
+      show_product_price="true"
+      show_product_attribute="false"
+      show_product_tags="true"
+      show_add_to_cart="true"
+      show_upcomming_offer="false"
+      slide_show_speed="300"
+      auto_play_speed="5000"
+      slides_to_scroll="1"
+      slide_show_arrows="true"
+      slide_show_autoplay="true"
+      :all_location_data="true"
+      :slider_responsive='[ 
+            {
+                "breakpoint": 1280,
+                "settings": {
+                   "slidesToShow": 3,
+                }
+            },
+            {
+                "breakpoint": 767,
+                "settings": {
+                  "slidesToShow": 2,
+                }
+            }
+        ]'
+    />
+
+   <!--<products-block-custom-block-->
+   <!--   :limit="12"-->
+   <!--   :start="0"-->
+   <!--   :featured="true"-->
+   <!--   :all_location_data="true"-->
+   <!--   title="Promo Deals"-->
+   <!--   show_title="true"-->
+   <!--   slide_show="false"-->
+   <!--   slide_show_dots="true"-->
+   <!--   rounded_corners="true"-->
+   <!--   columns="4"-->
+   <!--   description=""-->
+   <!--   :show_add_to_cart="true"-->
+   <!--   :show_product_attribute="false"-->
+   <!--   :show_product_tags="true"-->
+   <!--   :slide_link="true"-->
+   <!--   slide_show_speed="100"-->
+   <!--   :slider_responsive='[ -->
+   <!--           {-->
+   <!--               "breakpoint": 1024,-->
+   <!--               "settings": {-->
+   <!--                   "centerPadding":"60px"-->
+   <!--               }-->
+   <!--           },-->
+   <!--           {-->
+   <!--               "breakpoint": 480,-->
+   <!--               "settings": {-->
+   <!--                   "centerPadding":"30px"-->
+   <!--               }-->
+   <!--           }-->
+   <!--       ]'-->
+   <!-- />-->
+
+   
+  
+ <best-selling-product-custom-block
+      :limit="12"
+      :start="0"
+      columns="4"
+      title="Top Sellers"
+      show_title="true"
+      slide_show="false"
+      show_product_name="true"
+      show_product_description="true"
+      show_product_price="true"
+      show_product_attribute="false"
+      show_upcomming_offer="false"
+      show_product_tags="true"
+      show_add_to_cart="true"
+      slide_show_speed="300"
+      auto_play_speed="5000"
+      slides_to_scroll="1"
+      slide_show_arrows="true"
+      :all_location_data="true"
+    />
+
+  
+  
+
+    <specific-product-custom-block
+      :limit="12"
+      :start="0"
+      attributes='[{"code":"NEW_ARRIVALS","value":"1", "condition":"eq"}, {"code":"NEW_ARRIVALS_END_DATE","value":"$$__current_datetime__$$", "condition":"gteq"}]'
+      columns="4"
+      title="New Additions"
+      show_title="true"
+      :categories="['8236bcf3051127d75afcae45202d1354']"
+      slide_show="false"
+      show_product_name="true"
+      show_product_description="true"
+      show_product_price="true"
+      show_product_attribute="false"
+      show_product_tags="true"
+      show_upcomming_offer="false"
+      show_add_to_cart="true"
+      slide_show_speed="300"
+      auto_play_speed="5000"
+      slides_to_scroll="1"
+      slide_show_arrows="true"
+      :all_location_data="true"
+    />
+    
+    <div class=" recipes-wrapper rounded-md p-4 md:p-8 2xl:px-16 relative ">
+        <h3 class="title text-primary text-lg md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 font-bold mb-4 md:mb-5 lg:mb-6 2xl:mb-7 3xl:mb-8">Recipes and Cooking Tips</h3>
+        <div class="product-row card-grid recipes mt-3 md:mt-6 col-span-full 3xl:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-5 xl:gap-7 row-span-full xl:grid-cols-4">
+   <div class="card skeleton  relative grid-mode rounded-md">
+    <div class="skeleton-image"></div>
+    <div class="card-body">
+      <div class="skeleton-title"></div>
+      <div class="skeleton-link"></div>
+    </div>
+  </div>
+
+  <div class="card skeleton  relative grid-mode rounded-md">
+    <div class="skeleton-image"></div>
+    <div class="card-body">
+      <div class="skeleton-title"></div>
+      <div class="skeleton-link"></div>
+    </div>
+  </div>
+
+  <div class="card skeleton  relative grid-mode rounded-md">
+    <div class="skeleton-image"></div>
+    <div class="card-body">
+      <div class="skeleton-title"></div>
+      <div class="skeleton-link"></div>
+    </div>
+  </div>
+    <div class="card skeleton  relative grid-mode rounded-md">
+    <div class="skeleton-image"></div>
+    <div class="card-body">
+      <div class="skeleton-title"></div>
+      <div class="skeleton-link"></div>
+    </div>
+  </div>
+    <div class="card skeleton  relative grid-mode rounded-md">
+    <div class="skeleton-image"></div>
+    <div class="card-body">
+      <div class="skeleton-title"></div>
+      <div class="skeleton-link"></div>
+    </div>
+  </div>
+    <div class="card skeleton  relative grid-mode rounded-md">
+    <div class="skeleton-image"></div>
+    <div class="card-body">
+      <div class="skeleton-title"></div>
+      <div class="skeleton-link"></div>
+    </div>
+  </div>
+        </div>
+        <div>
+             <a id="load-more-btn" href="https://www.keellsfoods.lk/recipes/" class="view-more-button home-page-only" target="_blank">View All Recipes</a>
+        </div>
+    </div>
+ 
+   
+   
+
+    <footer-block-section />
+    
+      <span v-if="homePageLoaded" v-once>{{homePageLoaded()}}</span>
+  </template>
+</div>

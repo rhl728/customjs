@@ -1,0 +1,150 @@
+<div>
+  <form v-if="!slotData.showOtpVerificationSection" @submit="userLogin" class="flex flex-col justify-center" novalidate>
+    <div class="flex flex-col space-y-4">
+      <div class="block">
+        <label
+          for="email"
+          class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer required"
+        >
+          {{slotData.language.loginPopup.fields.email}}
+        </label>
+        <input
+          type="email"
+          id="email"
+          :placeholder="slotData.language.loginPopup.fields.email"
+          v-model="slotData.email"
+          class="py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body placeholder-slate-400 min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12"
+          required
+        />
+
+        <p v-if="slotData.emailError" class="my-2 text-xs text-red-500">
+          {{slotData.language.loginPopup.errors.emailEmpty}}
+        </p>
+        <p v-if="slotData.emailInvalid" class="my-2 text-xs text-red-500">
+          {{slotData.language.loginPopup.errors.emailInvalid}}
+        </p>
+      </div>
+
+      <div class="block">
+        <label
+          for="password"
+          class="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer required"
+        >
+          {{slotData.language.loginPopup.fields.password}}
+        </label>
+        <div class="relative">
+          <input
+            :type="showPassword ? 'text': 'password'"
+            id="password"
+            :placeholder="slotData.language.loginPopup.fields.password"
+            v-model="slotData.password"
+            class="py-2 px-4 md:px-5 w-full appearance-none transition duration-150 ease-in-out border text-input text-xs lg:text-sm font-body rounded-md placeholder-body placeholder-slate-400 min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:outline-none focus:border-heading h-11 md:h-12"
+            required
+          />
+          <label
+            @click="switchVisibility"
+            for="password"
+            class="absolute right-4 top-3.5 text-gray-400 cursor-pointer"
+          >
+            <b-icon v-if="!showPassword" class="w-5 h-5" icon="eye"></b-icon>
+            <b-icon v-else class="w-5 h-5" icon="eye-slash"></b-icon>
+          </label>
+        </div>
+
+        <p v-if="slotData.passwordError" class="my-2 text-xs text-red-500">
+          {{slotData.language.loginPopup.errors.passwordEmpty}}
+        </p>
+      </div>
+
+      <div
+        class="error-msg my-2 text-xs text-red-500"
+        v-if="slotData.errorMessage"
+      >
+        {{slotData.errorMessage}}
+      </div>
+
+      <div class="text-sm sm:text-base text-body text-center mt-5 mb-1">
+        <label class="form-label text-align-right">
+          <a
+            href="/forgot-password"
+            class="text-end text-sm text-heading underline hover:no-underline focus:outline-none"
+          >
+            {{slotData.language.loginPopup.forgotPassword}}
+          </a>
+        </label>
+      </div>
+
+      <div class="form-field row justify-content-end">
+        <div class="col-md-3 col-sm-12">
+          <button
+            type="submit"
+            class="submit-button text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-primary text-white px-5 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white hover:bg-gray-600 hover:shadow-cart h-11 md:h-12 w-full mt-1.5"
+          >
+            <span class="button-label" v-if="slotData.submitLoading">
+              <svg
+                class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            </span>
+            <span class="button-label" v-else>
+              {{slotData.language.loginPopup.fields.submit}}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- start: socail login section -->
+      <template v-if="slotData.showSocialLogin && slotData.socialLogins.length > 0">
+        <div class="w-full block pt-1 pb-1">
+          <span class="w-[45%] h-[0.5px] inline-block bg-gray-400 mr-auto align-middle"></span>
+          <span class="w-[7%] inline-block m-auto text-center">{{slotData.language.loginPopup.or}}</span>
+          <span class="lg:w-[45%] w-[44%] h-[0.5px] inline-block bg-gray-400 ml-auto align-middle"></span>
+        </div>
+
+        <div class="socail-login w-full">
+            <div v-for="social in slotData.socialLogins" class="inline-block w-full border border-gray-300 rounded p-3 mb-2 hover:border-gray-400 transition duration-200 ease-in-out cursor-pointer" v-on:click="onClickSocialLogin(social)">
+              <div class="lg:ml-[33%] ml-[29%]">
+                <span class="inline-block w-[25px] h-[25px] align-middle mr-3" :style="{'background-image': 'url(' + social.logo_url + ')', 'background-size': 'contain', 'background-repeat': 'no-repeat'}"></span>
+                <span>{{social.name}}</span>
+              </div>
+            </div>
+        </div>
+      </template>
+      <!-- end: socail login section -->
+
+      <div class="text-sm sm:text-base text-body text-center mt-5 mb-1">
+        <label class="form-label">
+          {{slotData.language.loginPopup.register.notRegistered}}
+          <a
+            href="/register"
+            class="text-sm sm:text-base text-heading underline font-bold hover:no-underline focus:outline-none"
+          >
+            {{slotData.language.loginPopup.register.createAccount}}
+          </a>
+        </label>
+      </div>
+    </div>
+  </form>
+
+  <!-- verify account form for two factor authentication -->
+  <template v-if="slotData.showOtpVerificationSection">
+    <otp-verify-form-section :req_id="slotData.otpReqId" :email="slotData.email" :contact="slotData.contact"
+      :password="slotData.password" :exp_at="slotData.otpExpAt" type="login"/>
+  </template>
+</div>

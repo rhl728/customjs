@@ -1,0 +1,225 @@
+<div class="summary-details">
+  <!-- delivery info -->
+  <div class="delivery-info section-wrapper bg-white p-4 rounded-lg shadow">
+    <div class="section-header mb-3 flex items-center">
+      <h3 class="title text-heading font-semibold text-base lg:text-lg">
+        {{ slotData.language.orderConfirmation.sections.delivery }}
+      </h3>
+
+      <!--     <a href="/checkout" class="text-xs leading-4 bg-primary text-white px-3 py-1.5 inline-block rounded-md hover:text-white hover:bg-gray-600 ml-auto cursor-pointer uppercase">{{ slotData.language.orderConfirmation.edit }}</a>
+ -->
+      <!--   <div class="edit">
+                <button class="header-button" v-b-modal.deliveryInfoPopup :title="slotData.language.orderConfirmation.edit"> {{ slotData.language.orderConfirmation.edit }} </button>
+              
+            </div> -->
+    </div>
+
+    <div
+      v-if="slotData.shipping_address"
+      v-html="slotData.shipping_address"
+      class="whitespace-pre-line text-body text-sm mb-4"
+    ></div>
+
+    <div
+      class="delivery-info info-wrapper text-sm md:text-sm"
+      v-if="slotData.orderInfo && slotData.orderInfo.delivery_info"
+    >
+      <div
+        class="delivery-date field flex mb-2"
+        v-if="slotData.orderInfo.delivery_info.date"
+      >
+        <span class="label text-body">
+          {{ slotData.language.orderConfirmation.fields.deliveryDate }}:
+        </span>
+        <span class="value ml-auto">
+          {{ slotData.orderInfo.delivery_info.date}}
+        </span>
+      </div>
+
+      <div
+        class="delivery-time field flex mb-2"
+        v-if="slotData.orderInfo.delivery_info.time"
+      >
+        <span class="label text-body">
+          {{ slotData.language.orderConfirmation.fields.deliveryTime }}:
+        </span>
+        <span class="value ml-auto">
+          {{ slotData.orderInfo.delivery_info.time}}
+        </span>
+      </div>
+
+      <div
+        class="order-type field flex mb-2"
+        v-if="slotData.orderInfo.delivery_info.orderType"
+      >
+        <span class="label text-body">
+          {{ slotData.language.orderConfirmation.fields.type }}:
+        </span>
+        <span class="value ml-auto">
+          {{ slotData.orderInfo.delivery_info.orderType}}
+        </span>
+      </div>
+
+      <div
+        class="delivery-method field flex mb-2"
+        v-if="slotData.orderInfo.delivery_info.deliveryMethod"
+      >
+        <span class="label text-body">
+          {{ slotData.language.orderConfirmation.fields.method }}:
+        </span>
+        <span class="value ml-auto">
+          {{ slotData.orderInfo.delivery_info.deliveryMethodName}}
+        </span>
+      </div>
+
+      <template v-if="slotData.settings.enable_address_separation == '1'">
+        <template v-for="item in slotData.shipping_other">
+          <div v-if="item.value" class="field flex mb-2">
+            <span class="label text-body"> {{ item.key }}: </span>
+            <span class="value ml-auto">
+              <template
+                v-if="item.key == 'Contact Number' && slotData.orderInfo.delivery_info.shipping_calling_code"
+              >
+                {{slotData.orderInfo.delivery_info.shipping_calling_code}}
+              </template>
+              {{ item.value }}
+            </span>
+          </div>
+        </template>
+      </template>
+      <div class="custom-fields" v-if="slotData.orderInfo.more_info">
+        <div
+          class="more-info field flex mb-2"
+          v-for="field in slotData.orderInfo.more_info"
+          v-if="field.type && slotData.helpers.InArray('DELIVER', field.type) && !slotData.orderInfo.delivery_info[field.code]"
+        >
+          <span class="label text-body"> {{ field.label }}: </span>
+          <span class="value ml-auto">
+            {{ (field.display_val) ? field.display_val : field.value }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- user info -->
+  <div class="user-info section-wrapper mt-4 bg-white p-4 rounded-lg shadow">
+    <div class="section-header flex items-center">
+      <h3 class="title text-heading font-semibold text-base lg:text-lg mb-3">
+        {{ slotData.language.orderConfirmation.sections.billing }}
+      </h3>
+
+      <!--    <a href="/checkout" class="text-xs leading-4 bg-primary text-white px-3 py-1.5 inline-block rounded-md hover:text-white hover:bg-gray-600 ml-auto cursor-pointer uppercase">{{ slotData.language.orderConfirmation.edit }}</a> -->
+      <!--   <div class="edit">
+                <button class="header-button" v-b-modal.userInfoPopup :title="slotData.language.orderConfirmation.edit"> {{ slotData.language.orderConfirmation.edit }} </button>
+             
+            </div> -->
+    </div>
+
+    <div
+      class="user-info info-wrapper _px-3 _md:px-4 text-sm"
+      v-if="slotData.orderInfo && slotData.orderInfo.user_info"
+    >
+      <div
+        v-if="slotData.billing_address"
+        v-html="slotData.billing_address"
+        class="whitespace-pre-line text-sm text-body mb-4"
+      ></div>
+      <template v-for="item in slotData.billing_other">
+        <div v-if="item.value" class="field flex mb-2">
+          <span class="label text-body"> {{ item.key }}: </span>
+          <span class="value ml-auto">
+            <template
+              v-if="item.key == 'Contact Number' && slotData.orderInfo.user_info.calling_code"
+            >
+              {{slotData.orderInfo.user_info.calling_code}}
+            </template>
+            <template v-if="item.displayVal"> {{ item.displayVal }} </template>
+            <template v-else>
+              {{ (item.value.label) ? item.value.label : item.value }}
+            </template>
+          </span>
+        </div>
+      </template>
+      <div class="custom-fields" v-if="slotData.orderInfo.more_info">
+        <template
+          v-for="field in slotData.orderInfo.more_info"
+          v-if="field.type && field.type.includes('INFO') && !slotData.orderInfo.user_info[field.code]"
+        >
+          <div class="more-info field flex mb-2">
+            <span class="label text-body"> {{ field.label }}: </span>
+            <span class="value ml-auto">
+              {{ (field.display_val) ? field.display_val : field.value }}
+            </span>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+
+  <!-- payment info -->
+  <div class="payment-info section-wrapper mt-4 bg-white p-4 rounded-lg shadow">
+    <div class="section-header mb-3 flex items-center">
+      <h3 class="title text-heading font-semibold text-base lg:text-lg">
+        {{ slotData.language.orderConfirmation.sections.payment }}
+      </h3>
+
+      <!--  <a href="/checkout" class="text-xs leading-4 bg-primary text-white px-3 py-1.5 inline-block rounded-md hover:text-white hover:bg-gray-600 ml-auto cursor-pointer uppercase">{{ slotData.language.orderConfirmation.edit }}</a> -->
+
+      <!--  <div class="edit">
+                <button class="header-button" v-b-modal.paymentInfoPopup :title="slotData.language.orderConfirmation.edit"> {{ slotData.language.orderConfirmation.edit }} </button>
+              
+            </div> -->
+    </div>
+
+    <div
+      class="payment-info info-wrapper text-sm md:text-sm"
+      v-if="slotData.orderInfo && slotData.orderInfo.payment_info"
+    >
+      <div
+        class="payment-method field flex mb-2"
+        v-if="slotData.orderInfo.payment_info.paymentMethod"
+      >
+        <span class="label text-body">
+          {{ slotData.language.orderConfirmation.fields.paymentMethod }}:
+        </span>
+        <span class="value ml-auto">
+          {{ slotData.orderInfo.payment_info.paymentMethod.name}}
+        </span>
+      </div>
+
+      <div class="custom-fields" v-if="slotData.orderInfo.more_info">
+        <div
+          class="more-info field flex mb-2"
+          v-for="field in slotData.orderInfo.more_info"
+          v-if="field.type && field.type.includes('PAY')"
+        >
+          <span class="label text-body"> {{ field.label }}: </span>
+          <span class="value ml-auto">
+            <template v-if="field.display_val">
+              {{ field.display_val }}
+            </template>
+            <template v-else>
+              {{ (field.value.label) ? field.value.label : field.value }}
+            </template>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Special instructions -->
+  <div
+    class="special-info section-wrapper mt-4 mt-4 bg-white p-4 rounded-lg shadow"
+    v-if="slotData.orderInfo &&  slotData.orderInfo.instruction"
+  >
+    <div class="section-header flex items-center mb-3">
+      <h3 class="title text-heading font-semibold text-base lg:text-lg">
+        {{ slotData.language.orderConfirmation.fields.orderInstruction }}
+      </h3>
+    </div>
+
+    <div class="info-wrapper text-sm md:text-sm text-body break-words">
+      {{slotData.orderInfo.instruction}}
+    </div>
+  </div>
+</div>

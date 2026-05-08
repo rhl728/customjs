@@ -1,0 +1,320 @@
+<div class="bg-gray-50">
+    <div v-if="slotData.settingLoaded">
+      <header-block-section  />
+      <div class="relative flex flex-wrap lg:flex-nowrap lg:min-h-screen mt-[90px] bg-white">
+        <div class="main-loader absolute top-0 left-0 w-full" v-if="mainLoader">
+          <progress-bar-snippet  />
+        </div>
+        <div class="cat-list-wrp w-full lg:w-[320px] h-full lg:fixed lg:top-[90px] lg:left-0 lg:overflow-auto">
+            <h2 class="category-list-title font-semibold truncate mt-6 m-4 text-sm sm:text-base md:text-sm lg:text-base xl:text-lg hidden lg:block">{{slotData.language.heading}}</h2>
+  
+            <span class="hidden lg:block">
+              <category-base-list-template
+                :page="page"
+                :featured="slotData.featured"
+                
+                :items_to_show="20"
+              />
+            </span>
+        
+        </div>
+        <trail-popup-snippet  :is_active="slotData.isActive"></trail-popup-snippet>
+
+        <!--<div class="w-full p-4 md:p-8 bg-gray-50 lg:ml-[320px] lg:w-[calc(100%-320px)]">-->
+        <!--    <h1 class="title text-primary text-xl md:text-3xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Promo Deals</h1>-->
+            <!--<offer-list-template
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['bf4f002957e6a4a9e62f4a6adc517926']"-->
+        <!--      category_name="Keells Krest Products"-->
+        <!--    />-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['a5f2002b6d3e24523ed7744b2588c9b1']"-->
+        <!--      category_name="Elephant House Products"-->
+              
+        <!--    />-->
+        
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Sausages</h2>-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['af04062fd60db8e0afcdb2acafe6edec']"-->
+        <!--      category_name="Keells Krest"-->
+        <!--    />-->
+        <!--     <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['513ac4770568ecac79899b520f47a8dd']"-->
+        <!--      category_name="Elephant House"-->
+              
+        <!--    />-->
+        <!--</div> -->
+        
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Meatballs</h2>-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['239b1626a136c68df223d620a46c10a7']"-->
+        <!--      category_name="Keells Krest"-->
+              
+        <!--    />-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['f5202028eeaae46db4dba4144f1b1000']"-->
+        <!--      category_name="Elephant House"-->
+              
+        <!--    />-->
+        <!--</div> -->
+            
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Crumbed Savouries</h2>-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['b32ebfc1d0186340d09cddc9fd85258f']"-->
+        <!--      category_name="Formed Meat"-->
+              
+        <!--    />-->
+        <!--     <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['f92b149c3ce14e90bcd7f699471b7c7a']"-->
+        <!--      category_name="Chinese Rolls"-->
+              
+        <!--    />-->
+        <!--</div> -->
+            
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Cold Meat</h2>-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['c0ab90476329b2e345fddd8368ccbd96']"-->
+        <!--      category_name="Bacon"-->
+              
+        <!--    />-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['637707e7c96fcb6f78087b8072c235cd']"-->
+        <!--      category_name="Ham"-->
+              
+        <!--    />-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['259a7c437c2f46f994d4dd8aeb8c6eb7']"-->
+        <!--      category_name="Slices"-->
+              
+        <!--    />-->
+        <!--</div> -->
+            
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Raw Meat</h2>-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['5f71497f0e1a4e48ad5f835d11de81d8']"-->
+        <!--      category_name="Chicken"-->
+              
+        <!--    />-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['ee3270276e0ca79d8cc84ed98d23d176']"-->
+        <!--      category_name="Pork"-->
+              
+        <!--    />-->
+        <!--     <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['810554a850f74c0d863f81f2529eaea8']"-->
+        <!--      category_name="Mutton"-->
+              
+        <!--    />-->
+        <!--</div> -->
+        
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Non Frozen</h2>-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['e70e6092acff4aab6b44e0d9a82eca9a']"-->
+              
+              
+        <!--    />-->
+        <!-- </div> -->
+         
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">BBQ Feast</h2>-->
+
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['85796a83c94621d76da91d20fbd54c6b']"-->
+              
+              
+        <!--    />-->
+        <!--</div>         -->
+        <!--</div>-->
+        
+        <div class="w-full p-4 md:p-8 bg-gray-50 lg:ml-[320px] lg:w-[calc(100%-320px)]">
+            <h1 class="title text-primary text-xl md:text-3xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Promo Deals</h1>
+            <!--<offer-list-template-->
+            <!--  :categories="null"-->
+            <!--  :page="page"-->
+            <!--  :category_id="['bf4f002957e6a4a9e62f4a6adc517926']"-->
+            <!--  category_name="Keells Krest Products"-->
+            <!--/>-->
+            <!--<offer-list-template-->
+            <!--  :categories="null"-->
+            <!--  :page="page"-->
+            <!--  :category_id="['a5f2002b6d3e24523ed7744b2588c9b1']"-->
+            <!--  category_name="Elephant House Products"-->
+              
+            <!--/>-->
+        <custom-offer-category-list-template
+          :hideHeader="false" 
+          :hideLoadMore="true"  
+          :columns=5
+          categorySortDirection="desc"
+          categorySortProperty="name"
+          :categoryLimit=0
+          productSortProperty=""
+          productSortDirection="asc"
+          />
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Keells Krest Products</h2>-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['af04062fd60db8e0afcdb2acafe6edec']"-->
+        <!--      category_name="Sausages"-->
+        <!--    />-->
+        <!--     <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['239b1626a136c68df223d620a46c10a7']"-->
+        <!--      category_name="Meatballs"-->
+              
+        <!--    />-->
+        <!--</div> -->
+        
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Elephant House Products</h2>-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['513ac4770568ecac79899b520f47a8dd']"-->
+        <!--      category_name="Sausages"-->
+              
+        <!--    />-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['f5202028eeaae46db4dba4144f1b1000']"-->
+        <!--      category_name="Meatballs"-->
+              
+        <!--    />-->
+        <!--</div> -->
+            
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Crumbed Savouries</h2>-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['b32ebfc1d0186340d09cddc9fd85258f']"-->
+        <!--      category_name="Formed Meat"-->
+              
+        <!--    />-->
+        <!--     <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['f92b149c3ce14e90bcd7f699471b7c7a']"-->
+        <!--      category_name="Chinese Rolls"-->
+              
+        <!--    />-->
+        <!--</div> -->
+            
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Ham, Slices & Bacon</h2>-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['c0ab90476329b2e345fddd8368ccbd96']"-->
+        <!--      category_name="Bacon"-->
+              
+        <!--    />-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['637707e7c96fcb6f78087b8072c235cd']"-->
+        <!--      category_name="Ham"-->
+              
+        <!--    />-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['259a7c437c2f46f994d4dd8aeb8c6eb7']"-->
+        <!--      category_name="Slices"-->
+              
+        <!--    />-->
+        <!--</div> -->
+            
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Raw Meat</h2>-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['5f71497f0e1a4e48ad5f835d11de81d8']"-->
+        <!--      category_name="Chicken"-->
+              
+        <!--    />-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['ee3270276e0ca79d8cc84ed98d23d176']"-->
+        <!--      category_name="Pork"-->
+              
+        <!--    />-->
+        <!--     <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['810554a850f74c0d863f81f2529eaea8']"-->
+        <!--      category_name="Mutton"-->
+              
+        <!--    />-->
+        <!--</div> -->
+        
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">Others</h2>-->
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['e70e6092acff4aab6b44e0d9a82eca9a']"-->
+              
+              
+        <!--    />-->
+        <!-- </div> -->
+         
+        <!--<div class="promo-category-wrap">  -->
+        <!--<h2 class="grey-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto">BBQ Feast</h2>-->
+
+        <!--    <offer-list-template-->
+        <!--      :categories="null"-->
+        <!--      :page="page"-->
+        <!--      :category_id="['85796a83c94621d76da91d20fbd54c6b']"-->
+              
+              
+        <!--    />-->
+        <!--</div>         -->
+        </div>
+      </div>
+      <footer-block-section  />
+    </div>
+  </div>

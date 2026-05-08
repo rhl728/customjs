@@ -1,0 +1,30 @@
+<div>
+    <template v-if="data.upcoming_offer && data.upcoming_offer.length > 0">
+        <div class="upcoming-offer-wrappe bg-red-500 text-white text-xs p-2 rounded-md font-semibold">
+            <button class="dropdown-button" v-on:click="onClickButton">
+                <b-icon class="w-6 h-6" icon="caret-down"></b-icon>
+                <span class="button-label uppercase ">{{slotData.language.detailView.upcomingOffer.title}}</span>
+            </button>
+            <div class="upcoming-offer-details mt-1" v-if="slotData.showDetail">
+                <template v-for="offer in data.upcoming_offer">
+                    <div class="upcoming-offer-item">
+                        <div class="offer-name-wrapper">
+                            <span class="offer-name">{{offer.offer_name}} - </span>
+                            <template v-if="slotData.helpers.PriceFormat(offer.offer_percentage, 0) != 0">
+                                <span class="offer-percentage">
+                                    {{slotData.helpers.PriceFormat(offer.offer_percentage, 0)}}% {{slotData.language.detailView.offText}}
+                                </span>
+                            </template>
+                        </div>
+                        <span class="offer-starts-in ml-auto">
+                            {{slotData.language.detailView.offerStartsIn}} :
+                            <span class="offer-start-text">{{slotData.helpers.GetDiff('today', offer.start_time)}} </span>
+                           
+                           
+                        </span>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+</div>

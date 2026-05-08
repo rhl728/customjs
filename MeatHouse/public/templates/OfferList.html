@@ -1,0 +1,153 @@
+<div class="product-list-inner-wrapper mb-20" v-if="!slotData.category_ids || slotData.category_ids && slotData.products.length > 0">
+    <div class="view-fiter mb-6">
+        <div class="flex-wrap md:inline-flex w-full mb-2">
+            <h3 class="green-title title text-primary text-xl md:text-2xl font-bold lg:inline-flex mt-0 mb-4 md:pb-1 md:w-auto" v-if="slotData.productsLoaded">
+
+                <template v-if="slotData.searchText">
+                  <div class="w-full break-words overflow-wrap-anywhere">
+                    {{slotData.total}} {{slotData.language.category.searchProduct}}
+                    "{{slotData.searchText}}"
+                  </div>
+                </template>
+                <template v-else-if="slotData.categoryName">
+                    {{slotData.categoryName}}
+                </template>
+            </h3>
+            <template v-if="slotData.categoryShortDescription">
+                <div class="mb-4 text-body w-full break-words">{{slotData.categoryShortDescription}}</div>
+            </template>
+
+             <!-- category description -->
+            <div class="description-wrapper row w-full" v-if="slotData.categoryDescription">
+                <div class="description-title font-semibold text-heading text-lg-900 mt-4 mb-4">
+                    {{ slotData.language.category.descriptionText }}
+                </div>
+                <div class="item-description text-gray-500 text-sm lg:text-base leading-6 lg:leading-8 pb-6" v-html="slotData.categoryDescription"></div>
+            </div>
+
+            <template v-if="slotData.categoryTopContentBlock">
+                <div class="my-2 text-gray-500 text-sm lg:text-base leading-6 lg:leading-8 w-full" v-html="slotData.categoryTopContentBlock"></div>
+            </template>
+
+            <div v-if="slotData.isFilterHead && !slotData.fromCustomList" class="flex md:ml-auto items-center w-full md:w-auto offer-filteration">
+                <div class="ml-0 md:ml-auto flex items-center">
+                    <multiselect id="sortBy" :options="slotData.sortOptions" track-by="value"  v-model="slotData.sortValue" label="text" class="sort-wrapper w-full" select-label="" deselect-label="" selected-label="" placeholder="Sorting Options" @select="onChangeSortProperty">
+                        <template slot="noResult">No records found.</template>
+                    </multiselect>
+                </div>
+                <div class="product-filter-wrapper ml-auto md:ml-4" :class="slotData.category_ids ? 'block lg:hidden' : ''">
+                    <filter-button-snippet  :category_ids="slotData.category_ids" :show_attribute_filters="true" />
+                </div>
+                
+                <div class="change-product-view-wrapper ml-2 md:ml-4">
+                    <list-grid-buttons-snippet :productsView="slotData.productsView" />
+                </div>
+            </div>
+             
+        </div>
+        
+        <refine-tag-snippet  />
+        
+    </div>
+    
+    <div
+        v-if="!slotData.isProducstLoad && slotData.fromCustomList"
+        class="w-10 h-10 md:w-24 md:h-24 mx-auto mt-20"
+    >
+        <svg
+          class="animate-spin"
+          fill="var(--theme-primary)"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+            opacity=".25"
+          ></path>
+          <path
+            d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z"
+          ></path>
+        </svg>
+    </div>
+
+    <div class="item-inner-wrapper justify-content-start">
+
+        <template v-if="slotData.products.length > 0">
+            <template v-if="gridView">
+                <product-grid-view-section 
+                    v-bind:products="slotData.products"
+                    v-bind="{ columns: slotData.fromCustomList ? columns : false }"
+                />
+            </template>
+            <template v-else>
+                <product-list-view-section v-bind:products="slotData.products"  />
+            </template>
+        </template>
+        <template v-else-if="slotData.productsLoaded">
+            <div class="no-items text-center mb-12 mt-12">
+                <div class="w-full max-w-md h-60 bg-not_found bg-center bg-no-repeat bg-contain mx-auto mb-6"></div>
+                <span class="text-heading text-lg md:text-xl lg:text-2xl xl:leading-10 font-bold">{{slotData.language.noResults}}</span>
+            </div>
+        </template>
+
+        <template v-if="!slotData.productsLoaded">
+            <div class="loading-item-wrapper">
+                <div class="product-grid" v-if="gridView">
+                    <div class="grid gap-4 mt-4 grid-cols-2 md:grid-cols-3 xl:grid-cols-3" :class="setCols">
+                        <template v-for="(row, index) in 3">
+                            <div class="card relative grid-mode rounded-md box-border overflow-hidden flex flex-nowrap rounded-md items-center bg-transparent border border-gray-100 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-md">
+                                <span class="image w-full relative flex flex-col bg-gray-200 h-[200px] loading-animation mb-6"></span>
+                                <span class="title relative rounded-md  mr-auto ml-4 flex flex-col bg-gray-200 h-[30px] w-[80%] loading-animation mb-6"></span>
+                                <span class="desc relative rounded-lg  ml-4 mr-4 mb-2 flex flex-col bg-gray-200 h-4 w-[100%] loading-animation "></span>
+                                <span class="desc relative rounded-lg  ml-4 mr-4  flex flex-col bg-gray-200 h-4 w-[100%] loading-animation mb-6 "></span>
+                                <span class="desc relative rounded-lg mr-auto ml-4 flex flex-col bg-gray-200 h-6 w-[40%] loading-animation mb-12 "></span>
+                                <span class="add-cart relative rounded-sm ml-auto mr-auto  flex flex-col bg-gray-200 h-[30px] w-[50%] loading-animation  mb-[10px]"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <div class="product-list row" v-else>
+                    <div class="item-wrapper">
+                        <template v-for="(row, index) in 6">
+                            <div class="item bg-white rounded-md hover:shadow-md hover:-translate-y-2 transition-all duration-500 mb-5">
+                                <div class="image relative inline-block h-full flex-col bg-gray-200 h-[140px] loading-animation w-[25%]"></div>
+                                <div class="w-[73%] inline-block p-3">
+                                    <span class="title relative rounded-md h-full flex flex-col bg-gray-200 h-[20px] w-[80%] loading-animation mb-[8px]"></span>
+                                    <span class="desc relative rounded-lg h-full flex flex-col bg-gray-200 h-[8px] w-[60%] loading-animation mb-[8px]"></span>
+                                    <span class="desc relative rounded-lg h-full flex flex-col bg-gray-200 h-[8px] w-[60%] loading-animation mb-[8px]"></span>
+                                    <span class="add-cart relative rounded-sm h-full flex flex-col bg-gray-200 h-[30px] w-[150px] loading-animation mt-[30px] ml-auto"></span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div class="scroll-loader mt-6 flex justify-center" v-if="slotData.scrollLoader">
+            <span class="button-label  flex items-center text-base text-body">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-heading" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </span>
+           <!--  <b-icon class="loader-icon" icon="arrow-repeat" animation="spin"></b-icon> -->
+        </div>
+        <div
+          v-if="slotData.showMoreBtn && (this.fromCustomList ? !this.hideLoadMore :true)"
+          class="flex justify-center mt-5"
+        >
+          <button
+            :disabled="slotData.isLoadMoreBtnDisable"
+            @click="showMoreProducts"
+            class="bg-primary text-white px-4 py-3 rounded-md"
+          >
+            <span>Load More</span>
+          </button>
+        </div>
+    </div>
+    <template v-if="slotData.categoryBottomContentBlock">
+        <div class="mt-8 my-2 text-gray-500 text-sm lg:text-base leading-6 lg:leading-8 w-full" v-html="slotData.categoryBottomContentBlock"></div>
+    </template>
+
+</div>

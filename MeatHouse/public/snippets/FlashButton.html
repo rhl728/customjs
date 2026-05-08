@@ -1,0 +1,8 @@
+<div v-if="slotData.displayButton">
+    <b-form-checkbox
+        v-model="slotData.status"
+        @change="changeStatus()"
+        >
+        {{slotData.language.flashSaleFilterButton}}
+    </b-form-checkbox>
+</div>

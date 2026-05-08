@@ -1,0 +1,20 @@
+<div class="bg-gray-50">
+  <div v-if="slotData.settingLoaded">
+    <div class="main-loader" v-if="mainLoader">
+      <progress-bar-snippet />
+    </div>
+    <header-block-section />
+
+    <div class="cms-page content-wrapper content mt-[90px] p-[16px]">
+
+       <div v-html="slotData.content" class="whitespace-pre-line text-sm text-body"></div> 
+      <!--<v-runtime-template :template="slotData.content"></v-runtime-template>-->
+      <!-- {{slotData.content }} -->
+
+    </div>
+    <footer-block-section />
+  </div>
+  <div v-else>
+    <page-loader-snippet />
+  </div>
+</div>

@@ -1,0 +1,75 @@
+<div>
+    <div v-if="slotData.settingLoaded" :class="slotData.selectedProducts && Object.keys(slotData.selectedProducts).length ? 'bg-gray-50' : ''">
+
+        <header-block-section  />
+        
+
+        <div class="content-wrapper mx-auto max-w-[1920px] px-4 md:px-8 2xl:px-16 mt-[90px] mb-8 lg:mb-16">
+
+            <div class="breadcrumb pt-8 mb-8">
+                <div class="breadcrumb-inner flex items-center">
+                    <ul class="flex items-center w-full overflow-hidden text-gray-500 list-none my-0">
+                        <li class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 "><a href="/" class="text-body hover:text-primary">Home</a></li>
+                        <li class="text-base mt-0.5">/</li>
+                        <li class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 text-primary">{{slotData.language.checkOut.title}}</li>
+                    </ul>
+                </div>
+            </div>
+            <trail-popup-snippet  :is_active="slotData.isActive"></trail-popup-snippet>
+
+             <div class="flex flex-nowrap xl:pb-4 cart-inner-wrapper items-start flex-col-reverse md:flex-row " v-if="slotData.selectedProducts && Object.keys(slotData.selectedProducts).length">
+                <div class="form-content-wrapper w-full md:w-1/2 lg:w-full p-4 xl:p-6 mt-4 md:mt-0 bg-white shadow rounded-lg">
+                   
+                 
+                    <check-out-form-section  />
+                   
+                    <!-- <delivery-info-section  />
+                    <payment-info-section  />
+                    <user-info-section  />
+                    <order-comment-section  />
+                     -->
+                    <div class="md:flex">
+                        <mini-cart-section 
+                        show_cart_icon="false"
+                        show_cart_header="false"
+                        show_products="false"
+                        show_cart_instruction="false"
+                        show_discount_code="false"
+                        :button_text="slotData.language.cart.continueText"
+                        button_url="/order-summary"
+                        minimum_order_text="false"
+                        hide_prices="true"   
+                         />
+                    </div>
+                </div>
+
+                <div class="w-full md:w-1/2  lg:w-[450px] lg:min-w-[450px]  md:ml-7 lg:ml-10">
+                    
+
+                   <!-- <cart-mini-product-list-section  type="list" /> -->
+                    <div class="order-info-main-wrapper  bg-white shadow rounded-lg">
+                        <h2 class="text-lg md:text-xl xl:text-2xl font-bold text-heading px-6 pt-6 mt-0">{{slotData.language.cart.title}}</h2>
+                        <mini-cart-section 
+                        show_cart_icon="false"
+                        show_cart_header="false"
+                        show_products="false"
+                        show_cart_instruction="false"
+                        :button_text="slotData.language.cart.continueText"
+                        button_url="/order-summary"
+                        minimum_order_text="false"
+                        show_button="false"
+                         />
+
+                    </div>
+                </div>
+
+            </div>   
+
+            <div class="inner-content-wrapper" v-else>
+                <cart-empty-block-template  />
+            </div>
+
+        </div>
+        <footer-block-section  />
+    </div>
+</div>

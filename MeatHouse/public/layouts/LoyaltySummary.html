@@ -1,0 +1,216 @@
+<div v-if="slotData.settingLoaded">
+        <header-block-section  />
+
+        <div class="content-wrapper mx-auto max-w-[1920px] px-4 md:px-8 2xl:px-16 mt-[90px]  mb-8 lg:mb-16 min-h-screen">
+
+            <div class="breadcrumb pt-8 mb-8">
+                <div class="breadcrumb-inner flex items-center">
+                    <ul class="flex items-center w-full overflow-hidden text-gray-500 list-none my-0">
+                        <li class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 "><a href="/" class="text-body hover:text-primary">Home</a></li>
+                        <li class="text-base mt-0.5">/</li>
+                        <li class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 "><a href="/user-account" class="text-body hover:text-primary">My Account</a></li>
+                        <li class="text-base mt-0.5">/</li>
+                        <li class="text-sm px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 text-primary"> {{slotData.language.loyaltySummary.title}} </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="main-wrapper">
+                <div class="main-title-wrapper mb-6">
+                    <h1 class="text-lg md:text-xl xl:text-2xl font-bold text-heading mb-6 xl:mb-8 mt-0">{{slotData.language.loyaltySummary.title}}</h1>
+                </div>
+            </div>
+
+            <div class="inner-content-wrapper row">
+                <div class="">
+                    <div class="item-wrapper">
+                        <div class="all-points-inner-wrapper flex items-center text-heading bg-gray-100 text-heading  sm:rounded-lg font-semibold mb-4 p-4">
+                            <span class="label mr-2 text-lg">{{slotData.language.loyaltySummary.allPoints}}:</span>   
+                            <template v-if="!slotData.summaryData && !slotData.errorMessage">
+                              <span class="balance-text py-2.5 px-3 bg-primary text-white rounded-md flex items-center justify-center">
+                                <span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                              </span>
+                            </template>
+                            <template v-else-if="slotData.pointBalance || slotData.pointBalance === 0">
+                              <span class="balance-text py-1.5 px-3 bg-primary text-white rounded-md">{{slotData.pointBalance}}</span>
+                            </template>
+                        </div>
+                        <!-- <div class="error-msg  block text-xs text-red-500 mt-0.5" v-if="slotData.errorMessage">{{slotData.errorMessage}}</div> -->
+                    </div>
+
+                    <!-- this is the table skeleton loader -->
+                    <div v-if="!slotData.summaryData  && !slotData.errorMessage" class="points-summary-wrapper">
+               
+                        <div class="border border-gray-300 rounded-lg overflow-hidden sm:overflow-x-visible">
+                            <table class="loyalty-table non-mobile w-full border border-gray-300 rounded-lg overflow-hidden">
+                              <thead class="bg-gray-100">
+                                <tr class="loyalty-row title-row text-sm text-gray-700">
+                                  <th class="loyalty-column field-date px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                  </th>
+                                  <th class="loyalty-column field-status px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                  </th>
+                                  <th class="loyalty-column field-action px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                  </th>
+                                  <th class="loyalty-column field-type px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                  </th>
+                                  <th class="loyalty-column field-points px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr v-for="i in 5" :key="i" class="loyalty-row non-mobile border-t">
+                                  <td class="loyalty-column field-date px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-left">
+                                    <div class="h-4 bg-gray-200 rounded animate-pulse w-24 sm:w-32"></div>
+                                  </td>
+                                  <td class="loyalty-column field-status px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                    <div class="h-4 bg-gray-200 rounded animate-pulse w-16 mx-auto"></div>
+                                  </td>
+                                  <td class="loyalty-column field-action px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                    <div class="h-4 bg-gray-200 rounded animate-pulse w-20 mx-auto"></div>
+                                  </td>
+                                  <td class="loyalty-column field-type px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                    <div class="h-4 bg-gray-200 rounded animate-pulse w-16 mx-auto"></div>
+                                  </td>
+                                  <td class="loyalty-column field-points px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-right">
+                                    <div class="h-4 bg-gray-200 rounded animate-pulse w-12 sm:w-16 ml-auto"></div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          
+                      </div>
+
+                    <div v-else-if ="slotData.summaryData && slotData.summaryData.length > 0"  class="points-summary-wrapper">
+                      
+                        <div class="border border-gray-300 rounded-lg overflow-hidden overflow-x-auto sm:overflow-x-visible">
+                        <table class="loyalty-table non-mobile w-full border border-gray-300 rounded-lg overflow-hidden">
+                            <thead class="bg-gray-100">
+                                <tr class="loyalty-row title-row text-sm text-gray-700">
+                                    <th class="loyalty-column field-date px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-left">
+                                        {{slotData.language.loyaltySummary.fields.date}}
+                                    </th>
+                                    <th class="loyalty-column field-status px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                        {{slotData.language.loyaltySummary.fields.status}}
+                                    </th>
+                                    <th class="loyalty-column field-action px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                        {{slotData.language.loyaltySummary.fields.action}}
+                                    </th>
+                                    <th class="loyalty-column field-type px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                        {{slotData.language.loyaltySummary.fields.type}}
+                                    </th>
+                                    <th class="loyalty-column field-points px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-right">
+                                        {{slotData.language.loyaltySummary.fields.points}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="data in slotData.summaryData" :key="data.date" 
+                                    class="loyalty-row non-mobile border-t hover:bg-gray-50 transition">
+                                    <td class="loyalty-column field-date px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-left">
+                                        {{ new Date(data.date).toLocaleString('en-US', { 
+                                            month: 'short', day: '2-digit', year: 'numeric', 
+                                            hour: '2-digit', minute: '2-digit', hour12: true 
+                                        }) }}
+                                      </td>                                      
+                                    <td class="loyalty-column field-status px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                        <template v-if="data.status">
+                                            {{slotData.language.loyaltySummary.status.active}}
+                                        </template>
+                                        <template v-else>
+                                            {{slotData.language.loyaltySummary.status.inactive}}
+                                        </template>
+                                    </td>
+                                    <td class="loyalty-column field-action px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                        <template v-if="data.action">
+                                            {{data.action.display_name}}
+                                        </template>
+                                        <template v-else>
+                                            -
+                                        </template>
+                                    </td>
+                                    <td class="loyalty-column field-type px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-center">
+                                        {{data.type}}
+                                    </td>
+                                    <td class="loyalty-column field-points px-2 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm text-right">
+                                        <template v-if ="data.type == 'Redeemed'">
+                                            <span class="balance-text py-1 px-1.5 sm:py-1.2 sm:px-2.5 border border-red-400 text-red-600 rounded-md">
+                                                -{{data.points}}
+                                            </span>
+                                        </template>
+                                        <template v-else>
+                                            
+                                        <span class="balance-text py-1 px-1.5 sm:py-1.2 sm:px-2.5 border border-green-400 text-green-600 rounded-md">
+                                            +{{data.points}}
+                                        </span>
+                                        </template>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div v-else-if ="!slotData.isValidContact">
+                      <div class="text-center text-gray-500 pt-5 text-sm">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="48"
+                          height="48"
+                          fill="currentColor"
+                          class="bi bi-person-lock mx-auto mb-3 text-gray-700"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m0 5.996V14H3s-1 0-1-1 1-4 6-4q.845.002 1.544.107a4.5 4.5 0 0 0-.803.918A11 11 0 0 0 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664zM9 13a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"/>
+                        </svg>
+                      
+                        <h3 class="text-lg text-black">{{slotData.language.loyaltySummary.unlockPoints}}</h3>
+                        <p class="max-w-xs mx-auto mb-4">
+                          {{slotData.language.loyaltySummary.completeProfile}}
+                        </p>
+                        <button
+                          class="md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-body text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-primary text-white px-5 md:px-6 lg:px-8 py-4 md:py-3 hover:text-white hover:bg-gray-600 hover:shadow-cart h-10"
+                        >
+                          <a href="/profile" class="text-white">
+                            {{slotData.language.loyaltySummary.completeProfileButton}}
+                          </a>
+                        </button>
+                      </div>
+                      
+                    </div>
+                    <div v-else class="points-summary-wrapper">
+                        <div class="text-center text-gray-500 pt-5 text-sm">
+                          <svg class="w-24 h-24 mx-auto mt-5 mb-5" viewBox="0 0 648 633" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_2686_530)">
+                            <path d="M411.146 142.174H236.636C232.659 142.179 228.847 143.761 226.035 146.573C223.223 149.385 221.641 153.197 221.636 157.174V545.024L219.636 545.634L176.826 558.744C174.797 559.363 172.606 559.151 170.733 558.155C168.86 557.16 167.459 555.462 166.836 553.434L39.4961 137.484C38.8764 135.455 39.0876 133.263 40.0833 131.39C41.079 129.516 42.7778 128.115 44.8062 127.494L110.776 107.294L302.026 48.7538L367.996 28.5538C369 28.2449 370.055 28.1369 371.101 28.2361C372.147 28.3353 373.162 28.6398 374.09 29.1321C375.018 29.6243 375.84 30.2948 376.509 31.105C377.177 31.9152 377.679 32.8493 377.986 33.8538L410.536 140.174L411.146 142.174Z" fill="#F2F2F2"/>
+                            <path d="M449.226 140.174L409.996 12.0338C409.343 9.89876 408.276 7.91324 406.856 6.19071C405.436 4.46819 403.69 3.04242 401.718 1.99488C399.747 0.94734 397.588 0.298544 395.366 0.0855958C393.143 -0.127353 390.901 0.0997176 388.766 0.753809L296.016 29.1438L104.776 87.6938L12.0264 116.094C7.71776 117.417 4.11004 120.395 1.99518 124.376C-0.119678 128.356 -0.568904 133.013 0.746128 137.324L134.826 575.254C135.894 578.734 138.05 581.78 140.976 583.945C143.903 586.11 147.446 587.28 151.086 587.284C152.771 587.285 154.447 587.032 156.056 586.534L219.636 567.074L221.636 566.454V564.364L219.636 564.974L155.466 584.624C151.663 585.783 147.555 585.387 144.044 583.521C140.533 581.656 137.905 578.474 136.736 574.674L2.66654 136.734C2.08763 134.851 1.88586 132.872 2.07279 130.911C2.25971 128.95 2.83164 127.045 3.75586 125.305C4.68008 123.565 5.93844 122.025 7.45884 120.772C8.97923 119.519 10.7318 118.578 12.6162 118.004L105.366 89.6038L296.606 31.0638L389.356 2.66383C390.786 2.22763 392.272 2.00522 393.766 2.00382C396.973 2.01103 400.094 3.04498 402.671 4.95425C405.248 6.86351 407.146 9.54776 408.086 12.6138L447.136 140.174L447.756 142.174H449.836L449.226 140.174Z" fill="#D5D5D9"/>
+                            <path d="M122.681 127.821C120.754 127.819 118.877 127.2 117.328 126.055C115.778 124.909 114.636 123.296 114.07 121.454L101.189 79.3823C100.843 78.2522 100.723 77.065 100.836 75.8884C100.949 74.7119 101.292 73.5691 101.847 72.5253C102.401 71.4815 103.156 70.5572 104.067 69.8051C104.979 69.053 106.03 68.4879 107.16 68.1421L283.099 14.2783C285.382 13.5818 287.847 13.8194 289.955 14.9388C292.062 16.0582 293.639 17.968 294.34 20.249L307.221 62.3213C307.917 64.6036 307.679 67.0689 306.559 69.1762C305.44 71.2835 303.531 72.8608 301.25 73.562L125.31 127.426C124.458 127.687 123.572 127.82 122.681 127.821Z" fill="#D5D5D9"/>
+                            <path d="M190.154 44.9547C201.199 44.9547 210.154 36.0003 210.154 24.9547C210.154 13.909 201.199 4.95465 190.154 4.95465C179.108 4.95465 170.154 13.909 170.154 24.9547C170.154 36.0003 179.108 44.9547 190.154 44.9547Z" fill="#D5D5D9"/>
+                            <path d="M190.154 37.6193C197.148 37.6193 202.818 31.9491 202.818 24.9547C202.818 17.9602 197.148 12.29 190.154 12.29C183.159 12.29 177.489 17.9602 177.489 24.9547C177.489 31.9491 183.159 37.6193 190.154 37.6193Z" fill="white"/>
+                            <path d="M602.636 582.174H264.636C262.383 582.171 260.222 581.275 258.629 579.681C257.035 578.088 256.139 575.927 256.136 573.674V168.674C256.139 166.42 257.035 164.26 258.629 162.666C260.222 161.073 262.383 160.176 264.636 160.174H602.636C604.89 160.176 607.05 161.073 608.644 162.666C610.237 164.26 611.134 166.42 611.136 168.674V573.674C611.134 575.927 610.237 578.088 608.644 579.681C607.05 581.275 604.89 582.171 602.636 582.174Z" fill="#F2F2F2"/>
+                            <path d="M447.136 140.174H236.636C232.13 140.18 227.809 141.973 224.622 145.16C221.436 148.347 219.643 152.667 219.636 157.174V564.974L221.636 564.364V157.174C221.641 153.197 223.223 149.385 226.035 146.573C228.847 143.761 232.659 142.179 236.636 142.174H447.756L447.136 140.174ZM630.636 140.174H236.636C232.13 140.18 227.809 141.973 224.622 145.16C221.436 148.347 219.643 152.667 219.636 157.174V615.174C219.643 619.681 221.436 624.001 224.622 627.188C227.809 630.374 232.13 632.167 236.636 632.174H630.636C635.143 632.167 639.463 630.374 642.65 627.188C645.837 624.001 647.63 619.681 647.636 615.174V157.174C647.63 152.667 645.837 148.347 642.65 145.16C639.463 141.973 635.143 140.18 630.636 140.174ZM645.636 615.174C645.631 619.151 644.049 622.963 641.237 625.775C638.425 628.587 634.613 630.169 630.636 630.174H236.636C232.659 630.169 228.847 628.587 226.035 625.775C223.223 622.963 221.641 619.151 221.636 615.174V157.174C221.641 153.197 223.223 149.385 226.035 146.573C228.847 143.761 232.659 142.179 236.636 142.174H630.636C634.613 142.179 638.425 143.761 641.237 146.573C644.049 149.385 645.631 153.197 645.636 157.174V615.174Z" fill="#D5D5D9"/>
+                            <path d="M525.636 184.174H341.636C339.25 184.171 336.963 183.222 335.275 181.535C333.588 179.848 332.639 177.56 332.636 175.174V131.174C332.639 128.788 333.588 126.5 335.276 124.813C336.963 123.126 339.25 122.177 341.636 122.174H525.636C528.023 122.177 530.31 123.126 531.997 124.813C533.685 126.5 534.634 128.788 534.636 131.174V175.174C534.634 177.56 533.685 179.848 531.997 181.535C530.31 183.222 528.023 184.171 525.636 184.174Z" fill="#D5D5D9"/>
+                            <path d="M433.636 125.174C444.682 125.174 453.636 116.22 453.636 105.174C453.636 94.1281 444.682 85.1738 433.636 85.1738C422.591 85.1738 413.636 94.1281 413.636 105.174C413.636 116.22 422.591 125.174 433.636 125.174Z" fill="#D5D5D9"/>
+                            <path d="M433.636 117.356C440.364 117.356 445.818 111.902 445.818 105.174C445.818 98.446 440.364 92.9919 433.636 92.9919C426.908 92.9919 421.454 98.446 421.454 105.174C421.454 111.902 426.908 117.356 433.636 117.356Z" fill="white"/>
+                            </g>
+                            <defs>
+                            <clipPath id="clip0_2686_530">
+                            <rect width="647.636" height="632.174" fill="white"/>
+                            </clipPath>
+                            </defs>
+                            </svg>
+                              <p>You don't have any loyalty points yet. Start shopping and earn rewards!</p>                       
+                          </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+        <footer-block-section  />
+    
+</div>

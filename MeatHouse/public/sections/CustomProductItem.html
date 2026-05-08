@@ -1,0 +1,153 @@
+<div class="card relative" v-bind:class="[slideShow ? 'slideshow-mode flex xl:block items-center' : 'grid-mode rounded-md box-border overflow-hidden flex flex-nowrap rounded-md items-center bg-transparent border border-gray-100 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-md ' ]">
+  <!-- offer percentage -->
+  <template v-if="showOfferTags"><legend></legend>
+  
+      <item-offer-percentage-snippet :data="data"></item-offer-percentage-snippet>
+
+  </template>
+
+  <!-- image -->
+  <template v-if="showProductImage">
+    <template v-if="data.images.length">
+      <template v-for="image in data.images">
+        <template v-if="image.primary_image && image.primary_image == 1">
+          
+            <a v-bind:href="'/'+data.seo_url " v-bind:class="[slideShow ? 'flex flex-shrink-0 w-32 h-36 mr-2 xl:block xl:mr-0 xl:h-auto xl:w-auto' : 'complete-product-a-tag flex flex-shrink-0 w-32 sm:w-44 md:w-36 xl:w-44 h-full' ]" >
+             <img 
+
+              :src="`https://www.meathouse.lk${image.small.substring(image.small.indexOf('/productImages'))}`"
+              :alt="data.name"
+              class="w-full h-full thumb object-contain object-center bg-white"
+              :class="[slideShow ? 'xl:h-56 h-36 ' : 'h-full ' ]"
+              :title="data.name"
+            decoding="async"
+            loading="lazy"
+              >
+            </a>
+          
+        </template>
+      </template>
+    </template>
+    <template v-else>
+      <a v-bind:href="'/'+data.seo_url " v-bind:class="[slideShow ? '' : 'complete-product-a-tag flex flex-shrink-0 w-32 sm:w-44 md:w-36 xl:w-44 h-full' ]">
+        <div
+          class="thumb bg-contain bg-center bg-no-repeat h-full w-full bg-gray-100  " v-bind:class="[slideShow ? 'h-56' : '' ]"
+          v-bind:style="{'background-image': 'url($$__client_media_url__$$/$$__client_media_path__$$/no-image.png)'}"
+          v-bind:title="data.name"
+        ></div>
+      </a>
+    </template>
+  </template>
+
+  <div class="info "  v-bind:class="[slideShow ? 'xl:pt-6' : 'px-4' ]">
+    <!-- name -->
+   <template v-if="showProductName">
+      <a
+        v-bind:href="'/'+data.seo_url "
+        class="name-product-link"
+        :aria-label="data.name"
+        v-if="data.name"
+      >
+        <div class="head">
+          <h3 class="text-heading font-semibold mb-1 md:mb-1.5 text-sm sm:text-base md:text-sm xl:text-base " v-bind:class="[slideShow ? ' xl:text-lg' : '' ]">
+            <span itemprop="name"> {{data.name}} </span>
+            <template v-if="data.featured">
+              <span class="featured-item-icon absolute top-2 left-2 bg-primary p-1.5 rounded-md text-white text-sm flex">
+              <b-icon
+                icon="star-fill"
+                class="featured-icon"
+                :title="slotData.language.detailView.featuredItemTitle"
+              ></b-icon>
+            </span>
+            </template>
+          </h3>
+        </div>
+      </a>
+    </template>
+
+    <!-- description -->
+      <template v-if="showProductDescription">
+      <a
+        v-bind:href="'/'+data.seo_url "
+        class="name-product-link"
+        :aria-label="data.name"
+        v-if="data.name"
+      >
+      <div v-if="data.description" class="description-details text-gray-500 description text-body text-xs xl:text-sm leading-normal mb-0.5 xl:mb-2" v-bind:class="[slideShow ? '' : '' ]">
+        <!--  {{data.description.slice(0, 130)}} -->
+        {{slotData.helpers.HtmlToString(data.description).slice(0, 130)}}
+      </div>
+      </a>
+    </template>
+
+    <!-- attributes -->
+    <template v-if="showProductAttribute">
+      <item-attributes-snippet :data="data"></item-attributes-snippet>
+    </template>
+
+    <!-- item price -->
+     <template v-if="showProductPrice">
+      <a v-bind:href="'/'+data.seo_url " class="name-product-link" :aria-label="data.name" v-if="data.name">
+        <item-quantity-availability-snippet :data="data"></item-quantity-availability-snippet>
+           <item-price-snippet :data="data" ></item-price-snippet>
+        <!--<custom-product-item-price-snippet :data="data" :showLabel="showProductPriceLabel" />-->
+      </a>
+      <!-- Include MintPay pricing block -->
+      <template>
+        <div v-if="slotData.settings.payment_methods && slotData.helpers.IsMintPayEnabled(slotData.settings.payment_methods)">
+          <mint-pay-price-block-snippet :data="data" pageView="list"/>
+        </div>
+      </template>
+      <!-- Include KokoPay pricing block -->
+      <template>
+        <div v-if="slotData.settings.payment_methods && slotData.helpers.IsKokoPayEnabled(slotData.settings.payment_methods)">
+          <koko-pay-price-block-snippet :data="data" pageView="list"/>
+        </div>
+      </template>
+    </template>
+
+    <!-- Installment Message -->
+    
+
+    <!-- flash offer -->
+    <template
+      v-if="slotData.settings.default_menu_type != 'without_available_now'"
+    >
+      <template v-if="showFlashOffers">
+        <item-flash-offer-snippet :data="data"></item-flash-offer-snippet>
+      </template>
+    </template>
+
+    <!-- upcoming offer -->
+    <template v-if="showUpcommingOffer">
+      <item-upcoming-offer-snippet :data="data"></item-upcoming-offer-snippet>
+    </template>
+
+    <!-- item tags -->
+    <template v-if="data.tags">
+      <template v-if="showProductTags">
+        <div class="tag-wrapper hidden md:block">
+          <template v-for="tag in data.tags">
+            <div class="tag" :title="tag.name">
+              <template v-if="tag.icon">
+                <span
+                  class="tag-icon"
+                  :style="{'background-image': 'url(' + tag.icon + ')'}"
+                  :title="tag.name"
+                ></span>
+              </template>
+              <template v-else>
+                <b-icon class="w-6 h-6" icon="tag"  :title="tag.name"></b-icon>
+              </template>
+            </div>
+          </template>
+        </div>
+      </template>
+    </template>
+
+    <!-- add to cart button -->
+    <template v-if="showAddToCart && slotData.disableCheckout != true">
+      <item-add-to-cart-snippet :data="data" />
+    </template>
+  </div>
+</div>
