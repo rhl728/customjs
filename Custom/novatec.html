@@ -83,13 +83,12 @@
     padding: 0;
   }
 
-  /* Each category is now a single self-contained card:
-     image on top, name bar below, download button floated
-     top-right over the image. */
+  /* Each category is a single self-contained card: full-bleed image,
+     with the download button and the name bar both floating on top
+     of the image as overlays (button top-right, name bottom). */
   .nv-downloads .nv-card{
     position: relative;
     display: flex !important;
-    flex-direction: column;
     background: #ffffff;
     border: 1px solid var(--nv-line);
     border-radius: var(--nv-radius);
@@ -111,6 +110,7 @@
     filter: brightness(0.78);
   }
 
+  /* Image now fills the entire card; name bar and button sit on top of it */
   .nv-downloads .nv-card__image{
     width: 100%;
     aspect-ratio: 4 / 3;
@@ -166,11 +166,17 @@
     background: #1f9d55;
   }
 
-  /* Name bar — solid color strip below the image, not over it */
+  /* Name bar — now an overlay sitting on top of the image (bottom edge),
+     with a translucent dark backing + gradient so white text stays
+     readable over any photo. */
   .nv-downloads .nv-card__namebar{
-    background: var(--nv-navy-deep);
-    padding: 14px 16px;
-    flex: 1 1 auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background: linear-gradient(to top, rgba(33, 29, 82, 0.92) 0%, rgba(33, 29, 82, 0.78) 60%, rgba(33, 29, 82, 0) 100%);
+    padding: 28px 16px 14px;
     display: flex;
     align-items: center;
   }
@@ -182,6 +188,7 @@
     margin: 0;
     line-height: 1.3;
     letter-spacing: 0.01em;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
   }
 
   /* ---------- Empty state (no category data at all) ---------- */
@@ -232,7 +239,7 @@
 </section>
 
 <script>
-
+(function () {
   document.addEventListener("oms_getTemplateListSuccess", () => {
 
   /* ====================================================================
@@ -367,5 +374,5 @@
 
   render();
   });
-
+})();
 </script>
