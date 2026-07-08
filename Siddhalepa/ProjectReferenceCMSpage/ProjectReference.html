@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Projects References | Novatec</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="ProjectReference.css">
+</head>
+<body>
+
+    <div class="project-reference-container">
+        
+        <!-- Header Section -->
+        <h1 class="page-title">Our Projects References</h1>
+        <p class="page-description">
+            NSL is proud to have been an integral part of several key, high-profile, elite apartment and housing projects in both Sri Lanka and Maldives including:
+        </p>
+
+        <!-- Filters & Search Toolbar -->
+        <div class="filter-search-row">
+            
+            <!-- Category Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab-btn active" data-category="all">All Projects</button>
+                <button class="filter-tab-btn" data-category="apartments">Apartments & Housing</button>
+                <button class="filter-tab-btn" data-category="hotels">Hotels & Resorts</button>
+                <button class="filter-tab-btn" data-category="international">International</button>
+                <button class="filter-tab-btn" data-category="other">Other Projects</button>
+            </div>
+
+            <!-- Live Keyword Search Bar -->
+            <div class="search-wrapper">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input type="text" id="search-input" class="search-input" placeholder="Search projects, brands, locations...">
+                <button id="search-clear" class="search-clear">&times;</button>
+            </div>
+
+        </div>
+
+        <!-- Render Target for Dynamic Banners and Cards Grid -->
+        <div id="projects-sections-container">
+            <!-- Dynamically populated by ProjectReference.js -->
+        </div>
+
+    </div>
+
+    <!-- Detail Card Click Modal -->
+    <div id="detail-modal" class="modal-overlay">
+        <div class="modal-card">
+            <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+            <div class="modal-image-wrapper">
+                <img id="modal-img" src="" alt="Project Image" class="modal-img">
+            </div>
+            <div class="modal-content">
+                <div id="modal-developer" class="modal-developer">Developer</div>
+                <h2 id="modal-title" class="modal-title">Project Title</h2>
+                
+                <div class="modal-info-grid">
+                    <div>
+                        <div class="modal-info-label">Location</div>
+                        <div id="modal-location" class="modal-info-value">Location Name</div>
+                    </div>
+                    <div>
+                        <div class="modal-info-label">Contract Value</div>
+                        <div id="modal-value" class="modal-info-value">Value Description</div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <div class="modal-brand-label">Products Supplied</div>
+                    <div id="modal-brand" class="modal-brand-logo">
+                        <!-- Brand logo SVG injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script src="ProjectReference.js" defer></script>
+</body>
+</html>

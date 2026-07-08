@@ -1,7 +1,7 @@
 /* Custom Stylesheet for HorizontalCategoryMenu */
 
 :root {
-    --menu-primary: #0b753a; /* Brand green */
+    --menu-primary: #1E2A56; /* Shop primary color */
     --menu-text-dark: #111827;
     --menu-text-medium: #1f2937;
     --menu-text-muted: #4b5563;
@@ -73,7 +73,7 @@
 .menu-list .menu-item-trigger {
     display: block;
     font-weight: 600;
-    color: var(--menu-text-medium);
+    color: #ffffff;
     text-decoration: none;
     padding: 4px 0;
     transition: color 0.2s ease;
@@ -85,14 +85,15 @@
     user-select: none;
 }
 .menu-list .menu-item-link:hover,
-.menu-list .menu-item-trigger:hover .menu-item-label {
-    color: var(--menu-primary);
+.menu-list .menu-item-trigger:hover .menu-item-label,
+.menu-list .menu-item-trigger:hover .chevron-icon {
+    color: rgba(255, 255, 255, 0.75);
 }
 .menu-list .menu-item .chevron-icon {
     margin-left: 6px;
     width: 12px;
     height: 12px;
-    color: var(--menu-text-muted);
+    color: #ffffff;
     transition: transform 0.3s ease;
 }
 .menu-list .menu-item:hover .chevron-icon {
@@ -131,7 +132,7 @@
 .parent-category-link,
 .parent-category-label {
     font-weight: 700;
-    color: var(--menu-text-dark);
+    color: #000000;
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -155,7 +156,7 @@
 }
 .subcategory-link,
 .subcategory-label {
-    color: var(--menu-text-muted);
+    color: #000000;
     font-size: 12px;
     text-decoration: none;
     padding: 2px 0;
@@ -167,7 +168,8 @@
     color: var(--menu-primary);
 }
 .subcategory-label {
-    color: var(--menu-text-light);
+    color: #000000;
+    opacity: 0.5;
 }
 
 /* Large Screens (Desktop) Styles */
@@ -187,7 +189,7 @@
     .menu-list {
         flex-direction: row;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: flex-end;
     }
     
     .menu-list .menu-item {
