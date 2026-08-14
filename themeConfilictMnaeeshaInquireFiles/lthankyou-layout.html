@@ -1,0 +1,190 @@
+<div v-if="slotData.settingLoaded">
+  <header-block-section :show_location_block="true" :show_search_block="true" :show_hamburger_menu="true" />
+
+  <div
+   role="main"
+   class="content-wrapper mx-auto max-w-[1920px] px-4 md:px-8  xl:px-32 2xl:px-44 3xl:px-56 py-16 lg:py-20">
+
+    <div class="max-w-5xl mx-auto px-4 py-8 space-y-6 mt-6 md:mt-10">
+      <div class="w-full bg-white mt-6 mb-4 overflow-hidden">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-4">
+
+          <!-- Text -->
+          <div class="flex-1">
+            <div class="text-md md:text-xl text-gray-500 mb-0 font-semibold">
+              {{slotData.language.paymentSuccess.title1}}
+            </div>
+              <div class="text-xl md:text-4xl font-semibold text-green-700 mb-2 break-words w-full">
+              <span v-if="slotData.orderForm == 'inquire' || slotData.settings.enable_online_ordering === '0'">
+                {{slotData.language.paymentSuccess.inquiry.subTitle}}
+              </span>
+              <span v-else>
+                {{slotData.language.paymentSuccess.subTitle1}}
+              </span>
+            </div>
+
+            <p class="text-gray-500 text-md font-semibold">
+              <span v-if="slotData.orderForm == 'inquire' || slotData.settings.enable_online_ordering === '0'">
+                {{slotData.language.paymentSuccess.inquiry.description}}
+              </span>
+              <span v-else>
+                {{slotData.language.paymentSuccess.description}}
+              </span>
+            </p>
+            <button type="button" v-if="slotData.showCheckOrderButton" @click="checkMyOrder"
+              class="text-[13px] md:text-base md:text-sm1 leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center rounded-md bg-white border border-green-600 text-green-600 px-4 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-4 hover:shadow-md w-full sm:w-auto">
+              <!-- <b-icon icon="eye" class="w-5 h-5 text-green-600 mr-2"></b-icon> -->
+               <i class="bi bi-eye text-green-600 mr-2 icon-bi--md"></i>
+              <span class="button-label">
+                {{ slotData.language.paymentSuccess.buttonText2 }}
+              </span>
+            </button>
+
+          </div>
+         <div class="flex-shrink-0">
+         <img
+          src="$$__client_media_url__$$/$$__client_media_path__$$/order_success.png"
+          alt=""
+          class="w-40 h-40 md:w-[200px] md:h-[200px] bg-no-repeat bg-contain bg-center"
+        />
+        </div>
+        </div>
+      </div>
+
+      <template v-if="slotData.orderInfo.order_id">
+        <template v-if="slotData.orderForm === 'inquire' || slotData.settings.enable_online_ordering === '0'">
+          <ul
+            class="border border-gray-300 bg-gray-50 rounded-md grid mb-7 lg:mb-8 xl:mb-10 list-none"
+            :class="slotData.userEmail ? 'grid-cols-[20%_30%_50%]' : 'grid-cols-[repeat(auto-fit,minmax(200px,1fr))]'" >
+            <template v-if="slotData.orderInfo.order_id">
+              <li
+                class="w-full text-heading font-semibold text-base lg:text-lg border-b md:border-b-0 md:border-r border-dashed border-gray-300 p-4 last:border-0 mx-auto">
+                <div class="w-full flex flex-col justify-center items-center">
+                  <p class="text-start">
+                    <span class="text-[14px] block text-body font-normal leading-5">
+                      {{slotData.language.paymentSuccess.inquiry.inquiryNumber}}
+                    </span>
+                    <span class="text-heading">
+                      #{{slotData.orderInfo.order_id}}
+                    </span>
+                  </p>
+                </div>
+              </li>
+            </template>
+            <template v-if="slotData.date">
+            <li
+              class="w-full text-heading font-semibold text-base lg:text-lg border-b md:border-b-0 md:border-r border-dashed border-gray-300 p-4 last:border-0">
+              <div class="w-full flex flex-col justify-center items-center">
+                <p class="text-start">
+                  <span
+                    class="text-[14px] block text-body font-normal leading-5">{{slotData.language.paymentSuccess.dateLabel}}</span>
+                    <span class="text-heading">
+                      {{slotData.date}}
+                    </span>
+                </p>
+              </div>
+            </li>
+            </template>
+            <template v-if="slotData.userEmail">
+              <li
+                class="w-full text-heading font-semibold text-base lg:text-lg border-b md:border-b-0 md:border-r border-dashed border-gray-300 p-4 last:border-0 mx-auto">
+                <div class="w-full flex flex-col justify-center items-center">
+                  <p class="text-start">
+                    <span
+                      class="text-[14px] block text-body font-normal leading-5">{{slotData.language.paymentSuccess.emailLabel1}}</span>
+                      <span class="w-11/12 md:w-full break break-all text-heading">{{slotData.userEmail}}</span>
+                  </p>
+                </div>
+              </li>
+            </template>
+          </ul>
+        </template>
+        <template v-else>
+        <ul
+          class="border border-gray-300 bg-gray-50 rounded-md flex flex-col md:flex-row mb-7 lg:mb-8 xl:mb-10 list-none">
+          <template v-if="slotData.orderInfo.order_id">
+            <li
+              class="text-heading font-semibold text-base lg:text-lg border-b md:border-b-0 md:border-r border-dashed border-gray-300 p-4 last:border-0">
+              <span class="text-[14px] block text-body font-normal leading-5">
+                {{slotData.language.paymentSuccess.orderNumber}}
+              </span>
+              #{{slotData.orderInfo.order_id}}
+            </li>
+          </template>
+          <template v-if="slotData.transactionId">
+            <li
+              class="text-heading font-semibold text-base lg:text-lg border-b md:border-b-0 md:border-r border-dashed border-gray-300 p-4 last:border-0">
+              <span class="text-[14px] block text-body font-normal leading-5">
+                {{slotData.language.paymentSuccess.transactionNumber}}</span>#{{slotData.transactionId}}
+            </li>
+          </template>
+          <template v-if="slotData.date">
+          <li
+            class="text-heading font-semibold text-base lg:text-lg border-b md:border-b-0 md:border-r border-dashed border-gray-300 p-4 last:border-0">
+            <span
+              class="text-[14px] block text-body font-normal leading-5">{{slotData.language.paymentSuccess.dateLabel1}}</span>{{slotData.date}}
+          </li>
+          </template>
+          <template v-if="slotData.userEmail">
+            <li
+              class="text-heading font-semibold text-base lg:text-lg border-b md:border-b-0 md:border-r border-dashed border-gray-300 p-4 last:border-0">
+              <span
+                class="text-[14px] block text-body font-normal leading-5">{{slotData.language.paymentSuccess.emailLabel1}}</span>
+                <span class="w-11/12 md:w-full break break-all">{{slotData.userEmail}}</span>
+            </li>
+          </template>
+          <template v-if="slotData.total">
+            <li
+              class="text-heading font-semibold text-base lg:text-lg border-b md:border-b-0 md:border-r border-dashed border-gray-300 p-4 last:border-0">
+              <span
+                class="text-[11px] block text-body font-normal leading-5">{{slotData.language.paymentSuccess.totalLabel}}</span>{{slotData.total}}
+            </li>
+          </template>
+          <template v-if="slotData.paymentInfo">
+            <li
+              class="text-heading font-semibold text-base lg:text-lg border-b md:border-b-0 md:border-r border-dashed border-gray-300 p-4 last:border-0">
+              <span
+                class="text-[14px] block text-body font-normal leading-5">{{slotData.language.paymentSuccess.paymentMethodLabel1}}</span>{{slotData.paymentInfo?.paymentMethod?.name}}
+            </li>
+          </template>
+        </ul>
+        </template>
+      </template>
+
+
+      <div class="inner-content-wrapper flex item-center justify-center gap-3">
+
+
+        <!-- <template v-if="slotData.userEmail">
+                <p class="description mb-6">
+                  <template v-if="slotData.orderForm == 'inquire'">
+                    {{slotData.language.paymentSuccess.inquiry.description}}
+                  </template>
+                  <template v-else>
+                    {{slotData.language.paymentSuccess.description}}
+                  </template>
+                </p>
+              </template> -->
+
+        <div class="button-wrapper">
+          <a class="text-[13px] md:text-base md:text-sm1 leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-white text-primary px-4 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-4 hover:text-white border border-primary  hover:border-white hover:bg-gray-600 hover:shadow-md w-full sm:w-auto"
+            href="/">
+            <span class="button-label">
+              {{slotData.language.paymentSuccess.buttonText}}
+            </span>
+          </a>
+        </div>
+        <div v-if="slotData.showDownloadButton" class="button-wrapper flex items-center">
+          <div class="text-[13px] md:text-base md:text-sm1 leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-primary text-white px-4 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-4 hover:text-white hover:bg-gray-600 hover:shadow-md w-full sm:w-auto">
+            <!-- <b-icon icon="download" class="w-5 h-5 mr-2 text-white"></b-icon> -->
+             <i class="bi bi-download mr-2 text-white icon-bi--md"></i>
+            <span class="button-label">
+              {{slotData.language.paymentSuccess.buttonText1}}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer-block-section />
+  </div>
+</div>
